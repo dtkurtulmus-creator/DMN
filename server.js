@@ -1,3 +1,4 @@
+```javascript
 const express = require("express");
 const cors = require("cors");
 const OpenAI = require("openai");
@@ -7,117 +8,273 @@ const path = require("path");
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+
+// Render PORT'u kendisi verir.
+// Lokal çalıştırırken 3000 kullanılır.
+const PORT = process.env.PORT || 3000;
+
+
+// =====================================
+// OPENAI
+// =====================================
 
 if (!process.env.OPENAI_API_KEY) {
-    console.error("HATA: OPENAI_API_KEY bulunamadı. .env dosyanı kontrol et.");
+
+    console.error(
+        "HATA: OPENAI_API_KEY bulunamadı."
+    );
+
     process.exit(1);
 }
 
-const client = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-});
+
+const client =
+    new OpenAI({
+        apiKey:
+            process.env.OPENAI_API_KEY
+    });
+
+
+// =====================================
+// MIDDLEWARE
+// =====================================
 
 app.use(cors());
-app.use(express.json());
-app.use(express.static(__dirname));
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
-});
+app.use(
+    express.json()
+);
 
-app.post("/api/chat", async (req, res) => {
-    try {
-        const mesaj = req.body.message;
+app.use(
+    express.static(__dirname)
+);
 
-        if (!mesaj) {
-            return res.status(400).json({
-                error: "Mesaj gönderilmedi."
-            });
-        }
 
-        const response = await client.responses.create({
-            model: "gpt-5.4-mini",
+// =====================================
+// ANA SAYFA
+// =====================================
 
-            instructions: `
+app.get(
+    "/",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "index.html"
+            )
+        );
+
+    }
+);
+
+
+// =====================================
+// CHAT
+// =====================================
+
+app.post(
+    "/api/chat",
+    async (req, res) => {
+
+        try {
+
+            const mesaj =
+                req.body.message;
+
+            const english =
+                req.body.english === true;
+
+            const codeMode =
+                req.body.codeMode === true;
+
+
+            if (!mesaj) {
+
+                return res.status(400).json({
+
+                    error:
+                        "Mesaj gönderilmedi."
+
+                });
+
+            }
+
+
+            // =================================
+            // SİSTEM TALİMATI
+            // =================================
+
+            let instructions;
+
+
+            if (english) {
+
+                instructions = `
+
+You are DMN, a friendly AI assistant.
+
+Always answer in English.
+
+You are especially knowledgeable about:
+- Arduino
+- ESP32
+- electronics
+- programming
+- computers
+- technology
+
+The conversation mode is always enabled.
+
+Speak naturally and conversationally.
+
+If the user asks for code:
+- Provide complete working code.
+- Never shorten the code.
+- Never use "..." to replace code.
+- Include required libraries.
+- Include all necessary functions.
+- Make the code ready to use.
+
+If the user asks for only code:
+- Give only the code.
+- Do not add explanations.
+
+If the user sends code:
+- Find the errors.
+- Explain the important problem briefly.
+- Then provide the COMPLETE corrected code.
+
+`;
+
+            } else {
+
+                instructions = `
+
 Sen DMN adlı Türkçe yapay zekâ asistanısın.
 
-Uzmanlığın Arduino, ESP32, elektronik ve programlamadır.
-
 Her zaman Türkçe konuş.
+
+Sohbet modu her zaman açıktır.
+
+Kullanıcıyla doğal, samimi ve anlaşılır şekilde sohbet et.
+
+Uzmanlığın:
+- Arduino
+- ESP32
+- elektronik
+- programlama
+- bilgisayar
+- teknoloji
+
+Kullanıcı normal bir şey sorarsa:
+- Doğal bir sohbet asistanı gibi cevap ver.
+- Gereksiz yere kod üretme.
 
 Kullanıcı kod isterse:
 - Tam ve eksiksiz çalışan kod ver.
 - Kodun hiçbir bölümünü kısaltma.
 - "..." veya "devamı" kullanma.
 - Gerekli kütüphaneleri dahil et.
-- setup() ve loop() bölümlerini eksiksiz ver.
-- Kodları cpp kod bloğunda göster.
+- Gerekli bütün fonksiyonları ver.
+- Kullanıma hazır kod ver.
 
 Kullanıcı "sadece kod" derse:
 - Yalnızca kod ver.
 - Açıklama yazma.
-- "İstersen..." yazma.
 
 Kullanıcı kod gönderirse:
 - Hataları bul.
-- Düzeltilmiş TAM kodu ver.
-`,
+- Sorunu kısaca açıkla.
+- Ardından düzeltilmiş TAM kodu ver.
 
-            input: mesaj
-        });
+`;
 
-        res.json({
-            reply: response.output_text
-        });
+            }
 
-    } catch (error) {
-        console.error("CHAT HATASI:", error);
 
-        res.status(500).json({
-            error: "DMN cevap oluşturamadı."
-        });
-    }
-});
+            // =================================
+            // KOD MODU
+            // =================================
 
-app.post("/api/voice", async (req, res) => {
-    try {
-        const text = req.body.text;
+            if (codeMode) {
 
-        if (!text) {
-            return res.status(400).json({
-                error: "Seslendirilecek metin yok."
+                instructions += `
+
+The user appears to be requesting code.
+
+Prioritize producing the requested code.
+
+Do not unnecessarily refuse to provide code.
+
+Provide complete code unless the user explicitly asks for a small snippet.
+
+`;
+
+            }
+
+
+            // =================================
+            // OPENAI
+            // =================================
+
+            const response =
+                await client.responses.create({
+
+                    model:
+                        "gpt-5.4-mini",
+
+                    instructions:
+                        instructions,
+
+                    input:
+                        mesaj
+
+                });
+
+
+            res.json({
+
+                reply:
+                    response.output_text
+
             });
+
+
+        } catch (error) {
+
+            console.error(
+                "CHAT HATASI:",
+                error
+            );
+
+
+            res.status(500).json({
+
+                error:
+                    error.message ||
+                    "DMN cevap oluşturamadı."
+
+            });
+
         }
 
-        console.log("Ses oluşturuluyor...");
+    }
+);
 
-        const speech = await client.audio.speech.create({
-            model: "gpt-4o-mini-tts",
-            voice: "alloy",
-            input: text
-        });
 
-        const audioBuffer = Buffer.from(
-            await speech.arrayBuffer()
+// =====================================
+// SERVER
+// =====================================
+
+app.listen(
+    PORT,
+    () => {
+
+        console.log(
+            `DMN sunucusu ${PORT} portunda çalışıyor.`
         );
 
-        console.log("Ses oluşturuldu.");
-
-        res.setHeader("Content-Type", "audio/mpeg");
-        res.setHeader("Content-Length", audioBuffer.length);
-
-        res.end(audioBuffer);
-
-    } catch (error) {
-        console.error("SES HATASI:", error);
-
-        res.status(500).json({
-            error: error.message || "Ses oluşturulamadı."
-        });
     }
-});
-
-app.listen(PORT, () => {
-    console.log(`DMN sunucusu http://localhost:${PORT} adresinde çalışıyor.`);
-});
+);
+```

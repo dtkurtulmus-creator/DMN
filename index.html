@@ -1,9 +1,11 @@
+````html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta name="google-site-verification" content="mBO_SXlln8r7ot4GJeNZK81rDS11GLJPQZbGsy6jHCQ" />
+    <meta name="google-site-verification" content="mBO_SXlln8r7ot4GJeNZK81rDS11GLJPQZbGsy6jHCQ" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>DMN</title>
 
     <style>
@@ -17,16 +19,36 @@
             color: white;
             font-family: Arial, sans-serif;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
+            overflow: hidden;
         }
 
         header {
-            padding: 18px 25px;
+            height: 65px;
+            padding: 0 20px;
             background: #171a23;
             border-bottom: 1px solid #292e3a;
+            display: flex;
+            align-items: center;
+            gap: 15px;
             font-size: 24px;
             font-weight: bold;
+        }
+
+        #backButton {
+            background: transparent;
+            color: white;
+            font-size: 28px;
+            padding: 5px 10px;
+            display: none;
+        }
+
+        .screen {
+            height: calc(100vh - 65px);
+        }
+
+        #chatScreen {
+            display: flex;
+            flex-direction: column;
         }
 
         .messages {
@@ -83,6 +105,8 @@
             padding: 0 18px;
             cursor: pointer;
             font-size: 20px;
+            background: #252a36;
+            color: white;
         }
 
         button:hover {
@@ -100,66 +124,409 @@
             color: #8f98aa;
             font-size: 13px;
         }
+
+        /* AYARLAR */
+
+        #settingsScreen {
+            display: none;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .settings-box {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .settings-title {
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+
+        .setting {
+            background: #191e29;
+            border: 1px solid #2b3240;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .setting-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .setting-name {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .setting-description {
+            color: #8f98aa;
+            font-size: 13px;
+        }
+
+        .switch {
+            position: relative;
+            width: 52px;
+            height: 30px;
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            inset: 0;
+            background: #353c4b;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .slider:before {
+            content: "";
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            left: 4px;
+            top: 4px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+
+        .switch input:checked + .slider {
+            background: #4caf50;
+        }
+
+        .switch input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        .back-settings {
+            margin-bottom: 20px;
+            padding: 10px 15px;
+        }
     </style>
 </head>
 
 <body>
 
 <header>
-    DMN 🤖
+    <button id="backButton">←</button>
+    <span>DMN 🤖</span>
 </header>
 
-<div class="messages" id="messages">
+<!-- ================= CHAT ================= -->
 
-    <div class="message dmn">
-        Merhaba! Ben DMN. 🎤 Mikrofon düğmesine basarak konuşabilirsin.
+<div id="chatScreen" class="screen">
+
+    <div class="messages" id="messages">
+
+        <div class="message dmn">
+            Merhaba! Ben DMN. 🤖
+            Bana istediğin şeyi sorabilirsin.
+        </div>
+
+    </div>
+
+    <div class="input-area">
+
+        <div class="input-box">
+
+            <button id="micButton" title="Sesli komut">
+                🎤
+            </button>
+
+            <input
+                id="messageInput"
+                type="text"
+                placeholder="DMN'ye bir şey sor..."
+                autocomplete="off"
+            >
+
+            <button id="sendButton" title="Gönder">
+                ➤
+            </button>
+
+        </div>
+
+        <div class="status" id="status">
+            🔊 Sesli cevap: Kapalı
+        </div>
+
     </div>
 
 </div>
 
-<div class="input-area">
 
-    <div class="input-box">
+<!-- ================= AYARLAR ================= -->
 
-        <button id="micButton" title="Sesli komut">
-            🎤
+<div id="settingsScreen" class="screen">
+
+    <div class="settings-box">
+
+        <button class="back-settings" id="settingsBackButton">
+            ← Sohbete dön
         </button>
 
-        <input
-            id="messageInput"
-            type="text"
-            placeholder="DMN'ye bir şey sor..."
-            autocomplete="off"
-        >
+        <div class="settings-title">
+            ⚙️ DMN Ayarları
+        </div>
 
-        <button id="sendButton" title="Gönder">
-            ➤
-        </button>
+        <!-- SES -->
 
-    </div>
+        <div class="setting">
 
-    <div class="status" id="status">
-        Ses: Microsoft Tolga
+            <div class="setting-info">
+
+                <div class="setting-name">
+                    🔊 Sesli cevap
+                </div>
+
+                <div class="setting-description">
+                    DMN cevaplarını sesli olarak okur.
+                </div>
+
+            </div>
+
+            <label class="switch">
+
+                <input
+                    type="checkbox"
+                    id="voiceToggle"
+                >
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+
+        <!-- İNGİLİZCE -->
+
+        <div class="setting">
+
+            <div class="setting-info">
+
+                <div class="setting-name">
+                    🇬🇧 İngilizce konuşma
+                </div>
+
+                <div class="setting-description">
+                    DMN İngilizce cevap verir ve İngilizce ses kullanır.
+                </div>
+
+            </div>
+
+            <label class="switch">
+
+                <input
+                    type="checkbox"
+                    id="englishToggle"
+                >
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+
+        <!-- SOHBET -->
+
+        <div class="setting">
+
+            <div class="setting-info">
+
+                <div class="setting-name">
+                    💬 Sohbet modu
+                </div>
+
+                <div class="setting-description">
+                    DMN doğal ve sohbet tarzında cevap verir.
+                </div>
+
+            </div>
+
+            <label class="switch">
+
+                <input
+                    type="checkbox"
+                    id="chatToggle"
+                    checked
+                    disabled
+                >
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
     </div>
 
 </div>
+
 
 <script>
 
-const input =
-    document.getElementById("messageInput");
+const input = document.getElementById("messageInput");
+const sendButton = document.getElementById("sendButton");
+const micButton = document.getElementById("micButton");
+const messages = document.getElementById("messages");
+const statusText = document.getElementById("status");
 
-const sendButton =
-    document.getElementById("sendButton");
+const chatScreen = document.getElementById("chatScreen");
+const settingsScreen = document.getElementById("settingsScreen");
 
-const micButton =
-    document.getElementById("micButton");
+const backButton = document.getElementById("backButton");
+const settingsBackButton =
+    document.getElementById("settingsBackButton");
 
-const messages =
-    document.getElementById("messages");
+const voiceToggle =
+    document.getElementById("voiceToggle");
 
-const statusText =
-    document.getElementById("status");
+const englishToggle =
+    document.getElementById("englishToggle");
+
+
+// =====================================
+// AYARLAR
+// =====================================
+
+// Sesli cevap ilk açılışta KAPALI
+let voiceEnabled =
+    localStorage.getItem("dmn_voice") === "true";
+
+// İngilizce ilk açılışta KAPALI
+let englishEnabled =
+    localStorage.getItem("dmn_english") === "true";
+
+voiceToggle.checked = voiceEnabled;
+englishToggle.checked = englishEnabled;
+
+
+// =====================================
+// AYARLARI GÜNCELLE
+// =====================================
+
+function ayarlariGuncelle() {
+
+    voiceEnabled =
+        voiceToggle.checked;
+
+    englishEnabled =
+        englishToggle.checked;
+
+    localStorage.setItem(
+        "dmn_voice",
+        voiceEnabled
+    );
+
+    localStorage.setItem(
+        "dmn_english",
+        englishEnabled
+    );
+
+    if (voiceEnabled) {
+
+        statusText.textContent =
+            englishEnabled
+                ? "🔊 Voice: English"
+                : "🔊 Sesli cevap: Açık";
+
+    } else {
+
+        statusText.textContent =
+            englishEnabled
+                ? "🔊 Voice: Off | 🇬🇧 English"
+                : "🔊 Sesli cevap: Kapalı";
+    }
+}
+
+
+voiceToggle.addEventListener(
+    "change",
+    ayarlariGuncelle
+);
+
+englishToggle.addEventListener(
+    "change",
+    ayarlariGuncelle
+);
+
+ayarlariGuncelle();
+
+
+// =====================================
+// AYARLAR EKRANI
+// =====================================
+
+function ayarlariAc() {
+
+    chatScreen.style.display = "none";
+    settingsScreen.style.display = "block";
+
+    backButton.style.display = "block";
+}
+
+
+function sohbetEkraninaDon() {
+
+    settingsScreen.style.display = "none";
+    chatScreen.style.display = "flex";
+
+    backButton.style.display = "none";
+}
+
+
+backButton.addEventListener(
+    "click",
+    sohbetEkraninaDon
+);
+
+settingsBackButton.addEventListener(
+    "click",
+    sohbetEkraninaDon
+);
+
+
+// DMN yazısına / header alanına basıldığında
+// ayarlar ekranını açmak için sol oka basılır.
+backButton.style.display = "none";
+
+
+// Sol oka ulaşmak için DMN başlığına sağ tıklama vb.
+// yerine header'daki DMN alanına basılmasını istemiyoruz.
+// Bu nedenle küçük bir ayar butonu ekliyoruz.
+
+const header =
+    document.querySelector("header");
+
+const settingsButton =
+    document.createElement("button");
+
+settingsButton.textContent = "☰";
+settingsButton.title = "Ayarlar";
+
+settingsButton.style.marginLeft = "auto";
+
+header.appendChild(settingsButton);
+
+settingsButton.addEventListener(
+    "click",
+    ayarlariAc
+);
 
 
 // =====================================
@@ -185,7 +552,37 @@ function mesajEkle(text, type) {
 
 
 // =====================================
-// DMN'YE MESAJ GÖNDER
+// KOD İSTEĞİ ALGILA
+// =====================================
+
+function kodIstegiMi(mesaj) {
+
+    const text =
+        mesaj.toLowerCase();
+
+    const kelimeler = [
+        "kod ver",
+        "kodu ver",
+        "kod yaz",
+        "kodu yaz",
+        "kod oluştur",
+        "kod olustur",
+        "kod yap",
+        "kodunu ver",
+        "program yaz",
+        "program oluştur",
+        "program olustur"
+    ];
+
+    return kelimeler.some(
+        kelime =>
+            text.includes(kelime)
+    );
+}
+
+
+// =====================================
+// MESAJ GÖNDER
 // =====================================
 
 async function mesajGonder() {
@@ -211,12 +608,15 @@ async function mesajGonder() {
         "message dmn";
 
     loading.textContent =
-        "DMN düşünüyor...";
+        englishEnabled
+            ? "DMN is thinking..."
+            : "DMN düşünüyor...";
 
     messages.appendChild(loading);
 
     messages.scrollTop =
         messages.scrollHeight;
+
 
     try {
 
@@ -232,7 +632,15 @@ async function mesajGonder() {
                     },
 
                     body: JSON.stringify({
-                        message: mesaj
+
+                        message: mesaj,
+
+                        english:
+                            englishEnabled,
+
+                        codeMode:
+                            kodIstegiMi(mesaj)
+
                     })
                 }
             );
@@ -259,9 +667,14 @@ async function mesajGonder() {
         );
 
 
-        // Microsoft Tolga ile seslendir
-        sesliOku(data.reply);
+        // Ses sadece ayarlardan AÇILDIYSA
+        if (voiceEnabled) {
 
+            sesliOku(
+                data.reply
+            );
+
+        }
 
     } catch (error) {
 
@@ -281,31 +694,26 @@ async function mesajGonder() {
 
 
 // =====================================
-// MICROSOFT TOLGA SESİ
+// TARAYICI SESİ
 // =====================================
 
 function sesliOku(metin) {
 
-    if (!("speechSynthesis" in window)) {
-
-        console.error(
-            "Tarayıcı seslendirmeyi desteklemiyor."
-        );
-
+    if (
+        !("speechSynthesis" in window)
+    ) {
         return;
     }
 
 
-    // Önce eski konuşmayı durdur
     window.speechSynthesis.cancel();
 
 
-    // Kodları seslendirme
     const temizMetin =
         metin
             .replace(
                 /```[\s\S]*?```/g,
-                " Kod burada. "
+                " "
             )
             .replace(
                 /`[^`]*`/g,
@@ -320,24 +728,46 @@ function sesliOku(metin) {
 
 
     const sesler =
-        window.speechSynthesis.getVoices();
+        window.speechSynthesis
+            .getVoices();
 
 
-    const tolga =
-        sesler.find(
-            ses =>
-                ses.name ===
-                "Microsoft Tolga - Turkish (Turkey)"
-        );
+    let secilenSes;
 
 
-    if (!tolga) {
+    if (englishEnabled) {
 
-        statusText.textContent =
-            "Ses: Microsoft Tolga bulunamadı";
+        secilenSes =
+            sesler.find(
+                ses =>
+                    /English/i.test(
+                        ses.lang
+                    )
+            );
 
-        console.error(
-            "Microsoft Tolga sesi bulunamadı."
+    } else {
+
+        secilenSes =
+            sesler.find(
+                ses =>
+                    ses.name.includes(
+                        "Microsoft Tolga"
+                    )
+            )
+            ||
+            sesler.find(
+                ses =>
+                    /^tr[-_]/i.test(
+                        ses.lang
+                    )
+            );
+    }
+
+
+    if (!secilenSes) {
+
+        console.warn(
+            "Uygun ses bulunamadı."
         );
 
         return;
@@ -351,28 +781,32 @@ function sesliOku(metin) {
 
 
     konusma.voice =
-        tolga;
+        secilenSes;
+
 
     konusma.lang =
-        "tr-TR";
+        englishEnabled
+            ? "en-US"
+            : "tr-TR";
 
 
-    // Daha doğal konuşma
     konusma.rate =
         0.95;
 
     konusma.pitch =
-        0.85;
+        0.9;
 
     konusma.volume =
-        1.0;
+        1;
 
 
     konusma.onstart =
         function() {
 
             statusText.textContent =
-                "🔊 Ses: Microsoft Tolga";
+                englishEnabled
+                    ? "🔊 Speaking English..."
+                    : "🔊 Konuşuyor...";
 
         };
 
@@ -380,8 +814,7 @@ function sesliOku(metin) {
     konusma.onend =
         function() {
 
-            statusText.textContent =
-                "Ses: Microsoft Tolga";
+            ayarlariGuncelle();
 
         };
 
@@ -390,7 +823,7 @@ function sesliOku(metin) {
         function(event) {
 
             console.error(
-                "Seslendirme hatası:",
+                "Ses hatası:",
                 event
             );
 
@@ -406,7 +839,7 @@ function sesliOku(metin) {
 
 
 // =====================================
-// TÜRKÇE SESLİ KOMUT
+// SESLİ KOMUT
 // =====================================
 
 const SpeechRecognition =
@@ -424,12 +857,13 @@ if (SpeechRecognition) {
 
 
     recognition.lang =
-        "tr-TR";
+        englishEnabled
+            ? "en-US"
+            : "tr-TR";
 
 
     recognition.continuous =
         false;
-
 
     recognition.interimResults =
         false;
@@ -446,7 +880,9 @@ if (SpeechRecognition) {
                 "🔴";
 
             statusText.textContent =
-                "🎤 Dinliyorum...";
+                englishEnabled
+                    ? "🎤 Listening..."
+                    : "🎤 Dinliyorum...";
         };
 
 
@@ -460,8 +896,7 @@ if (SpeechRecognition) {
             micButton.textContent =
                 "🎤";
 
-            statusText.textContent =
-                "Ses: Microsoft Tolga";
+            ayarlariGuncelle();
         };
 
 
@@ -492,10 +927,8 @@ if (SpeechRecognition) {
                 event.results[0][0]
                     .transcript;
 
-
             input.value =
                 text;
-
 
             mesajGonder();
         };
@@ -521,6 +954,11 @@ micButton.addEventListener(
         if (!recognition) {
             return;
         }
+
+        recognition.lang =
+            englishEnabled
+                ? "en-US"
+                : "tr-TR";
 
         try {
 
@@ -563,32 +1001,19 @@ input.addEventListener(
 
 
 // =====================================
-// SESLER YÜKLENDİĞİNDE
+// SESLER
 // =====================================
 
 window.speechSynthesis.onvoiceschanged =
     function() {
 
-        const sesler =
-            window.speechSynthesis
-                .getVoices();
+        window.speechSynthesis
+            .getVoices();
 
-        const tolga =
-            sesler.find(
-                ses =>
-                    ses.name ===
-                    "Microsoft Tolga - Turkish (Turkey)"
-            );
-
-        if (tolga) {
-
-            statusText.textContent =
-                "Ses: Microsoft Tolga";
-
-        }
     };
 
 </script>
 
 </body>
 </html>
+````

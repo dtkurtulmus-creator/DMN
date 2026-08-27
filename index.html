@@ -1,85 +1,70 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="mBO_SXlln8r7ot4GJeNZK81rDS11GLJPQZbGsy6jHCQ">
 
 <title>DMN</title>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
 
-:root {
-    --bg: #0b0d12;
-    --panel: #12151d;
-    --panel2: #181c26;
-    --border: #292f3c;
-    --text: #f5f7fb;
-    --muted: #9299aa;
-    --accent: #7c5cff;
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
 }
 
 body {
-    margin: 0;
     background:
-        radial-gradient(
-            circle at 20% 10%,
-            rgba(124,92,255,.18),
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 80% 20%,
-            rgba(0,180,255,.10),
-            transparent 25%
-        ),
-        #0b0d12;
-
-    color: var(--text);
+        radial-gradient(circle at 10% 10%, rgba(90,70,180,.22), transparent 30%),
+        radial-gradient(circle at 90% 20%, rgba(30,130,220,.16), transparent 30%),
+        radial-gradient(circle at 50% 100%, rgba(120,40,180,.12), transparent 35%),
+        #0b0d13;
+    color: #fff;
     font-family: Arial, sans-serif;
-    height: 100vh;
     overflow: hidden;
+}
+
+button,
+input {
+    font-family: inherit;
 }
 
 button {
     border: 0;
-    color: white;
-    background: transparent;
     cursor: pointer;
-}
-
-button:hover {
-    background: rgba(255,255,255,.08);
+    color: white;
 }
 
 .app {
     display: flex;
+    width: 100%;
     height: 100vh;
 }
 
-
-/* =====================================
-   SIDEBAR
-===================================== */
+/* SIDEBAR */
 
 .sidebar {
-    width: 270px;
-    background:
-        linear-gradient(
-            180deg,
-            #11141c,
-            #0d1016
-        );
-
-    border-right: 1px solid var(--border);
+    width: 280px;
+    background: rgba(18,21,31,.92);
+    border-right: 1px solid #292e3a;
+    backdrop-filter: blur(20px);
     display: flex;
     flex-direction: column;
-    padding: 14px;
+    padding: 15px;
+    transition: .25s;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 12px;
 }
 
 .new-chat {
@@ -92,49 +77,51 @@ button:hover {
     margin-bottom: 15px;
 }
 
-.history-title {
-    color: var(--muted);
-    font-size: 12px;
-    padding: 8px;
+.new-chat:hover,
+.sidebar button:hover,
+.icon-button:hover {
+    background: #303746;
 }
 
-.history {
+.chat-list {
     flex: 1;
     overflow-y: auto;
 }
 
-.history-item {
-    width: 100%;
-    text-align: left;
-    padding: 11px;
+.chat-item {
+    padding: 12px;
     border-radius: 10px;
     margin-bottom: 5px;
-    color: #dce0e9;
+    cursor: pointer;
+    color: #dce0e8;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.history-item.active {
+.chat-item:hover {
     background: #242936;
 }
 
+.chat-item.active {
+    background: #303645;
+}
+
 .sidebar-bottom {
-    border-top: 1px solid var(--border);
+    border-top: 1px solid #292e3a;
     padding-top: 10px;
 }
 
-.settings-button {
+.sidebar-button {
     width: 100%;
-    padding: 12px;
+    background: transparent;
     text-align: left;
+    padding: 12px;
     border-radius: 10px;
+    font-size: 15px;
 }
 
-
-/* =====================================
-   MAIN
-===================================== */
+/* MAIN */
 
 .main {
     flex: 1;
@@ -146,52 +133,61 @@ button:hover {
 header {
     height: 64px;
     flex-shrink: 0;
-    padding: 0 20px;
-    border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
-    gap: 12px;
-    background: rgba(13,16,22,.85);
-    backdrop-filter: blur(15px);
-}
-
-.logo {
-    font-size: 21px;
-    font-weight: bold;
-}
-
-.online {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #4caf50;
-}
-
-.header-spacer {
-    flex: 1;
+    padding: 0 18px;
+    background: rgba(15,18,27,.75);
+    border-bottom: 1px solid #292e3a;
+    backdrop-filter: blur(18px);
 }
 
 .mobile-menu {
     display: none;
-    font-size: 22px;
+    background: transparent;
+    font-size: 23px;
+    margin-right: 10px;
 }
 
+.header-title {
+    font-size: 21px;
+    font-weight: bold;
+}
 
-/* =====================================
-   CHAT
-===================================== */
+.header-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+}
 
-.chat {
+.icon-button {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #252a36;
+    font-size: 19px;
+}
+
+.screen {
+    flex: 1;
+    min-height: 0;
+}
+
+#chatScreen {
+    display: flex;
+    flex-direction: column;
+}
+
+.messages {
     flex: 1;
     overflow-y: auto;
-    padding: 25px 18px 160px;
+    padding: 28px 18px 160px;
 }
 
 .message {
     max-width: 850px;
-    margin: 16px auto;
-    padding: 15px 18px;
-    border-radius: 17px;
+    margin: 12px auto;
+    padding: 15px 17px;
+    border-radius: 16px;
     line-height: 1.55;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
@@ -202,198 +198,186 @@ header {
 }
 
 .dmn {
-    background:
-        linear-gradient(
-            135deg,
-            rgba(124,92,255,.08),
-            rgba(255,255,255,.025)
-        );
-
-    border: 1px solid var(--border);
+    background: rgba(25,30,41,.9);
+    border: 1px solid #303746;
 }
 
 .message-image {
-    display: block;
     max-width: 100%;
     max-height: 500px;
+    display: block;
     border-radius: 14px;
     margin-top: 10px;
 }
 
 .generated-image {
     width: 100%;
-    border-radius: 15px;
+    max-width: 700px;
+    border-radius: 14px;
+    display: block;
     margin-top: 10px;
 }
 
-
-/* =====================================
-   CODE
-===================================== */
+/* CODE */
 
 .code-wrapper {
     margin-top: 12px;
-    border: 1px solid #303646;
+    border: 1px solid #343b4a;
     border-radius: 12px;
     overflow: hidden;
-    background: #090b0f;
+    background: #0b0e14;
 }
 
 .code-header {
-    height: 38px;
+    height: 42px;
+    padding: 0 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 10px;
-    background: #151922;
-    color: #9da5b8;
-    font-size: 12px;
-}
-
-.copy-button {
-    background: #252a36;
-    padding: 6px 10px;
-    border-radius: 7px;
-    font-size: 12px;
-}
-
-.code-wrapper pre {
-    margin: 0;
-    padding: 15px;
-    overflow-x: auto;
-    white-space: pre;
-}
-
-.code-wrapper code {
-    font-family: Consolas, monospace;
+    background: #151924;
+    color: #aeb6c7;
     font-size: 13px;
 }
 
+.copy-button {
+    padding: 7px 11px;
+    border-radius: 8px;
+    background: #272d3a;
+    font-size: 13px;
+}
 
-/* =====================================
-   INPUT
-===================================== */
+.copy-button:hover {
+    background: #384052;
+}
+
+pre {
+    margin: 0;
+    padding: 15px;
+    overflow-x: auto;
+}
+
+code {
+    font-family: Consolas, monospace;
+    font-size: 14px;
+}
+
+/* INPUT */
 
 .input-area {
-    position: fixed;
+    position: absolute;
     bottom: 0;
-    left: 270px;
+    left: 280px;
     right: 0;
     padding: 15px 18px 20px;
-    background:
-        linear-gradient(
-            transparent,
-            rgba(11,13,18,.96) 25%
-        );
+    background: linear-gradient(
+        transparent,
+        rgba(11,13,19,.97) 25%
+    );
+}
+
+.input-container {
+    max-width: 850px;
+    margin: auto;
+}
+
+.preview {
+    display: none;
+    margin-bottom: 8px;
+    padding: 8px;
+    border-radius: 12px;
+    background: #171b25;
+    width: fit-content;
+}
+
+.preview img {
+    max-width: 130px;
+    max-height: 90px;
+    border-radius: 8px;
 }
 
 .input-box {
-    max-width: 850px;
-    margin: auto;
-    min-height: 58px;
-    padding: 8px;
-    border: 1px solid #343b4a;
-    border-radius: 18px;
-    background: #171b24;
     display: flex;
-    align-items: center;
-    gap: 7px;
+    gap: 8px;
+    padding: 8px;
+    background: #171b25;
+    border: 1px solid #303746;
+    border-radius: 17px;
     box-shadow: 0 10px 35px rgba(0,0,0,.3);
 }
 
 .input-box input {
     flex: 1;
     min-width: 0;
-    background: transparent;
-    color: white;
     border: 0;
     outline: 0;
+    background: transparent;
+    color: white;
     font-size: 16px;
-    padding: 12px;
+    padding: 10px;
 }
 
-.tool-button {
-    width: 42px;
-    height: 42px;
+.input-box input::placeholder {
+    color: #8992a4;
+}
+
+.input-button {
+    width: 43px;
+    height: 43px;
     border-radius: 12px;
-    font-size: 19px;
+    background: #252a36;
+    font-size: 18px;
 }
 
 .send-button {
-    background: var(--accent);
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    font-size: 19px;
+    background: #fff;
+    color: #111;
+}
+
+.send-button:hover {
+    background: #ddd;
 }
 
 .status {
-    max-width: 850px;
-    margin: 7px auto 0;
-    color: var(--muted);
-    font-size: 11px;
+    color: #858ea1;
+    font-size: 12px;
+    margin-top: 7px;
+    text-align: center;
 }
 
-
-/* =====================================
-   PREVIEW
-===================================== */
-
-.preview {
+#imageInput,
+#fileInput {
     display: none;
-    max-width: 850px;
-    margin: 0 auto 8px;
-    padding: 8px;
-    background: #171b24;
-    border: 1px solid var(--border);
-    border-radius: 12px;
 }
 
-.preview img {
-    max-width: 150px;
-    max-height: 100px;
-    border-radius: 9px;
-}
+/* SETTINGS */
 
-.remove-button {
-    margin-left: 10px;
-    background: #252a36;
-    padding: 7px 10px;
-    border-radius: 8px;
-}
-
-
-/* =====================================
-   SETTINGS
-===================================== */
-
-.settings-screen {
+#settingsScreen {
     display: none;
-    flex: 1;
     overflow-y: auto;
-    padding: 30px;
+    padding: 35px 20px 120px;
 }
 
 .settings-box {
-    max-width: 700px;
+    max-width: 750px;
     margin: auto;
 }
 
 .settings-title {
-    font-size: 28px;
+    font-size: 29px;
+    font-weight: bold;
     margin-bottom: 25px;
 }
 
 .setting {
-    background: #191e29;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 18px;
-    margin-bottom: 15px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     gap: 15px;
+    padding: 18px;
+    margin-bottom: 14px;
+    border: 1px solid #303746;
+    border-radius: 15px;
+    background: rgba(25,30,41,.9);
 }
 
 .setting-name {
@@ -402,7 +386,7 @@ header {
 }
 
 .setting-description {
-    color: var(--muted);
+    color: #8992a4;
     font-size: 13px;
 }
 
@@ -410,6 +394,7 @@ header {
     position: relative;
     width: 52px;
     height: 30px;
+    flex-shrink: 0;
 }
 
 .switch input {
@@ -443,30 +428,16 @@ header {
     transform: translateX(22px);
 }
 
-
-/* =====================================
-   FILE
-===================================== */
-
-#imageInput,
-#fileInput {
-    display: none;
-}
-
-
-/* =====================================
-   MOBILE
-===================================== */
+/* MOBILE */
 
 @media (max-width: 700px) {
 
     .sidebar {
         position: fixed;
         z-index: 20;
-        left: -280px;
+        left: -290px;
         top: 0;
         bottom: 0;
-        transition: .2s;
     }
 
     .sidebar.open {
@@ -481,19 +452,16 @@ header {
         left: 0;
     }
 
-    .chat {
+    .messages {
         padding-left: 10px;
         padding-right: 10px;
     }
 
     .message {
-        max-width: 95%;
+        margin: 9px 0;
     }
-
 }
-
 </style>
-
 </head>
 
 <body>
@@ -502,25 +470,20 @@ header {
 
     <aside class="sidebar" id="sidebar">
 
-        <button
-            class="new-chat"
-            id="newChatButton">
+        <div class="logo">
+            DMN 🤖
+        </div>
+
+        <button class="new-chat" id="newChatButton">
             ＋ Yeni sohbet
         </button>
 
-        <div class="history-title">
-            Sohbetler
-        </div>
-
-        <div
-            class="history"
-            id="history">
-        </div>
+        <div class="chat-list" id="chatList"></div>
 
         <div class="sidebar-bottom">
 
             <button
-                class="settings-button"
+                class="sidebar-button"
                 id="settingsButton">
                 ⚙️ Ayarlar
             </button>
@@ -529,54 +492,133 @@ header {
 
     </aside>
 
-
     <main class="main">
 
         <header>
 
             <button
                 class="mobile-menu"
-                id="mobileMenu">
+                id="mobileMenuButton">
                 ☰
             </button>
 
-            <div class="logo">
+            <div class="header-title">
                 DMN 🤖
             </div>
 
-            <div class="online"></div>
+            <div class="header-actions">
 
-            <div class="header-spacer"></div>
+                <button
+                    class="icon-button"
+                    id="headerSettingsButton"
+                    title="Ayarlar">
+                    ⚙️
+                </button>
+
+            </div>
 
         </header>
 
+        <div id="chatScreen" class="screen">
 
-        <div
-            class="chat"
-            id="messages">
+            <div
+                class="messages"
+                id="messages">
+            </div>
 
-            <div class="message dmn">
-                Merhaba! Ben DMN. 🤖
-                Bana istediğin şeyi sorabilirsin.
+            <div class="input-area">
+
+                <div class="input-container">
+
+                    <div
+                        class="preview"
+                        id="preview">
+
+                        <img
+                            id="previewImage"
+                            alt="Seçilen görsel">
+
+                    </div>
+
+                    <div class="input-box">
+
+                        <button
+                            class="input-button"
+                            id="fileButton"
+                            title="Dosya ekle">
+                            📎
+                        </button>
+
+                        <input
+                            type="file"
+                            id="fileInput">
+
+                        <button
+                            class="input-button"
+                            id="imageButton"
+                            title="Fotoğraf ekle">
+                            📷
+                        </button>
+
+                        <input
+                            type="file"
+                            id="imageInput"
+                            accept="image/*">
+
+                        <button
+                            class="input-button"
+                            id="generateButton"
+                            title="Görsel oluştur">
+                            🎨
+                        </button>
+
+                        <button
+                            class="input-button"
+                            id="micButton"
+                            title="Sesli komut">
+                            🎤
+                        </button>
+
+                        <input
+                            id="messageInput"
+                            type="text"
+                            placeholder="DMN'ye bir şey sor..."
+                            autocomplete="off">
+
+                        <button
+                            class="input-button send-button"
+                            id="sendButton"
+                            title="Gönder">
+                            ➤
+                        </button>
+
+                    </div>
+
+                    <div
+                        class="status"
+                        id="status">
+                        🔊 Sesli cevap: Kapalı
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
 
-
         <div
-            class="settings-screen"
-            id="settingsScreen">
+            id="settingsScreen"
+            class="screen">
 
             <div class="settings-box">
 
                 <div class="settings-title">
-                    ⚙️ Ayarlar
+                    ⚙️ DMN Ayarları
                 </div>
 
                 <div class="setting">
 
                     <div>
-
                         <div class="setting-name">
                             🔊 Sesli cevap
                         </div>
@@ -584,7 +626,6 @@ header {
                         <div class="setting-description">
                             DMN cevaplarını sesli okur.
                         </div>
-
                     </div>
 
                     <label class="switch">
@@ -599,11 +640,9 @@ header {
 
                 </div>
 
-
                 <div class="setting">
 
                     <div>
-
                         <div class="setting-name">
                             🇬🇧 İngilizce
                         </div>
@@ -611,7 +650,6 @@ header {
                         <div class="setting-description">
                             DMN İngilizce cevap verir.
                         </div>
-
                     </div>
 
                     <label class="switch">
@@ -626,82 +664,31 @@ header {
 
                 </div>
 
-            </div>
+                <div class="setting">
 
-        </div>
+                    <div>
+                        <div class="setting-name">
+                            💬 Sohbet modu
+                        </div>
 
+                        <div class="setting-description">
+                            Doğal sohbet tarzını kullanır.
+                        </div>
+                    </div>
 
-        <div
-            class="input-area"
-            id="inputArea">
+                    <label class="switch">
 
-            <div
-                class="preview"
-                id="preview">
+                        <input
+                            type="checkbox"
+                            checked
+                            disabled>
 
-                <img
-                    id="previewImage"
-                    alt="Fotoğraf">
+                        <span class="slider"></span>
 
-                <button
-                    class="remove-button"
-                    id="removeImage">
-                    ✕
-                </button>
+                    </label>
 
-            </div>
+                </div>
 
-
-            <div class="input-box">
-
-                <button
-                    class="tool-button"
-                    id="fileButton"
-                    title="Dosya ekle">
-                    📎
-                </button>
-
-                <input
-                    type="file"
-                    id="fileInput">
-
-                <button
-                    class="tool-button"
-                    id="imageButton"
-                    title="Fotoğraf ekle">
-                    📷
-                </button>
-
-                <input
-                    type="file"
-                    id="imageInput"
-                    accept="image/*">
-
-                <button
-                    class="tool-button"
-                    id="micButton"
-                    title="Konuş">
-                    🎤
-                </button>
-
-                <input
-                    id="messageInput"
-                    type="text"
-                    placeholder="DMN'ye bir şey sor..."
-                    autocomplete="off">
-
-                <button
-                    class="send-button"
-                    id="sendButton">
-                    ➤
-                </button>
-
-            </div>
-
-            <div
-                class="status"
-                id="status">
-                DMN hazır
             </div>
 
         </div>
@@ -710,8 +697,10 @@ header {
 
 </div>
 
-
 <script>
+
+const messages =
+    document.getElementById("messages");
 
 const input =
     document.getElementById("messageInput");
@@ -734,41 +723,41 @@ const fileButton =
 const fileInput =
     document.getElementById("fileInput");
 
+const generateButton =
+    document.getElementById("generateButton");
+
 const preview =
     document.getElementById("preview");
 
 const previewImage =
     document.getElementById("previewImage");
 
-const removeImage =
-    document.getElementById("removeImage");
-
-const messages =
-    document.getElementById("messages");
-
-const history =
-    document.getElementById("history");
-
 const statusText =
     document.getElementById("status");
+
+const chatList =
+    document.getElementById("chatList");
 
 const sidebar =
     document.getElementById("sidebar");
 
-const settingsButton =
-    document.getElementById("settingsButton");
+const chatScreen =
+    document.getElementById("chatScreen");
 
 const settingsScreen =
     document.getElementById("settingsScreen");
 
-const inputArea =
-    document.getElementById("inputArea");
+const settingsButton =
+    document.getElementById("settingsButton");
+
+const headerSettingsButton =
+    document.getElementById("headerSettingsButton");
 
 const newChatButton =
     document.getElementById("newChatButton");
 
-const mobileMenu =
-    document.getElementById("mobileMenu");
+const mobileMenuButton =
+    document.getElementById("mobileMenuButton");
 
 const voiceToggle =
     document.getElementById("voiceToggle");
@@ -777,18 +766,24 @@ const englishToggle =
     document.getElementById("englishToggle");
 
 
-let selectedImage = null;
-
-let selectedFile = null;
-
-let currentChatId = null;
-
 let voiceEnabled =
     localStorage.getItem("dmn_voice") === "true";
 
 let englishEnabled =
     localStorage.getItem("dmn_english") === "true";
 
+let selectedImage = null;
+
+let currentChatId = null;
+
+let chats = [];
+
+let recognition = null;
+
+
+/* ================================
+   AYARLAR
+================================ */
 
 voiceToggle.checked =
     voiceEnabled;
@@ -797,267 +792,7 @@ englishToggle.checked =
     englishEnabled;
 
 
-// =====================================
-// SOHBET VERİLERİ
-// =====================================
-
-function sohbetleriGetir() {
-
-    try {
-
-        return JSON.parse(
-            localStorage.getItem(
-                "dmn_chats"
-            ) || "[]"
-        );
-
-    } catch {
-
-        return [];
-
-    }
-
-}
-
-
-function sohbetleriKaydet(chats) {
-
-    localStorage.setItem(
-        "dmn_chats",
-        JSON.stringify(chats)
-    );
-
-}
-
-
-function yeniChat() {
-
-    const chat = {
-
-        id:
-            Date.now().toString(),
-
-        title:
-            "Yeni sohbet",
-
-        messages: []
-
-    };
-
-    const chats =
-        sohbetleriGetir();
-
-    chats.unshift(chat);
-
-    sohbetleriKaydet(chats);
-
-    currentChatId =
-        chat.id;
-
-    mesajlariTemizle();
-
-    gecmisiGoster();
-
-}
-
-
-function mesajlariTemizle() {
-
-    messages.innerHTML = "";
-
-}
-
-
-function mevcutSohbet() {
-
-    const chats =
-        sohbetleriGetir();
-
-    return chats.find(
-        chat =>
-            chat.id === currentChatId
-    );
-
-}
-
-
-function mesajKaydet(role, text, image) {
-
-    const chats =
-        sohbetleriGetir();
-
-    const chat =
-        chats.find(
-            item =>
-                item.id === currentChatId
-        );
-
-    if (!chat) {
-        return;
-    }
-
-    chat.messages.push({
-
-        role: role,
-
-        text: text || "",
-
-        image: image || null
-
-    });
-
-    if (
-        chat.title === "Yeni sohbet" &&
-        text
-    ) {
-
-        chat.title =
-            text.substring(0, 35);
-
-    }
-
-    sohbetleriKaydet(chats);
-
-    gecmisiGoster();
-
-}
-
-
-function gecmisiGoster() {
-
-    history.innerHTML = "";
-
-    const chats =
-        sohbetleriGetir();
-
-    chats.forEach(chat => {
-
-        const button =
-            document.createElement("button");
-
-        button.className =
-            "history-item";
-
-        if (
-            chat.id === currentChatId
-        ) {
-
-            button.classList.add(
-                "active"
-            );
-
-        }
-
-        button.textContent =
-            chat.title;
-
-        button.onclick =
-            function() {
-
-                sohbetAc(
-                    chat.id
-                );
-
-            };
-
-        history.appendChild(
-            button
-        );
-
-    });
-
-}
-
-
-function sohbetAc(id) {
-
-    const chats =
-        sohbetleriGetir();
-
-    const chat =
-        chats.find(
-            item =>
-                item.id === id
-        );
-
-    if (!chat) {
-        return;
-    }
-
-    currentChatId = id;
-
-    mesajlariTemizle();
-
-    chat.messages.forEach(
-        item => {
-
-            if (item.text) {
-
-                mesajEkle(
-                    item.text,
-                    item.role
-                );
-
-            }
-
-            if (item.image) {
-
-                resimGoster(
-                    item.image,
-                    item.role
-                );
-
-            }
-
-        }
-    );
-
-    gecmisiGoster();
-
-    settingsScreen.style.display =
-        "none";
-
-    inputArea.style.display =
-        "block";
-
-    sidebar.classList.remove(
-        "open"
-    );
-
-}
-
-
-// =====================================
-// İLK SOHBET
-// =====================================
-
-function baslat() {
-
-    const chats =
-        sohbetleriGetir();
-
-    if (!chats.length) {
-
-        yeniChat();
-
-    } else {
-
-        sohbetAc(
-            chats[0].id
-        );
-
-    }
-
-}
-
-baslat();
-
-
-// =====================================
-// AYARLAR
-// =====================================
-
-function ayarlariGuncelle() {
+function updateSettings() {
 
     voiceEnabled =
         voiceToggle.checked;
@@ -1067,89 +802,143 @@ function ayarlariGuncelle() {
 
     localStorage.setItem(
         "dmn_voice",
-        voiceEnabled
+        String(voiceEnabled)
     );
 
     localStorage.setItem(
         "dmn_english",
-        englishEnabled
+        String(englishEnabled)
     );
 
     statusText.textContent =
         voiceEnabled
-            ? "🔊 Sesli cevap açık"
-            : "DMN hazır";
+            ? (
+                englishEnabled
+                    ? "🔊 Voice: English"
+                    : "🔊 Sesli cevap: Açık"
+            )
+            : (
+                englishEnabled
+                    ? "🔊 Voice: Off | English"
+                    : "🔊 Sesli cevap: Kapalı"
+            );
 
+    if (recognition) {
+        recognition.lang =
+            englishEnabled
+                ? "en-US"
+                : "tr-TR";
+    }
 }
 
 
 voiceToggle.addEventListener(
     "change",
-    ayarlariGuncelle
+    updateSettings
 );
-
 
 englishToggle.addEventListener(
     "change",
-    ayarlariGuncelle
+    updateSettings
 );
 
+updateSettings();
 
-settingsButton.addEventListener(
-    "click",
-    function() {
+
+/* ================================
+   AYARLAR AÇ / KAPAT
+================================ */
+
+function toggleSettings() {
+
+    const settingsOpen =
+        settingsScreen.style.display === "block";
+
+    if (settingsOpen) {
+
+        settingsScreen.style.display =
+            "none";
+
+        chatScreen.style.display =
+            "flex";
+
+    } else {
 
         settingsScreen.style.display =
             "block";
 
-        messages.style.display =
+        chatScreen.style.display =
             "none";
-
-        inputArea.style.display =
-            "none";
-
     }
+
+    sidebar.classList.remove("open");
+}
+
+
+settingsButton.addEventListener(
+    "click",
+    toggleSettings
 );
+
+headerSettingsButton.addEventListener(
+    "click",
+    toggleSettings
+);
+
+
+/* ================================
+   YENİ SOHBET
+================================ */
+
+function yeniSohbet() {
+
+    currentChatId =
+        "chat_" +
+        Date.now();
+
+    messages.innerHTML = "";
+
+    const welcome =
+        englishEnabled
+            ? "Hello! I'm DMN. 🤖\nAsk me anything."
+            : "Merhaba! Ben DMN. 🤖\nBana istediğin şeyi sorabilirsin.";
+
+    mesajEkle(
+        welcome,
+        "dmn"
+    );
+
+    saveCurrentChat();
+
+    renderChatList();
+
+    sidebar.classList.remove("open");
+
+    settingsScreen.style.display =
+        "none";
+
+    chatScreen.style.display =
+        "flex";
+}
 
 
 newChatButton.addEventListener(
     "click",
-    function() {
-
-        yeniChat();
-
-    }
+    yeniSohbet
 );
 
 
-mobileMenu.addEventListener(
-    "click",
-    function() {
+/* ================================
+   MESAJ
+================================ */
 
-        sidebar.classList.toggle(
-            "open"
-        );
-
-    }
-);
-
-
-// =====================================
-// MESAJ
-// =====================================
-
-function mesajEkle(text, role) {
+function mesajEkle(text, type) {
 
     const div =
         document.createElement("div");
 
     div.className =
-        "message " +
-        (
-            role === "user"
-                ? "user"
-                : "dmn"
-        );
+        "message " + type;
 
     div.textContent =
         text;
@@ -1158,28 +947,25 @@ function mesajEkle(text, role) {
 
     messages.scrollTop =
         messages.scrollHeight;
-
 }
 
 
-function resimGoster(src, role) {
+/* ================================
+   GÖRSEL MESAJ
+================================ */
+
+function resimEkle(src, type = "user") {
 
     const div =
         document.createElement("div");
 
     div.className =
-        "message " +
-        (
-            role === "user"
-                ? "user"
-                : "dmn"
-        );
+        "message " + type;
 
     const img =
         document.createElement("img");
 
-    img.src =
-        src;
+    img.src = src;
 
     img.className =
         "message-image";
@@ -1190,637 +976,231 @@ function resimGoster(src, role) {
 
     messages.scrollTop =
         messages.scrollHeight;
-
 }
 
 
-// =====================================
-// KOD İSTEĞİ
-// =====================================
+/* ================================
+   KODLARI KOPYALANABİLİR YAP
+================================ */
 
-function kodIstegiMi(text) {
+function formatReply(text) {
 
-    const t =
-        text.toLowerCase();
-
-    return [
-        "kod yaz",
-        "kod ver",
-        "kodu ver",
-        "kod oluştur",
-        "kod olustur",
-        "program yaz",
-        "program oluştur",
-        "javascript kod",
-        "arduino kod",
-        "esp32 kod",
-        "html kod",
-        "css kod"
-    ].some(
-        word =>
-            t.includes(word)
-    );
-
-}
-
-
-// =====================================
-// GÖRSEL İSTEĞİ
-// =====================================
-
-function resimIstegiMi(text) {
-
-    const t =
-        text.toLowerCase();
-
-    return [
-        "resim oluştur",
-        "resim olustur",
-        "resim yap",
-        "görsel oluştur",
-        "gorsel olustur",
-        "fotoğraf oluştur",
-        "fotoğraf olustur",
-        "çiz",
-        "görsel üret",
-        "gorsel üret"
-    ].some(
-        word =>
-            t.includes(word)
-    );
-
-}
-
-
-// =====================================
-// GÖRSEL OLUŞTUR
-// =====================================
-
-async function resimOlustur(prompt) {
-
-    const loading =
+    const container =
         document.createElement("div");
 
-    loading.className =
-        "message dmn";
+    const regex =
+        /```([a-zA-Z0-9_-]*)\n?([\s\S]*?)```/g;
 
-    loading.textContent =
-        "🎨 Görsel oluşturuluyor...";
+    let lastIndex = 0;
 
-    messages.appendChild(
-        loading
-    );
+    let match;
 
-    try {
+    while ((match = regex.exec(text)) !== null) {
 
-        const response =
-            await fetch(
-                "/api/image",
-                {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        prompt: prompt
-                    })
-
-                }
+        const before =
+            text.slice(
+                lastIndex,
+                match.index
             );
 
-
-        const data =
-            await response.json();
-
-        loading.remove();
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                data.error ||
-                "Görsel oluşturulamadı."
+        if (before) {
+            container.appendChild(
+                document.createTextNode(before)
             );
-
         }
 
+        const language =
+            match[1] || "code";
 
-        const div =
+        const code =
+            match[2].trim();
+
+        const wrapper =
             document.createElement("div");
 
-        div.className =
-            "message dmn";
+        wrapper.className =
+            "code-wrapper";
 
-        const img =
-            document.createElement("img");
+        const header =
+            document.createElement("div");
 
-        img.src =
-            data.image;
+        header.className =
+            "code-header";
 
-        img.className =
-            "generated-image";
+        const lang =
+            document.createElement("span");
 
-        div.appendChild(img);
+        lang.textContent =
+            language;
 
-        messages.appendChild(div);
+        const copy =
+            document.createElement("button");
 
-        messages.scrollTop =
-            messages.scrollHeight;
+        copy.className =
+            "copy-button";
 
+        copy.textContent =
+            "Kopyala";
 
-        mesajKaydet(
-            "dmn",
-            "",
-            data.image
+        copy.addEventListener(
+            "click",
+            async function() {
+
+                try {
+
+                    await navigator.clipboard.writeText(
+                        code
+                    );
+
+                    copy.textContent =
+                        "Kopyalandı";
+
+                    setTimeout(
+                        () => {
+                            copy.textContent =
+                                "Kopyala";
+                        },
+                        1500
+                    );
+
+                } catch (error) {
+
+                    copy.textContent =
+                        "Kopyalanamadı";
+                }
+            }
         );
 
+        header.appendChild(lang);
+        header.appendChild(copy);
 
-    } catch (error) {
+        const pre =
+            document.createElement("pre");
 
-        loading.remove();
+        const codeElement =
+            document.createElement("code");
 
-        mesajEkle(
-            "DMN: " +
-            error.message,
-            "dmn"
-        );
+        codeElement.textContent =
+            code;
 
+        pre.appendChild(codeElement);
+
+        wrapper.appendChild(header);
+        wrapper.appendChild(pre);
+
+        container.appendChild(wrapper);
+
+        lastIndex =
+            regex.lastIndex;
     }
 
+    const after =
+        text.slice(lastIndex);
+
+    if (after) {
+
+        container.appendChild(
+            document.createTextNode(after)
+        );
+    }
+
+    return container;
 }
 
 
-// =====================================
-// CHAT GÖNDER
-// =====================================
+/* ================================
+   DMN MESAJI
+================================ */
 
-async function mesajGonder() {
+function dmnMesajiEkle(text) {
 
-    const mesaj =
-        input.value.trim();
-
-    if (
-        !mesaj &&
-        !selectedImage &&
-        !selectedFile
-    ) {
-
-        return;
-
-    }
-
-
-    if (!currentChatId) {
-
-        yeniChat();
-
-    }
-
-
-    if (mesaj) {
-
-        mesajEkle(
-            "Sen: " + mesaj,
-            "user"
-        );
-
-        mesajKaydet(
-            "user",
-            "Sen: " + mesaj,
-            null
-        );
-
-    }
-
-
-    if (selectedImage) {
-
-        resimGoster(
-            selectedImage,
-            "user"
-        );
-
-        mesajKaydet(
-            "user",
-            "",
-            selectedImage
-        );
-
-    }
-
-
-    const image =
-        selectedImage;
-
-    const file =
-        selectedFile;
-
-
-    input.value = "";
-
-    selectedImage = null;
-
-    selectedFile = null;
-
-    imageInput.value = "";
-
-    fileInput.value = "";
-
-    preview.style.display =
-        "none";
-
-    previewImage.src = "";
-
-
-    if (
-        mesaj &&
-        resimIstegiMi(mesaj) &&
-        !image
-    ) {
-
-        await resimOlustur(
-            mesaj
-        );
-
-        return;
-
-    }
-
-
-    const loading =
+    const div =
         document.createElement("div");
 
-    loading.className =
+    div.className =
         "message dmn";
 
-    loading.textContent =
-        englishEnabled
-            ? "DMN is thinking..."
-            : "DMN düşünüyor...";
+    const formatted =
+        formatReply(text);
 
-    messages.appendChild(
-        loading
-    );
+    div.appendChild(formatted);
+
+    messages.appendChild(div);
 
     messages.scrollTop =
         messages.scrollHeight;
-
-
-    try {
-
-        let fileContent = "";
-
-        let fileName = "";
-
-
-        if (file) {
-
-            fileName =
-                file.name;
-
-            if (
-                file.type.startsWith(
-                    "text/"
-                ) ||
-                /\.(js|html|css|cpp|c|h|json|py|txt)$/i
-                    .test(file.name)
-            ) {
-
-                fileContent =
-                    await file.text();
-
-            }
-
-        }
-
-
-        const response =
-            await fetch(
-                "/api/chat",
-                {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        message:
-                            mesaj,
-
-                        english:
-                            englishEnabled,
-
-                        codeMode:
-                            kodIstegiMi(mesaj),
-
-                        image:
-                            image,
-
-                        fileName:
-                            fileName,
-
-                        fileContent:
-                            fileContent
-
-                    })
-
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-        loading.remove();
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                data.error ||
-                "DMN cevap veremedi."
-            );
-
-        }
-
-
-        mesajEkle(
-            "DMN: " + data.reply,
-            "dmn"
-        );
-
-
-        mesajKaydet(
-            "dmn",
-            "DMN: " + data.reply,
-            null
-        );
-
-
-        kodKopyalamaButonlariEkle();
-
-
-        if (voiceEnabled) {
-
-            sesliOku(
-                data.reply
-            );
-
-        }
-
-
-    } catch (error) {
-
-        loading.remove();
-
-        mesajEkle(
-            "DMN: " +
-            error.message,
-            "dmn"
-        );
-
-        console.error(
-            error
-        );
-
-    }
-
 }
 
 
-// =====================================
-// KOD KOPYALAMA
-// =====================================
+/* ================================
+   KOD İSTEĞİ
+================================ */
 
-function kodKopyalamaButonlariEkle() {
+function kodIstegiMi(mesaj) {
 
-    document
-        .querySelectorAll(
-            ".dmn"
-        )
-        .forEach(message => {
+    const text =
+        mesaj.toLowerCase();
 
-            if (
-                message.dataset
-                    .processed === "true"
-            ) {
-                return;
-            }
+    const words = [
 
-            const text =
-                message.textContent;
+        "kod ver",
+        "kodu ver",
+        "kod yaz",
+        "kodu yaz",
+        "kod oluştur",
+        "kod olustur",
+        "kod yap",
+        "program yaz",
+        "program oluştur",
+        "program olustur",
+        "arduino kodu",
+        "esp32 kodu"
+    ];
 
-            if (
-                !text.includes("```")
-            ) {
-                return;
-            }
-
-            message.dataset
-                .processed = "true";
-
-            const parts =
-                text.split("```");
-
-            message.innerHTML = "";
-
-            parts.forEach(
-                (part, index) => {
-
-                    if (
-                        index % 2 === 0
-                    ) {
-
-                        if (
-                            part.trim()
-                        ) {
-
-                            const p =
-                                document.createElement(
-                                    "div"
-                                );
-
-                            p.textContent =
-                                part;
-
-                            message.appendChild(
-                                p
-                            );
-
-                        }
-
-                    } else {
-
-                        const wrapper =
-                            document.createElement(
-                                "div"
-                            );
-
-                        wrapper.className =
-                            "code-wrapper";
-
-
-                        const header =
-                            document.createElement(
-                                "div"
-                            );
-
-                        header.className =
-                            "code-header";
-
-
-                        const label =
-                            document.createElement(
-                                "span"
-                            );
-
-                        label.textContent =
-                            "Kod";
-
-
-                        const copy =
-                            document.createElement(
-                                "button"
-                            );
-
-                        copy.className =
-                            "copy-button";
-
-                        copy.textContent =
-                            "Kopyala";
-
-
-                        copy.onclick =
-                            async function() {
-
-                                await navigator.clipboard.writeText(
-                                    part
-                                        .replace(
-                                            /^(javascript|cpp|html|css|python)\s*/i,
-                                            ""
-                                        )
-                                        .trim()
-                                );
-
-                                copy.textContent =
-                                    "Kopyalandı ✓";
-
-                                setTimeout(
-                                    function() {
-
-                                        copy.textContent =
-                                            "Kopyala";
-
-                                    },
-                                    1500
-                                );
-
-                            };
-
-
-                        header.appendChild(
-                            label
-                        );
-
-                        header.appendChild(
-                            copy
-                        );
-
-
-                        const pre =
-                            document.createElement(
-                                "pre"
-                            );
-
-                        const code =
-                            document.createElement(
-                                "code"
-                            );
-
-                        code.textContent =
-                            part.trim();
-
-                        pre.appendChild(
-                            code
-                        );
-
-                        wrapper.appendChild(
-                            header
-                        );
-
-                        wrapper.appendChild(
-                            pre
-                        );
-
-                        message.appendChild(
-                            wrapper
-                        );
-
-                    }
-
-                }
-
-            );
-
-        });
-
+    return words.some(
+        word =>
+            text.includes(word)
+    );
 }
 
 
-// =====================================
-// DOSYA
-// =====================================
+/* ================================
+   RESİM İSTEĞİ
+================================ */
 
-fileButton.addEventListener(
-    "click",
-    function() {
+function resimIstegiMi(mesaj) {
 
-        fileInput.click();
+    const text =
+        mesaj.toLowerCase();
 
-    }
-);
+    const words = [
 
+        "resim oluştur",
+        "resim olustur",
+        "resim yap",
+        "fotoğraf oluştur",
+        "fotoğraf olustur",
+        "görsel oluştur",
+        "gorsel oluştur",
+        "görsel yap",
+        "bir resim çiz",
+        "resim çiz"
+    ];
 
-fileInput.addEventListener(
-    "change",
-    function() {
-
-        const file =
-            fileInput.files[0];
-
-        if (!file) {
-            return;
-        }
-
-        selectedFile =
-            file;
-
-        statusText.textContent =
-            "📎 " + file.name;
-
-    }
-);
+    return words.some(
+        word =>
+            text.includes(word)
+    );
+}
 
 
-// =====================================
-// FOTOĞRAF
-// =====================================
+/* ================================
+   FOTOĞRAF
+================================ */
 
 imageButton.addEventListener(
     "click",
-    function() {
-
-        imageInput.click();
-
-    }
+    () => imageInput.click()
 );
 
 
@@ -1849,42 +1229,320 @@ imageInput.addEventListener(
 
                 preview.style.display =
                     "block";
-
             };
 
-        reader.readAsDataURL(
-            file
-        );
-
+        reader.readAsDataURL(file);
     }
 );
 
 
-removeImage.addEventListener(
+/* ================================
+   DOSYA
+================================ */
+
+fileButton.addEventListener(
     "click",
+    () => fileInput.click()
+);
+
+
+fileInput.addEventListener(
+    "change",
     function() {
 
-        selectedImage = null;
+        const file =
+            fileInput.files[0];
 
-        imageInput.value = "";
+        if (!file) {
+            return;
+        }
 
-        preview.style.display =
-            "none";
+        if (file.type.startsWith("image/")) {
 
-        previewImage.src = "";
+            const reader =
+                new FileReader();
 
+            reader.onload =
+                function(event) {
+
+                    selectedImage =
+                        event.target.result;
+
+                    previewImage.src =
+                        selectedImage;
+
+                    preview.style.display =
+                        "block";
+                };
+
+            reader.readAsDataURL(file);
+
+        } else {
+
+            input.value =
+                "Dosya: " + file.name;
+        }
     }
 );
 
 
-// =====================================
-// SESLİ OKUMA
-// =====================================
+/* ================================
+   GÖRSEL OLUŞTUR
+================================ */
 
-function sesMetniniTemizle(text) {
+generateButton.addEventListener(
+    "click",
+    async function() {
+
+        const prompt =
+            input.value.trim();
+
+        if (!prompt) {
+
+            input.focus();
+
+            return;
+        }
+
+        input.value = "";
+
+        mesajEkle(
+            "Sen: 🎨 " + prompt,
+            "user"
+        );
+
+        const loading =
+            document.createElement("div");
+
+        loading.className =
+            "message dmn";
+
+        loading.textContent =
+            "🎨 Görsel oluşturuluyor...";
+
+        messages.appendChild(loading);
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/image",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+                                prompt
+                            })
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            loading.remove();
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.error ||
+                    "Görsel oluşturulamadı."
+                );
+            }
+
+            const div =
+                document.createElement("div");
+
+            div.className =
+                "message dmn";
+
+            const text =
+                document.createElement("div");
+
+            text.textContent =
+                "🎨 Oluşturduğum görsel:";
+
+            const img =
+                document.createElement("img");
+
+            img.src =
+                data.image;
+
+            img.className =
+                "generated-image";
+
+            div.appendChild(text);
+            div.appendChild(img);
+
+            messages.appendChild(div);
+
+            messages.scrollTop =
+                messages.scrollHeight;
+
+            saveCurrentChat();
+
+        } catch (error) {
+
+            loading.remove();
+
+            mesajEkle(
+                "DMN: " + error.message,
+                "dmn"
+            );
+        }
+    }
+);
+
+
+/* ================================
+   MESAJ GÖNDER
+================================ */
+
+async function mesajGonder() {
+
+    const mesaj =
+        input.value.trim();
+
+    if (!mesaj && !selectedImage) {
+        return;
+    }
+
+    if (mesaj) {
+
+        mesajEkle(
+            "Sen: " + mesaj,
+            "user"
+        );
+    }
+
+    let gonderilecekResim =
+        selectedImage;
+
+    if (selectedImage) {
+
+        resimEkle(
+            selectedImage,
+            "user"
+        );
+    }
+
+    input.value = "";
+
+    selectedImage = null;
+
+    imageInput.value = "";
+
+    fileInput.value = "";
+
+    preview.style.display =
+        "none";
+
+    previewImage.src = "";
+
+    const loading =
+        document.createElement("div");
+
+    loading.className =
+        "message dmn";
+
+    loading.textContent =
+        englishEnabled
+            ? "DMN is thinking..."
+            : "DMN düşünüyor...";
+
+    messages.appendChild(loading);
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/chat",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            message:
+                                mesaj,
+
+                            english:
+                                englishEnabled,
+
+                            codeMode:
+                                kodIstegiMi(mesaj),
+
+                            image:
+                                gonderilecekResim
+                        })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        loading.remove();
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "DMN cevap veremedi."
+            );
+        }
+
+        dmnMesajiEkle(
+            data.reply
+        );
+
+        saveCurrentChat();
+
+        if (voiceEnabled) {
+
+            sesliOku(
+                data.reply
+            );
+        }
+
+    } catch (error) {
+
+        loading.remove();
+
+        mesajEkle(
+            "DMN: " +
+            error.message,
+            "dmn"
+        );
+
+        console.error(
+            "DMN HATASI:",
+            error
+        );
+    }
+}
+
+
+/* ================================
+   EMOJİLERİ SESLENDİRME
+================================ */
+
+function seslendirilecekMetniTemizle(metin) {
 
     let temiz =
-        text || "";
+        metin;
 
     temiz =
         temiz.replace(
@@ -1935,100 +1593,39 @@ function sesMetniniTemizle(text) {
         );
 
     return temiz.trim();
-
 }
 
 
-function uygunSesBul(sesler) {
+/* ================================
+   SESLİ CEVAP
+================================ */
 
-    const dil =
-        englishEnabled
-            ? "en"
-            : "tr";
+function sesliOku(metin) {
 
-
-    let ses =
-        sesler.find(
-            voice =>
-                voice.lang
-                    .toLowerCase()
-                    .startsWith(dil)
-        );
-
-
-    if (!ses) {
-
-        ses =
-            sesler.find(
-                voice =>
-                    voice.lang
-                        .toLowerCase()
-                        .includes(dil)
-            );
-
-    }
-
-
-    return ses;
-
-}
-
-
-function sesliOku(text) {
-
-    if (
-        !("speechSynthesis" in window)
-    ) {
-
+    if (!("speechSynthesis" in window)) {
         return;
-
     }
-
 
     const temiz =
-        sesMetniniTemizle(
-            text
+        seslendirilecekMetniTemizle(
+            metin
         );
-
 
     if (!temiz) {
         return;
     }
 
-
     window.speechSynthesis.cancel();
-
-
-    const sesler =
-        window.speechSynthesis
-            .getVoices();
-
-
-    const voice =
-        uygunSesBul(
-            sesler
-        );
-
 
     const utterance =
         new SpeechSynthesisUtterance(
             temiz
         );
 
-
-    if (voice) {
-
-        utterance.voice =
-            voice;
-
-    }
-
-
     utterance.lang =
         englishEnabled
             ? "en-US"
             : "tr-TR";
-
 
     utterance.rate =
         0.95;
@@ -2039,49 +1636,57 @@ function sesliOku(text) {
     utterance.volume =
         1;
 
+    const voices =
+        window.speechSynthesis.getVoices();
+
+    let voice =
+        voices.find(
+            v =>
+                englishEnabled
+                    ? /^en[-_]/i.test(v.lang)
+                    : /^tr[-_]/i.test(v.lang)
+        );
+
+    if (voice) {
+        utterance.voice =
+            voice;
+    }
 
     utterance.onstart =
         function() {
 
             statusText.textContent =
-                "🔊 Konuşuyor...";
-
+                englishEnabled
+                    ? "🔊 Speaking..."
+                    : "🔊 Konuşuyor...";
         };
-
 
     utterance.onend =
         function() {
 
-            ayarlariGuncelle();
-
+            updateSettings();
         };
-
 
     utterance.onerror =
         function() {
 
             statusText.textContent =
-                "Ses kullanılamıyor";
-
+                "Ses kullanılamadı.";
         };
-
 
     window.speechSynthesis.speak(
         utterance
     );
-
 }
 
 
-// =====================================
-// SESLİ KOMUT
-// =====================================
+/* ================================
+   MİKROFON
+================================ */
 
 const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
-
-let recognition = null;
 
 
 if (SpeechRecognition) {
@@ -2095,29 +1700,34 @@ if (SpeechRecognition) {
     recognition.interimResults =
         false;
 
-
     recognition.onstart =
         function() {
+
+            micButton.classList.add(
+                "recording"
+            );
 
             micButton.textContent =
                 "🔴";
 
             statusText.textContent =
-                "🎤 Dinliyorum...";
-
+                englishEnabled
+                    ? "🎤 Listening..."
+                    : "🎤 Dinliyorum...";
         };
-
 
     recognition.onend =
         function() {
 
+            micButton.classList.remove(
+                "recording"
+            );
+
             micButton.textContent =
                 "🎤";
 
-            ayarlariGuncelle();
-
+            updateSettings();
         };
-
 
     recognition.onerror =
         function(event) {
@@ -2127,14 +1737,16 @@ if (SpeechRecognition) {
                 event.error
             );
 
+            micButton.classList.remove(
+                "recording"
+            );
+
             micButton.textContent =
                 "🎤";
 
             statusText.textContent =
-                "Mikrofon kullanılamıyor";
-
+                "Mikrofon kullanılamadı.";
         };
-
 
     recognition.onresult =
         function(event) {
@@ -2147,7 +1759,6 @@ if (SpeechRecognition) {
                 text;
 
             mesajGonder();
-
         };
 
 } else {
@@ -2155,6 +1766,8 @@ if (SpeechRecognition) {
     micButton.disabled =
         true;
 
+    micButton.title =
+        "Bu tarayıcı sesli komutu desteklemiyor.";
 }
 
 
@@ -2177,60 +1790,253 @@ micButton.addEventListener(
 
         } catch (error) {
 
-            console.log(
-                error
-            );
-
+            console.log(error);
         }
-
     }
 );
 
 
-// =====================================
-// GÖNDER
-// =====================================
+/* ================================
+   ENTER
+================================ */
 
 sendButton.addEventListener(
     "click",
     mesajGonder
 );
 
-
 input.addEventListener(
     "keydown",
     function(event) {
 
-        if (
-            event.key === "Enter"
-        ) {
+        if (event.key === "Enter") {
+
+            event.preventDefault();
 
             mesajGonder();
-
         }
-
     }
 );
 
 
-// =====================================
-// SES LİSTESİ
-// =====================================
+/* ================================
+   SOHBET KAYDET
+================================ */
 
-if (
-    "speechSynthesis" in window
-) {
+async function saveCurrentChat() {
 
-    window.speechSynthesis
-        .onvoiceschanged =
-        function() {
+    if (!currentChatId) {
 
-            window.speechSynthesis
-                .getVoices();
+        currentChatId =
+            "chat_" + Date.now();
+    }
 
-        };
+    const firstUser =
+        messages.querySelector(".user");
 
+    let title =
+        firstUser
+            ? firstUser.textContent
+            : "Yeni sohbet";
+
+    title =
+        title
+            .replace(/^Sen:\s*/, "")
+            .trim()
+            .slice(0, 40);
+
+    if (!title) {
+        title = "Yeni sohbet";
+    }
+
+    const chat = {
+
+        id:
+            currentChatId,
+
+        title:
+            title,
+
+        html:
+            messages.innerHTML,
+
+        updatedAt:
+            Date.now()
+    };
+
+    try {
+
+        await fetch(
+            "/api/chats",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:
+                    JSON.stringify(chat)
+            }
+        );
+
+        await loadChats();
+
+    } catch (error) {
+
+        console.error(
+            "Sohbet kaydedilemedi:",
+            error
+        );
+    }
 }
+
+
+/* ================================
+   SOHBETLERİ YÜKLE
+================================ */
+
+async function loadChats() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/chats"
+            );
+
+        const data =
+            await response.json();
+
+        chats =
+            data.chats || [];
+
+        renderChatList();
+
+    } catch (error) {
+
+        console.error(
+            "Sohbetler yüklenemedi:",
+            error
+        );
+    }
+}
+
+
+/* ================================
+   SOHBET LİSTESİ
+================================ */
+
+function renderChatList() {
+
+    chatList.innerHTML = "";
+
+    chats.forEach(
+        chat => {
+
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "chat-item" +
+                (
+                    chat.id === currentChatId
+                        ? " active"
+                        : ""
+                );
+
+            item.textContent =
+                chat.title ||
+                "Sohbet";
+
+            item.addEventListener(
+                "click",
+                function() {
+
+                    openChat(chat);
+
+                    sidebar.classList.remove(
+                        "open"
+                    );
+                }
+            );
+
+            chatList.appendChild(item);
+        }
+    );
+}
+
+
+/* ================================
+   SOHBET AÇ
+================================ */
+
+function openChat(chat) {
+
+    currentChatId =
+        chat.id;
+
+    messages.innerHTML =
+        chat.html || "";
+
+    settingsScreen.style.display =
+        "none";
+
+    chatScreen.style.display =
+        "flex";
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+    renderChatList();
+}
+
+
+/* ================================
+   MOBİL MENÜ
+================================ */
+
+mobileMenuButton.addEventListener(
+    "click",
+    function() {
+
+        sidebar.classList.toggle(
+            "open"
+        );
+    }
+);
+
+
+/* ================================
+   İLK AÇILIŞ
+================================ */
+
+async function init() {
+
+    await loadChats();
+
+    if (chats.length > 0) {
+
+        openChat(
+            chats[0]
+        );
+
+    } else {
+
+        yeniSohbet();
+    }
+}
+
+
+window.speechSynthesis.onvoiceschanged =
+    function() {
+
+        window.speechSynthesis.getVoices();
+    };
+
+
+init();
 
 </script>
 

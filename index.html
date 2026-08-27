@@ -1,253 +1,261 @@
 <!DOCTYPE html>
-
 <html lang="tr">
 <head>
-    <meta name="google-site-verification" content="mBO_SXlln8r7ot4GJeNZK81rDS11GLJPQZbGsy6jHCQ" />
+    <meta name="google-site-verification" content="mBO_SXlln8r7ot4GJeNZK81rDS11GLJPQZbGsy6jHCQ">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-```
-<title>DMN</title>
+    <title>DMN</title>
 
-<style>
-    * {
-        box-sizing: border-box;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    body {
-        margin: 0;
-        background: #0f1117;
-        color: white;
-        font-family: Arial, sans-serif;
-        height: 100vh;
-        overflow: hidden;
-    }
+        body {
+            margin: 0;
+            background: #0f1117;
+            color: white;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-    header {
-        height: 65px;
-        padding: 0 20px;
-        background: #171a23;
-        border-bottom: 1px solid #292e3a;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        font-size: 24px;
-        font-weight: bold;
-    }
+        header {
+            height: 65px;
+            padding: 0 20px;
+            background: #171a23;
+            border-bottom: 1px solid #292e3a;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 24px;
+            font-weight: bold;
+        }
 
-    #settingsButton {
-        margin-left: auto;
-    }
+        #settingsButton {
+            margin-left: auto;
+        }
 
-    .screen {
-        height: calc(100vh - 65px);
-    }
+        .screen {
+            height: calc(100vh - 65px);
+        }
 
-    #chatScreen {
-        display: flex;
-        flex-direction: column;
-    }
+        #chatScreen {
+            display: flex;
+            flex-direction: column;
+        }
 
-    .messages {
-        flex: 1;
-        overflow-y: auto;
-        padding: 25px;
-    }
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+        }
 
-    .message {
-        max-width: 850px;
-        margin: 12px auto;
-        padding: 15px;
-        border-radius: 12px;
-        white-space: pre-wrap;
-        line-height: 1.5;
-    }
+        .message {
+            max-width: 850px;
+            margin: 12px auto;
+            padding: 15px;
+            border-radius: 12px;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
 
-    .user {
-        background: #252a36;
-    }
+        .user {
+            background: #252a36;
+        }
 
-    .dmn {
-        background: #191e29;
-        border: 1px solid #2b3240;
-    }
+        .dmn {
+            background: #191e29;
+            border: 1px solid #2b3240;
+        }
 
-    .message-image {
-        max-width: 100%;
-        max-height: 400px;
-        border-radius: 12px;
-        margin-top: 10px;
-        display: block;
-    }
+        .message-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 12px;
+            margin-top: 10px;
+            display: block;
+        }
 
-    .input-area {
-        padding: 18px;
-        background: #171a23;
-        border-top: 1px solid #292e3a;
-    }
+        .input-area {
+            padding: 18px;
+            background: #171a23;
+            border-top: 1px solid #292e3a;
+        }
 
-    .input-box {
-        max-width: 850px;
-        margin: auto;
-        display: flex;
-        gap: 10px;
-    }
+        .input-box {
+            max-width: 850px;
+            margin: auto;
+            display: flex;
+            gap: 10px;
+        }
 
-    input[type="text"] {
-        flex: 1;
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px solid #353c4b;
-        background: #0f1117;
-        color: white;
-        font-size: 16px;
-        outline: none;
-    }
+        input[type="text"] {
+            flex: 1;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #353c4b;
+            background: #0f1117;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
 
-    button {
-        border: 0;
-        border-radius: 10px;
-        padding: 0 16px;
-        cursor: pointer;
-        font-size: 20px;
-        background: #252a36;
-        color: white;
-    }
+        button {
+            border: 0;
+            border-radius: 10px;
+            padding: 0 16px;
+            cursor: pointer;
+            font-size: 20px;
+            background: #252a36;
+            color: white;
+        }
 
-    button:hover {
-        opacity: 0.85;
-    }
+        button:hover {
+            opacity: 0.85;
+        }
 
-    button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
-    #micButton.recording {
-        background: red;
-    }
+        #micButton.recording {
+            background: red;
+        }
 
-    .status {
-        max-width: 850px;
-        margin: 8px auto 0;
-        color: #8f98aa;
-        font-size: 13px;
-    }
+        .status {
+            max-width: 850px;
+            margin: 8px auto 0;
+            color: #8f98aa;
+            font-size: 13px;
+        }
 
-    #imageInput {
-        display: none;
-    }
+        #imageInput {
+            display: none;
+        }
 
-    #settingsScreen {
-        display: none;
-        padding: 30px;
-        overflow-y: auto;
-    }
+        .preview {
+            max-width: 850px;
+            margin: 10px auto;
+            display: none;
+        }
 
-    .settings-box {
-        max-width: 700px;
-        margin: auto;
-    }
+        .preview img {
+            max-width: 180px;
+            max-height: 120px;
+            border-radius: 10px;
+            border: 1px solid #353c4b;
+        }
 
-    .settings-title {
-        font-size: 28px;
-        margin-bottom: 25px;
-    }
+        .remove-image {
+            margin-left: 10px;
+            padding: 8px 12px;
+            font-size: 14px;
+        }
 
-    .setting {
-        background: #191e29;
-        border: 1px solid #2b3240;
-        border-radius: 14px;
-        padding: 18px;
-        margin-bottom: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 15px;
-    }
+        #settingsScreen {
+            display: none;
+            padding: 30px;
+            overflow-y: auto;
+        }
 
-    .setting-info {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-    }
+        .settings-box {
+            max-width: 700px;
+            margin: auto;
+        }
 
-    .setting-name {
-        font-size: 17px;
-        font-weight: bold;
-    }
+        .settings-title {
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
 
-    .setting-description {
-        color: #8f98aa;
-        font-size: 13px;
-    }
+        .setting {
+            background: #191e29;
+            border: 1px solid #2b3240;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
 
-    .switch {
-        position: relative;
-        width: 52px;
-        height: 30px;
-        flex-shrink: 0;
-    }
+        .setting-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
 
-    .switch input {
-        display: none;
-    }
+        .setting-name {
+            font-size: 17px;
+            font-weight: bold;
+        }
 
-    .slider {
-        position: absolute;
-        inset: 0;
-        background: #353c4b;
-        border-radius: 30px;
-        cursor: pointer;
-        transition: 0.2s;
-    }
+        .setting-description {
+            color: #8f98aa;
+            font-size: 13px;
+        }
 
-    .slider:before {
-        content: "";
-        position: absolute;
-        width: 22px;
-        height: 22px;
-        left: 4px;
-        top: 4px;
-        background: white;
-        border-radius: 50%;
-        transition: 0.2s;
-    }
+        .switch {
+            position: relative;
+            width: 52px;
+            height: 30px;
+            flex-shrink: 0;
+        }
 
-    .switch input:checked + .slider {
-        background: #4caf50;
-    }
+        .switch input {
+            display: none;
+        }
 
-    .switch input:checked + .slider:before {
-        transform: translateX(22px);
-    }
+        .slider {
+            position: absolute;
+            inset: 0;
+            background: #353c4b;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-    .back-settings {
-        margin-bottom: 20px;
-        padding: 10px 15px;
-    }
+        .slider:before {
+            content: "";
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            left: 4px;
+            top: 4px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
 
-    .preview {
-        max-width: 850px;
-        margin: 10px auto;
-        display: none;
-    }
+        .switch input:checked + .slider {
+            background: #4caf50;
+        }
 
-    .preview img {
-        max-width: 180px;
-        max-height: 120px;
-        border-radius: 10px;
-        border: 1px solid #353c4b;
-    }
+        .switch input:checked + .slider:before {
+            transform: translateX(22px);
+        }
 
-    .remove-image {
-        margin-left: 10px;
-        padding: 8px 12px;
-        font-size: 14px;
-    }
-</style>
-```
+        .back-settings {
+            margin-bottom: 20px;
+            padding: 10px 15px;
+        }
 
+        .history-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .danger-button {
+            background: #7a2525;
+        }
+    </style>
 </head>
 
 <body>
@@ -255,188 +263,217 @@
 <header>
     <span>DMN 🤖</span>
 
-```
-<button id="settingsButton" title="Ayarlar">
-    ⚙️
-</button>
-```
-
+    <button id="settingsButton" title="Ayarlar">
+        ⚙️
+    </button>
 </header>
+
 
 <div id="chatScreen" class="screen">
 
-```
-<div class="messages" id="messages">
-
-    <div class="message dmn">
-        Merhaba! Ben DMN. 🤖
-        Bana istediğin şeyi sorabilirsin.
-    </div>
-
-</div>
+    <div class="messages" id="messages"></div>
 
 
-<div class="preview" id="preview">
+    <div class="preview" id="preview">
 
-    <img id="previewImage" alt="Seçilen fotoğraf">
-
-    <button
-        class="remove-image"
-        id="removeImageButton">
-        ✕
-    </button>
-
-</div>
-
-
-<div class="input-area">
-
-    <div class="input-box">
-
-        <button
-            id="imageButton"
-            title="Fotoğraf ekle">
-            📷
-        </button>
-
-        <input
-            type="file"
-            id="imageInput"
-            accept="image/*"
+        <img
+            id="previewImage"
+            alt="Seçilen fotoğraf"
         >
 
         <button
-            id="micButton"
-            title="Sesli komut">
-            🎤
-        </button>
-
-        <input
-            id="messageInput"
-            type="text"
-            placeholder="DMN'ye bir şey sor..."
-            autocomplete="off"
+            class="remove-image"
+            id="removeImageButton"
         >
-
-        <button
-            id="sendButton"
-            title="Gönder">
-            ➤
+            ✕
         </button>
 
     </div>
 
-    <div class="status" id="status">
-        🔊 Sesli cevap: Kapalı
+
+    <div class="input-area">
+
+        <div class="input-box">
+
+            <button
+                id="imageButton"
+                title="Fotoğraf ekle"
+            >
+                📷
+            </button>
+
+            <input
+                type="file"
+                id="imageInput"
+                accept="image/*"
+            >
+
+            <button
+                id="micButton"
+                title="Sesli komut"
+            >
+                🎤
+            </button>
+
+            <input
+                id="messageInput"
+                type="text"
+                placeholder="DMN'ye bir şey sor..."
+                autocomplete="off"
+            >
+
+            <button
+                id="sendButton"
+                title="Gönder"
+            >
+                ➤
+            </button>
+
+        </div>
+
+        <div class="status" id="status">
+            🔊 Sesli cevap: Kapalı
+        </div>
+
     </div>
 
 </div>
-```
 
-</div>
 
 <div id="settingsScreen" class="screen">
 
-```
-<div class="settings-box">
+    <div class="settings-box">
 
-    <button
-        class="back-settings"
-        id="settingsBackButton">
-        ← Sohbete dön
-    </button>
+        <button
+            class="back-settings"
+            id="settingsBackButton"
+        >
+            ← Sohbete dön
+        </button>
 
-    <div class="settings-title">
-        ⚙️ DMN Ayarları
-    </div>
+        <div class="settings-title">
+            ⚙️ DMN Ayarları
+        </div>
 
 
-    <div class="setting">
+        <div class="setting">
 
-        <div class="setting-info">
+            <div class="setting-info">
 
-            <div class="setting-name">
-                🔊 Sesli cevap
+                <div class="setting-name">
+                    🔊 Sesli cevap
+                </div>
+
+                <div class="setting-description">
+                    DMN cevaplarını sesli olarak okur.
+                </div>
+
             </div>
 
-            <div class="setting-description">
-                DMN cevaplarını sesli olarak okur.
+            <label class="switch">
+
+                <input
+                    type="checkbox"
+                    id="voiceToggle"
+                >
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+
+        <div class="setting">
+
+            <div class="setting-info">
+
+                <div class="setting-name">
+                    🇬🇧 İngilizce konuşma
+                </div>
+
+                <div class="setting-description">
+                    DMN İngilizce cevap verir.
+                </div>
+
+            </div>
+
+            <label class="switch">
+
+                <input
+                    type="checkbox"
+                    id="englishToggle"
+                >
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+
+        <div class="setting">
+
+            <div class="setting-info">
+
+                <div class="setting-name">
+                    💬 Sohbet modu
+                </div>
+
+                <div class="setting-description">
+                    DMN doğal ve sohbet tarzında cevap verir.
+                </div>
+
+            </div>
+
+            <label class="switch">
+
+                <input
+                    type="checkbox"
+                    id="chatToggle"
+                    checked
+                    disabled
+                >
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+
+        <div class="setting">
+
+            <div class="setting-info">
+
+                <div class="setting-name">
+                    💾 Sohbet geçmişi
+                </div>
+
+                <div class="setting-description">
+                    Konuşmalar tarayıcıda otomatik olarak kaydedilir.
+                </div>
+
             </div>
 
         </div>
 
-        <label class="switch">
 
-            <input
-                type="checkbox"
-                id="voiceToggle">
+        <div class="history-buttons">
 
-            <span class="slider"></span>
-
-        </label>
-
-    </div>
-
-
-    <div class="setting">
-
-        <div class="setting-info">
-
-            <div class="setting-name">
-                🇬🇧 İngilizce konuşma
-            </div>
-
-            <div class="setting-description">
-                DMN İngilizce cevap verir.
-            </div>
+            <button
+                id="clearHistoryButton"
+                class="danger-button"
+            >
+                🗑️ Sohbet geçmişini sil
+            </button>
 
         </div>
-
-        <label class="switch">
-
-            <input
-                type="checkbox"
-                id="englishToggle">
-
-            <span class="slider"></span>
-
-        </label>
-
-    </div>
-
-
-    <div class="setting">
-
-        <div class="setting-info">
-
-            <div class="setting-name">
-                💬 Sohbet modu
-            </div>
-
-            <div class="setting-description">
-                DMN doğal ve sohbet tarzında cevap verir.
-            </div>
-
-        </div>
-
-        <label class="switch">
-
-            <input
-                type="checkbox"
-                id="chatToggle"
-                checked
-                disabled>
-
-            <span class="slider"></span>
-
-        </label>
 
     </div>
 
 </div>
-```
 
-</div>
 
 <script>
 
@@ -488,6 +525,9 @@ const voiceToggle =
 const englishToggle =
     document.getElementById("englishToggle");
 
+const clearHistoryButton =
+    document.getElementById("clearHistoryButton");
+
 
 let voiceEnabled =
     localStorage.getItem("dmn_voice") === "true";
@@ -505,6 +545,117 @@ englishToggle.checked =
     englishEnabled;
 
 
+// =====================================
+// SOHBET GEÇMİŞİ
+// =====================================
+
+let sohbetGecmisi = [];
+
+try {
+
+    const kayitliSohbet =
+        localStorage.getItem("dmn_chat_history");
+
+    if (kayitliSohbet) {
+
+        sohbetGecmisi =
+            JSON.parse(kayitliSohbet);
+
+    }
+
+} catch (error) {
+
+    console.error(
+        "Sohbet geçmişi okunamadı:",
+        error
+    );
+
+    sohbetGecmisi = [];
+
+}
+
+
+// =====================================
+// SOHBETİ KAYDET
+// =====================================
+
+function sohbetiKaydet() {
+
+    try {
+
+        localStorage.setItem(
+            "dmn_chat_history",
+            JSON.stringify(sohbetGecmisi)
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Sohbet kaydedilemedi:",
+            error
+        );
+
+    }
+
+}
+
+
+// =====================================
+// KAYITLI SOHBETİ YÜKLE
+// =====================================
+
+function sohbetiYukle() {
+
+    messages.innerHTML = "";
+
+    if (
+        !sohbetGecmisi ||
+        sohbetGecmisi.length === 0
+    ) {
+
+        mesajEkle(
+            "Merhaba! Ben DMN. 🤖\nBana istediğin şeyi sorabilirsin.",
+            "dmn",
+            false
+        );
+
+        return;
+    }
+
+
+    sohbetGecmisi.forEach(
+        function(kayit) {
+
+            if (
+                kayit.type === "image" &&
+                kayit.image
+            ) {
+
+                resimEkle(
+                    kayit.image,
+                    false
+                );
+
+            } else {
+
+                mesajEkle(
+                    kayit.text,
+                    kayit.role,
+                    false
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+// =====================================
+// AYARLAR
+// =====================================
+
 function ayarlariGuncelle() {
 
     voiceEnabled =
@@ -513,28 +664,34 @@ function ayarlariGuncelle() {
     englishEnabled =
         englishToggle.checked;
 
+
     localStorage.setItem(
         "dmn_voice",
-        voiceEnabled
+        String(voiceEnabled)
     );
 
     localStorage.setItem(
         "dmn_english",
-        englishEnabled
+        String(englishEnabled)
     );
 
-    statusText.textContent =
-        voiceEnabled
-            ? (
-                englishEnabled
-                    ? "🔊 Voice: English"
-                    : "🔊 Sesli cevap: Açık"
-            )
-            : (
-                englishEnabled
-                    ? "🔊 Voice: Off | 🇬🇧 English"
-                    : "🔊 Sesli cevap: Kapalı"
-            );
+
+    if (voiceEnabled) {
+
+        statusText.textContent =
+            englishEnabled
+                ? "Voice: English"
+                : "Sesli cevap: Açık";
+
+    } else {
+
+        statusText.textContent =
+            englishEnabled
+                ? "Voice: Off | English"
+                : "Sesli cevap: Kapalı";
+
+    }
+
 }
 
 
@@ -543,11 +700,16 @@ voiceToggle.addEventListener(
     ayarlariGuncelle
 );
 
+
 englishToggle.addEventListener(
     "change",
     ayarlariGuncelle
 );
 
+
+// =====================================
+// AYARLAR EKRANI
+// =====================================
 
 settingsButton.addEventListener(
     "click",
@@ -558,6 +720,7 @@ settingsButton.addEventListener(
 
         settingsScreen.style.display =
             "block";
+
     }
 );
 
@@ -571,14 +734,46 @@ settingsBackButton.addEventListener(
 
         chatScreen.style.display =
             "flex";
+
     }
 );
 
 
-ayarlariGuncelle();
+clearHistoryButton.addEventListener(
+    "click",
+    function() {
+
+        const onay =
+            confirm(
+                "Tüm sohbet geçmişi silinsin mi?"
+            );
+
+        if (!onay) {
+            return;
+        }
 
 
-function mesajEkle(text, type) {
+        sohbetGecmisi = [];
+
+        localStorage.removeItem(
+            "dmn_chat_history"
+        );
+
+        sohbetiYukle();
+
+    }
+);
+
+
+// =====================================
+// MESAJ EKLE
+// =====================================
+
+function mesajEkle(
+    text,
+    type,
+    kaydet = true
+) {
 
     const div =
         document.createElement("div");
@@ -593,10 +788,40 @@ function mesajEkle(text, type) {
 
     messages.scrollTop =
         messages.scrollHeight;
+
+
+    if (kaydet) {
+
+        sohbetGecmisi.push({
+
+            role:
+                type === "user"
+                    ? "user"
+                    : "dmn",
+
+            type:
+                "text",
+
+            text:
+                text
+
+        });
+
+        sohbetiKaydet();
+
+    }
+
 }
 
 
-function resimEkle(src) {
+// =====================================
+// RESİM EKLE
+// =====================================
+
+function resimEkle(
+    src,
+    kaydet = true
+) {
 
     const div =
         document.createElement("div");
@@ -604,13 +829,19 @@ function resimEkle(src) {
     div.className =
         "message user";
 
+
     const img =
         document.createElement("img");
 
-    img.src = src;
+    img.src =
+        src;
 
     img.className =
         "message-image";
+
+    img.alt =
+        "Gönderilen fotoğraf";
+
 
     div.appendChild(img);
 
@@ -618,15 +849,42 @@ function resimEkle(src) {
 
     messages.scrollTop =
         messages.scrollHeight;
+
+
+    if (kaydet) {
+
+        sohbetGecmisi.push({
+
+            role:
+                "user",
+
+            type:
+                "image",
+
+            image:
+                src
+
+        });
+
+        sohbetiKaydet();
+
+    }
+
 }
 
+
+// =====================================
+// KOD İSTEĞİ
+// =====================================
 
 function kodIstegiMi(mesaj) {
 
     const text =
         mesaj.toLowerCase();
 
+
     const kelimeler = [
+
         "kod ver",
         "kodu ver",
         "kod yaz",
@@ -634,24 +892,34 @@ function kodIstegiMi(mesaj) {
         "kod oluştur",
         "kod olustur",
         "kod yap",
+        "kodunu ver",
         "program yaz",
         "program oluştur",
         "program olustur"
+
     ];
+
 
     return kelimeler.some(
         kelime =>
             text.includes(kelime)
     );
+
 }
 
+
+// =====================================
+// RESİM İSTEĞİ
+// =====================================
 
 function resimIstegiMi(mesaj) {
 
     const text =
         mesaj.toLowerCase();
 
+
     const kelimeler = [
+
         "resim oluştur",
         "resim olustur",
         "resim yap",
@@ -661,14 +929,21 @@ function resimIstegiMi(mesaj) {
         "gorsel olustur",
         "bir resim çiz",
         "resim çiz"
+
     ];
+
 
     return kelimeler.some(
         kelime =>
             text.includes(kelime)
     );
+
 }
 
+
+// =====================================
+// FOTOĞRAF SEÇ
+// =====================================
 
 imageButton.addEventListener(
     "click",
@@ -687,12 +962,28 @@ imageInput.addEventListener(
         const file =
             imageInput.files[0];
 
+
         if (!file) {
             return;
         }
 
+
+        if (
+            !file.type.startsWith("image/")
+        ) {
+
+            alert(
+                "Lütfen bir fotoğraf seç."
+            );
+
+            return;
+
+        }
+
+
         const reader =
             new FileReader();
+
 
         reader.onload =
             function(event) {
@@ -705,12 +996,19 @@ imageInput.addEventListener(
 
                 preview.style.display =
                     "block";
+
             };
 
+
         reader.readAsDataURL(file);
+
     }
 );
 
+
+// =====================================
+// FOTOĞRAFI KALDIR
+// =====================================
 
 removeImageButton.addEventListener(
     "click",
@@ -724,17 +1022,28 @@ removeImageButton.addEventListener(
             "none";
 
         previewImage.src = "";
+
     }
 );
 
+
+// =====================================
+// MESAJ GÖNDER
+// =====================================
 
 async function mesajGonder() {
 
     const mesaj =
         input.value.trim();
 
-    if (!mesaj && !selectedImage) {
+
+    if (
+        !mesaj &&
+        !selectedImage
+    ) {
+
         return;
+
     }
 
 
@@ -784,7 +1093,10 @@ async function mesajGonder() {
             ? "DMN is thinking..."
             : "DMN düşünüyor...";
 
-    messages.appendChild(loading);
+
+    messages.appendChild(
+        loading
+    );
 
     messages.scrollTop =
         messages.scrollHeight;
@@ -818,6 +1130,7 @@ async function mesajGonder() {
                             gonderilecekResim
 
                     })
+
                 }
             );
 
@@ -835,6 +1148,7 @@ async function mesajGonder() {
                 data.error ||
                 "DMN cevap veremedi."
             );
+
         }
 
 
@@ -856,83 +1170,117 @@ async function mesajGonder() {
 
         loading.remove();
 
+
         mesajEkle(
             "DMN: " +
             error.message,
             "dmn"
         );
 
+
         console.error(
             "DMN hatası:",
             error
         );
+
     }
+
 }
 
 
-function seslendirilecekMetniTemizle(metin) {
+// =====================================
+// SES METNİNİ TEMİZLE
+// =====================================
+
+function seslendirilecekMetniTemizle(
+    metin
+) {
 
     let temiz =
-        metin;
+        String(metin || "");
 
+
+    // Kod bloklarını kaldır
     temiz =
         temiz.replace(
             /```[\s\S]*?```/g,
             " "
         );
 
+
+    // Satır içi kodları kaldır
     temiz =
         temiz.replace(
             /`[^`]*`/g,
             " "
         );
 
+
+    // URL'leri kaldır
     temiz =
         temiz.replace(
             /https?:\/\/\S+/gi,
             " "
         );
 
+
+    // Emoji karakterlerini kaldır
     temiz =
         temiz.replace(
             /[\u{1F300}-\u{1FAFF}]/gu,
             " "
         );
 
+
+    // Bayrak emojilerini kaldır
     temiz =
         temiz.replace(
             /[\u{1F1E6}-\u{1F1FF}]/gu,
             " "
         );
 
+
+    // Diğer sembol emojilerini kaldır
     temiz =
         temiz.replace(
             /[\u2600-\u27BF]/g,
             " "
         );
 
+
+    // Markdown karakterlerini kaldır
     temiz =
         temiz.replace(
             /[#*_~]/g,
             " "
         );
 
+
+    // Fazla boşlukları temizle
     temiz =
         temiz.replace(
             /\s+/g,
             " "
         );
 
+
     return temiz.trim();
+
 }
 
+
+// =====================================
+// SESLİ CEVAP
+// =====================================
 
 function sesliOku(metin) {
 
     if (
         !("speechSynthesis" in window)
     ) {
+
         return;
+
     }
 
 
@@ -943,7 +1291,9 @@ function sesliOku(metin) {
 
 
     if (!temizMetin) {
+
         return;
+
     }
 
 
@@ -984,11 +1334,18 @@ function sesliOku(metin) {
                         ses.lang
                     )
             );
+
     }
 
 
     if (!secilenSes) {
+
+        console.warn(
+            "Uygun ses bulunamadı."
+        );
+
         return;
+
     }
 
 
@@ -1001,16 +1358,20 @@ function sesliOku(metin) {
     konusma.voice =
         secilenSes;
 
+
     konusma.lang =
         englishEnabled
             ? "en-US"
             : "tr-TR";
 
+
     konusma.rate =
         0.95;
 
+
     konusma.pitch =
         0.9;
+
 
     konusma.volume =
         1;
@@ -1021,8 +1382,9 @@ function sesliOku(metin) {
 
             statusText.textContent =
                 englishEnabled
-                    ? "🔊 Speaking English..."
-                    : "🔊 Konuşuyor...";
+                    ? "Speaking English..."
+                    : "Konuşuyor...";
+
         };
 
 
@@ -1030,22 +1392,33 @@ function sesliOku(metin) {
         function() {
 
             ayarlariGuncelle();
+
         };
 
 
     konusma.onerror =
-        function() {
+        function(event) {
 
-            statusText.textContent =
-                "Ses hatası";
+            console.error(
+                "Ses hatası:",
+                event
+            );
+
+            ayarlariGuncelle();
+
         };
 
 
     window.speechSynthesis.speak(
         konusma
     );
+
 }
 
+
+// =====================================
+// SESLİ KOMUT
+// =====================================
 
 const SpeechRecognition =
     window.SpeechRecognition ||
@@ -1060,8 +1433,10 @@ if (SpeechRecognition) {
     recognition =
         new SpeechRecognition();
 
+
     recognition.continuous =
         false;
+
 
     recognition.interimResults =
         false;
@@ -1077,10 +1452,12 @@ if (SpeechRecognition) {
             micButton.textContent =
                 "🔴";
 
+
             statusText.textContent =
                 englishEnabled
-                    ? "🎤 Listening..."
-                    : "🎤 Dinliyorum...";
+                    ? "Listening..."
+                    : "Dinliyorum...";
+
         };
 
 
@@ -1094,7 +1471,9 @@ if (SpeechRecognition) {
             micButton.textContent =
                 "🎤";
 
+
             ayarlariGuncelle();
+
         };
 
 
@@ -1106,15 +1485,21 @@ if (SpeechRecognition) {
                 event.error
             );
 
+
             micButton.classList.remove(
                 "recording"
             );
 
+
             micButton.textContent =
                 "🎤";
 
+
             statusText.textContent =
-                "Mikrofon hatası";
+                englishEnabled
+                    ? "Microphone error"
+                    : "Mikrofon hatası";
+
         };
 
 
@@ -1125,31 +1510,49 @@ if (SpeechRecognition) {
                 event.results[0][0]
                     .transcript;
 
+
             input.value =
                 text;
 
+
             mesajGonder();
+
         };
 
 } else {
 
     micButton.disabled =
         true;
+
+
+    statusText.textContent =
+        englishEnabled
+            ? "Voice input is not supported."
+            : "Sesli komut desteklenmiyor.";
+
 }
 
+
+// =====================================
+// MİKROFON BUTONU
+// =====================================
 
 micButton.addEventListener(
     "click",
     function() {
 
         if (!recognition) {
+
             return;
+
         }
+
 
         recognition.lang =
             englishEnabled
                 ? "en-US"
                 : "tr-TR";
+
 
         try {
 
@@ -1160,9 +1563,14 @@ micButton.addEventListener(
             console.log(error);
 
         }
+
     }
 );
 
+
+// =====================================
+// GÖNDER BUTONU
+// =====================================
 
 sendButton.addEventListener(
     "click",
@@ -1170,17 +1578,31 @@ sendButton.addEventListener(
 );
 
 
+// =====================================
+// ENTER
+// =====================================
+
 input.addEventListener(
     "keydown",
     function(event) {
 
-        if (event.key === "Enter") {
+        if (
+            event.key === "Enter"
+        ) {
+
+            event.preventDefault();
+
             mesajGonder();
+
         }
 
     }
 );
 
+
+// =====================================
+// SESLER HAZIR OLDUĞUNDA
+// =====================================
 
 window.speechSynthesis.onvoiceschanged =
     function() {
@@ -1189,6 +1611,15 @@ window.speechSynthesis.onvoiceschanged =
             .getVoices();
 
     };
+
+
+// =====================================
+// BAŞLANGIÇ
+// =====================================
+
+ayarlariGuncelle();
+
+sohbetiYukle();
 
 </script>
 

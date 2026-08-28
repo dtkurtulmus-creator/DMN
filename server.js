@@ -1,4 +1,3 @@
-```javascript
 const express = require("express");
 const cors = require("cors");
 const OpenAI = require("openai");
@@ -20,69 +19,146 @@ const client = new OpenAI({
 });
 
 app.use(cors());
-app.use(express.json({ limit: "20mb" }));
+
+app.use(
+    express.json({
+        limit: "25mb"
+    })
+);
+
 app.use(express.static(__dirname));
 
+
+// =====================================
+// ANA SAYFA
+// =====================================
+
 app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "index.html"));
+    res.sendFile(
+        path.join(__dirname, "index.html")
+    );
 });
 
-app.post("/api/chat", async function (req, res) {
-    try {
-        const message = req.body.message || "";
-        const english = req.body.english === true;
-        const codeMode = req.body.codeMode === true;
-        const image = req.body.image || null;
 
-        let instructions;
+// =====================================
+// CHAT
+// =====================================
+
+app.post("/api/chat", async function (req, res) {
+
+    try {
+
+        const message =
+            typeof req.body.message === "string"
+                ? req.body.message
+                : "";
+
+        const english =
+            req.body.english === true;
+
+        const codeMode =
+            req.body.codeMode === true;
+
+        const image =
+            typeof req.body.image === "string"
+                ? req.body.image
+                : null;
+
+
+        if (!message && !image) {
+
+            return res.status(400).json({
+                error: "Mesaj veya fotoğraf gönderilmedi."
+            });
+
+        }
+
+
+        // =====================================
+        // TALİMATLAR
+        // =====================================
+
+        let instructions = "";
+
 
         if (english) {
+
             instructions = `
-You are DMN, a smart and friendly AI assistant.
+You are DMN, a smart, friendly and helpful AI assistant.
 
 Always answer in English.
 
-You are especially knowledgeable about Arduino, ESP32, electronics, programming, computers, technology and general knowledge.
+Be natural, conversational and intelligent.
 
-Be natural, helpful and conversational.
+You are especially knowledgeable about:
 
-If the user asks who created you, who your developer is, or who made you, answer:
+Arduino
+ESP32
+electronics
+programming
+computers
+technology
+general knowledge
+
+If the user asks who created you, who your developer is,
+who made you, or who developed you, answer:
 
 My developer is Devrim Tuğra Kurtulmuş.
 
 If the user asks for code:
+
 - Give complete working code.
-- Never use "..." instead of code.
+- Never replace code with "..."
 - Include required libraries.
 - Include all required functions.
 - Make the code ready to use.
+- Keep important parts of the code intact.
 
 If the user sends code:
+
 - Find the errors.
-- Briefly explain the problem.
+- Explain the important problem briefly.
 - Then provide the complete corrected code.
 
 If the user says "only code":
+
 - Give only the code.
 - Do not add explanations.
+
+Do not unnecessarily generate code during normal conversation.
 `;
+
         } else {
+
             instructions = `
-Sen DMN adlı Türkçe yapay zeka asistanısın.
+Sen DMN adlı akıllı, yardımsever ve samimi Türkçe yapay zeka asistanısın.
 
 Her zaman Türkçe konuş.
 
-Doğal, samimi, akıllı ve anlaşılır cevaplar ver.
+Doğal, anlaşılır, akıllı ve sohbet tarzında cevaplar ver.
 
-Arduino, ESP32, elektronik, programlama, bilgisayar, teknoloji ve genel bilgi konularında özellikle bilgili ol.
+Özellikle şu konularda bilgili ol:
 
-Kullanıcı "Seni kim yaptı?", "Yapımcın kim?", "Seni kim geliştirdi?" veya benzeri bir şey sorarsa:
+Arduino
+ESP32
+elektronik
+programlama
+bilgisayar
+teknoloji
+genel bilgi
+
+Kullanıcı sana "Seni kim yaptı?",
+"Yapımcın kim?",
+"Seni kim geliştirdi?",
+"Senin yapımcın kim?"
+veya benzeri bir soru sorarsa:
 
 Benim yapımcım Devrim Tuğra Kurtulmuş.
 
 şeklinde cevap ver.
 
 Kullanıcı kod isterse:
+
 - Tam ve eksiksiz çalışan kod ver.
 - Kodu kısaltma.
 - "..." kullanma.
@@ -91,36 +167,58 @@ Kullanıcı kod isterse:
 - Kullanıma hazır kod ver.
 
 Kullanıcı kod gönderirse:
+
 - Hataları bul.
 - Sorunu kısaca açıkla.
-- Düzeltilmiş TAM kodu ver.
+- Ardından düzeltilmiş TAM kodu ver.
 
 Kullanıcı normal sohbet yapıyorsa gereksiz yere kod üretme.
 
 Kullanıcı "sadece kod" derse:
+
 - Yalnızca kod ver.
 - Açıklama yazma.
+
+Fotoğraf gönderilirse fotoğrafı dikkatlice analiz et.
+Fotoğraftaki nesneleri, yazıları, devreleri veya hataları
+olabildiğince doğru şekilde açıkla.
 `;
         }
 
+
         if (codeMode) {
+
             instructions += `
+
 The user is requesting programming code.
-Prioritize complete and working code.
-Do not shorten the code.
+
+Prioritize complete, working and ready-to-use code.
+
+Do not shorten the requested code.
+
+Do not replace parts with "...".
 `;
         }
+
+
+        // =====================================
+        // OPENAI INPUT
+        // =====================================
 
         let input;
 
+
         if (image) {
+
             input = [
                 {
                     role: "user",
                     content: [
                         {
                             type: "input_text",
-                            text: message || "Bu fotoğrafı analiz et."
+                            text:
+                                message ||
+                                "Bu fotoğrafı analiz et."
                         },
                         {
                             type: "input_image",
@@ -129,73 +227,203 @@ Do not shorten the code.
                     ]
                 }
             ];
+
         } else {
+
             input = message;
+
         }
 
-        const response = await client.responses.create({
-            model: "gpt-5.6-luna",
-            instructions: instructions,
-            input: input
-        });
 
-        res.json({
-            reply: response.output_text || ""
-        });
+        // =====================================
+        // OPENAI CEVABI
+        // =====================================
 
-    } catch (error) {
-        console.error("CHAT HATASI:", error);
+        const response =
+            await client.responses.create({
 
-        res.status(500).json({
-            error: error.message || "DMN cevap oluşturamadı."
-        });
-    }
-});
+                model: "gpt-5.6-luna",
 
-app.post("/api/generate-image", async function (req, res) {
-    try {
-        const prompt = req.body.prompt || "";
+                instructions:
+                    instructions,
 
-        if (!prompt) {
-            return res.status(400).json({
-                error: "Görsel açıklaması gönderilmedi."
+                input:
+                    input
+
             });
-        }
 
-        console.log("Görsel oluşturuluyor...");
 
-        const result = await client.images.generate({
-            model: "gpt-image-1",
-            prompt: prompt,
-            size: "1024x1024"
-        });
+        const reply =
+            response.output_text || "";
 
-        if (!result.data || !result.data[0]) {
-            throw new Error("Görsel oluşturulamadı.");
-        }
-
-        const imageData = result.data[0].b64_json;
-
-        if (!imageData) {
-            throw new Error("Görsel verisi alınamadı.");
-        }
 
         res.json({
-            image: "data:image/png;base64," + imageData
+            reply: reply
         });
+
 
     } catch (error) {
-        console.error("GORSEL HATASI:", error);
+
+        console.error(
+            "CHAT HATASI:",
+            error
+        );
+
 
         res.status(500).json({
-            error: error.message || "Görsel oluşturulamadı."
+
+            error:
+                error.message ||
+                "DMN cevap oluşturamadı."
+
         });
+
     }
+
 });
 
-app.listen(PORT, "0.0.0.0", function () {
-    console.log(
-        "DMN sunucusu " + PORT + " portunda çalışıyor."
-    );
-});
-```
+
+// =====================================
+// GÖRSEL OLUŞTURMA
+// =====================================
+
+app.post(
+    "/api/generate-image",
+    async function (req, res) {
+
+        try {
+
+            const prompt =
+                typeof req.body.prompt === "string"
+                    ? req.body.prompt.trim()
+                    : "";
+
+
+            if (!prompt) {
+
+                return res.status(400).json({
+
+                    error:
+                        "Görsel açıklaması gönderilmedi."
+
+                });
+
+            }
+
+
+            console.log(
+                "Görsel oluşturuluyor..."
+            );
+
+
+            const result =
+                await client.images.generate({
+
+                    model:
+                        "gpt-image-2",
+
+                    prompt:
+                        prompt,
+
+                    size:
+                        "1024x1024"
+
+                });
+
+
+            if (
+                !result ||
+                !result.data ||
+                !result.data[0]
+            ) {
+
+                throw new Error(
+                    "Görsel oluşturulamadı."
+                );
+
+            }
+
+
+            const imageData =
+                result.data[0].b64_json;
+
+
+            if (!imageData) {
+
+                throw new Error(
+                    "Görsel verisi alınamadı."
+                );
+
+            }
+
+
+            res.json({
+
+                image:
+                    "data:image/png;base64," +
+                    imageData
+
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "GORSEL HATASI:",
+                error
+            );
+
+
+            res.status(500).json({
+
+                error:
+                    error.message ||
+                    "Görsel oluşturulamadı."
+
+            });
+
+        }
+
+    }
+);
+
+
+// =====================================
+// SAĞLIK KONTROLÜ
+// =====================================
+
+app.get(
+    "/api/health",
+    function (req, res) {
+
+        res.json({
+
+            status:
+                "ok",
+
+            dmn:
+                "online"
+
+        });
+
+    }
+);
+
+
+// =====================================
+// SERVER
+// =====================================
+
+app.listen(
+    PORT,
+    "0.0.0.0",
+    function () {
+
+        console.log(
+            "DMN sunucusu " +
+            PORT +
+            " portunda çalışıyor."
+        );
+
+    }
+);

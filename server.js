@@ -1,3 +1,4 @@
+```javascript
 const express = require("express");
 const cors = require("cors");
 const OpenAI = require("openai");
@@ -30,6 +31,37 @@ app.use(express.static(__dirname));
 
 
 // =====================================
+// BASİT FREE MESAJ SİSTEMİ
+// =====================================
+
+const FREE_MESSAGE_LIMIT = 10;
+
+// Demo/test amaçlı kullanıcı sayaçları.
+// Gerçek sistemde bunu veritabanında tutmalısın.
+const users = new Map();
+
+function getUserId(req) {
+    // Şimdilik tarayıcıdan gelen ID kullanılıyor.
+    // Gerçek sistemde kullanıcı hesabı/JWT kullanılmalı.
+    return (
+        req.headers["x-user-id"] ||
+        req.body.userId ||
+        "demo-user"
+    );
+}
+
+function getUser(userId) {
+    if (!users.has(userId)) {
+        users.set(userId, {
+            messages: FREE_MESSAGE_LIMIT
+        });
+    }
+
+    return users.get(userId);
+}
+
+
+// =====================================
 // ANA SAYFA
 // =====================================
 
@@ -41,12 +73,74 @@ app.get("/", function (req, res) {
 
 
 // =====================================
+// KULLANICI DURUMU
+// =====================================
+
+app.get("/api/usage", function (req, res) {
+    try {
+        const userId = getUserId(req);
+        const user = getUser(userId);
+
+        res.json({
+            messagesRemaining: user.messages,
+            freeLimit: FREE_MESSAGE_LIMIT
+        });
+
+    } catch (error) {
+        console.error("USAGE HATASI:", error);
+
+        res.status(500).json({
+            error: "Kullanım bilgisi alınamadı."
+        });
+    }
+});
+
+
+// =====================================
+// REKLAM İZLE → +10 MESAJ
+// =====================================
+//
+// ŞİMDİLİK TEST ENDPOINTİ.
+//
+// Gerçek reklam ağı bağlandığında burada
+// reklam sağlayıcısının server-side doğrulaması
+// yapılmalıdır.
+//
+// =====================================
+
+app.post("/api/reward-ad", function (req, res) {
+    try {
+        const userId = getUserId(req);
+        const user = getUser(userId);
+
+        user.messages += 10;
+
+        res.json({
+            success: true,
+            messagesAdded: 10,
+            messagesRemaining: user.messages
+        });
+
+    } catch (error) {
+        console.error("REKLAM ÖDÜL HATASI:", error);
+
+        res.status(500).json({
+            error: "Reklam ödülü verilemedi."
+        });
+    }
+});
+
+
+// =====================================
 // CHAT
 // =====================================
 
 app.post("/api/chat", async function (req, res) {
 
     try {
+
+        const userId = getUserId(req);
+        const user = getUser(userId);
 
         const message =
             typeof req.body.message === "string"
@@ -75,11 +169,30 @@ app.post("/api/chat", async function (req, res) {
 
 
         // =====================================
+        // MESAJ HAKKI KONTROLÜ
+        // =====================================
+
+        if (user.messages <= 0) {
+
+            return res.status(402).json({
+                error: "Mesaj hakkın bitti.",
+                code: "NO_MESSAGES",
+                messagesRemaining: 0,
+                rewardAvailable: true
+            });
+
+        }
+
+
+        // Mesaj hakkını cevap oluşturulmadan önce düşür.
+        user.messages--;
+
+
+        // =====================================
         // TALİMATLAR
         // =====================================
 
         let instructions = "";
-
 
         if (english) {
 
@@ -112,12 +225,12 @@ If the user asks for code:
 - Include required libraries.
 - Include all required functions.
 - Make the code ready to use.
-- Keep important parts of the code intact.
+- Do not unnecessarily shorten code.
 
 If the user sends code:
 
 - Find the errors.
-- Explain the important problem briefly.
+- Briefly explain the important problem.
 - Then provide the complete corrected code.
 
 If the user says "only code":
@@ -135,7 +248,7 @@ Sen DMN adlı akıllı, yardımsever ve samimi Türkçe yapay zeka asistanısın
 
 Her zaman Türkçe konuş.
 
-Doğal, anlaşılır, akıllı ve sohbet tarzında cevaplar ver.
+Doğal, anlaşılır, akıllı ve sohbet tarzında cevap ver.
 
 Özellikle şu konularda bilgili ol:
 
@@ -207,7 +320,6 @@ Do not replace parts with "...".
 
         let input;
 
-
         if (image) {
 
             input = [
@@ -236,7 +348,7 @@ Do not replace parts with "...".
 
 
         // =====================================
-        // OPENAI CEVABI
+        // OPENAI
         // =====================================
 
         const response =
@@ -244,11 +356,9 @@ Do not replace parts with "...".
 
                 model: "gpt-5.6-luna",
 
-                instructions:
-                    instructions,
+                instructions: instructions,
 
-                input:
-                    input
+                input: input
 
             });
 
@@ -257,8 +367,17 @@ Do not replace parts with "...".
             response.output_text || "";
 
 
+        // =====================================
+        // CEVAP
+        // =====================================
+
         res.json({
-            reply: reply
+
+            reply: reply,
+
+            messagesRemaining:
+                user.messages
+
         });
 
 
@@ -268,7 +387,6 @@ Do not replace parts with "...".
             "CHAT HATASI:",
             error
         );
-
 
         res.status(500).json({
 
@@ -298,18 +416,14 @@ app.post(
                     ? req.body.prompt.trim()
                     : "";
 
-
             if (!prompt) {
 
                 return res.status(400).json({
-
                     error:
                         "Görsel açıklaması gönderilmedi."
-
                 });
 
             }
-
 
             console.log(
                 "Görsel oluşturuluyor..."
@@ -319,14 +433,11 @@ app.post(
             const result =
                 await client.images.generate({
 
-                    model:
-                        "gpt-image-2",
+                    model: "gpt-image-1",
 
-                    prompt:
-                        prompt,
+                    prompt: prompt,
 
-                    size:
-                        "1024x1024"
+                    size: "1024x1024"
 
                 });
 
@@ -373,7 +484,6 @@ app.post(
                 error
             );
 
-
             res.status(500).json({
 
                 error:
@@ -398,11 +508,9 @@ app.get(
 
         res.json({
 
-            status:
-                "ok",
+            status: "ok",
 
-            dmn:
-                "online"
+            dmn: "online"
 
         });
 
@@ -427,3 +535,4 @@ app.listen(
 
     }
 );
+```

@@ -3,12 +3,21 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-site-verification" content="mBO_SXlln8r7ot4GJeNZK81rDS11GLJPQZbGsy6jHCQ">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="google-site-verification"
+        content="mBO_SXlln8r7ot4GJeNZK81rDS11GLJPQZbGsy6jHCQ"
+    >
 
     <title>DMN</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -17,22 +26,49 @@
             margin: 0;
             font-family: Arial, sans-serif;
             color: #fff;
+
             background:
-                radial-gradient(circle at 20% 10%, #26345f 0, transparent 35%),
-                radial-gradient(circle at 90% 20%, #40275f 0, transparent 35%),
-                linear-gradient(135deg, #0b1020, #151525 50%, #0b1020);
+                radial-gradient(
+                    circle at 20% 10%,
+                    #26345f 0,
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 90% 20%,
+                    #40275f 0,
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    #0b1020,
+                    #151525 50%,
+                    #0b1020
+                );
+
             height: 100vh;
             overflow: hidden;
         }
 
+
+        /* ================================
+           HEADER
+        ================================= */
+
         header {
             height: 65px;
+
             display: flex;
             align-items: center;
+
             padding: 0 18px;
-            background: rgba(15, 18, 32, 0.82);
+
+            background:
+                rgba(15, 18, 32, 0.82);
+
             backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255,255,255,.08);
+
+            border-bottom:
+                1px solid rgba(255,255,255,.08);
         }
 
         .logo {
@@ -44,18 +80,31 @@
             margin-left: auto;
         }
 
+
+        /* ================================
+           BUTTONS
+        ================================= */
+
         button {
             border: 0;
+
             color: white;
-            background: rgba(255,255,255,.09);
+
+            background:
+                rgba(255,255,255,.09);
+
             border-radius: 12px;
+
             padding: 11px 15px;
+
             cursor: pointer;
+
             font-size: 18px;
         }
 
         button:hover {
-            background: rgba(255,255,255,.16);
+            background:
+                rgba(255,255,255,.16);
         }
 
         button:disabled {
@@ -63,282 +112,619 @@
             cursor: not-allowed;
         }
 
+
+        /* ================================
+           CHAT
+        ================================= */
+
         #chatScreen {
             height: calc(100vh - 65px);
+
             display: flex;
             flex-direction: column;
         }
 
         .messages {
             flex: 1;
+
             overflow-y: auto;
+
             padding: 25px 15px;
         }
 
         .message {
             max-width: 850px;
+
             margin: 12px auto;
+
             padding: 15px 17px;
+
             border-radius: 18px;
+
             line-height: 1.55;
+
             white-space: pre-wrap;
+
             overflow-wrap: anywhere;
         }
 
         .user {
-            background: rgba(255,255,255,.09);
+            background:
+                rgba(255,255,255,.09);
         }
 
         .dmn {
-            background: rgba(20,25,43,.82);
-            border: 1px solid rgba(255,255,255,.08);
+            background:
+                rgba(20,25,43,.82);
+
+            border:
+                1px solid rgba(255,255,255,.08);
         }
+
+
+        /* ================================
+           IMAGES
+        ================================= */
 
         .message-image {
             max-width: 100%;
+
             max-height: 500px;
+
             border-radius: 15px;
+
             display: block;
+
             margin-top: 8px;
         }
 
+
+        /* ================================
+           CODE
+        ================================= */
+
         .code-wrapper {
             position: relative;
+
             margin-top: 10px;
         }
 
         .code-block {
             background: #080b12;
-            border: 1px solid #30384d;
+
+            border:
+                1px solid #30384d;
+
             border-radius: 12px;
+
             padding: 45px 15px 15px;
+
             overflow-x: auto;
+
             white-space: pre;
-            font-family: Consolas, monospace;
+
+            font-family:
+                Consolas,
+                monospace;
+
             font-size: 14px;
         }
 
         .copy-button {
             position: absolute;
+
             top: 8px;
             right: 8px;
+
             font-size: 13px;
-            padding: 7px 10px;
+
+            padding:
+                7px 10px;
         }
+
+
+        /* ================================
+           VOICE
+        ================================= */
 
         .voice-circle {
             width: 13px;
             height: 13px;
+
             border-radius: 50%;
+
             display: inline-block;
+
             margin-right: 7px;
+
             background: #7c8cff;
-            box-shadow: 0 0 12px #7c8cff;
-            animation: voicePulse 1s infinite alternate;
+
+            box-shadow:
+                0 0 12px #7c8cff;
+
+            animation:
+                voicePulse
+                1s
+                infinite
+                alternate;
         }
 
         @keyframes voicePulse {
+
             from {
                 transform: scale(.75);
                 opacity: .55;
             }
+
             to {
                 transform: scale(1.2);
                 opacity: 1;
             }
+
         }
 
+
+        /* ================================
+           INPUT
+        ================================= */
+
         .input-area {
+
             padding: 15px;
-            background: rgba(10,13,25,.82);
-            backdrop-filter: blur(15px);
-            border-top: 1px solid rgba(255,255,255,.08);
+
+            background:
+                rgba(10,13,25,.82);
+
+            backdrop-filter:
+                blur(15px);
+
+            border-top:
+                1px solid rgba(255,255,255,.08);
         }
 
         .input-box {
+
             max-width: 850px;
+
             margin: auto;
+
             display: flex;
+
             gap: 8px;
         }
 
         #messageInput {
+
             flex: 1;
+
             min-width: 0;
+
             padding: 14px;
-            border: 1px solid #343b50;
+
+            border:
+                1px solid #343b50;
+
             border-radius: 14px;
-            background: rgba(5,8,17,.8);
+
+            background:
+                rgba(5,8,17,.8);
+
             color: white;
+
             outline: none;
+
             font-size: 16px;
         }
 
         #messageInput:focus {
-            border-color: #6978ff;
+
+            border-color:
+                #6978ff;
         }
 
         #imageInput {
             display: none;
         }
 
+
+        /* ================================
+           STATUS
+        ================================= */
+
         .status {
+
             max-width: 850px;
-            margin: 8px auto 0;
-            color: #9aa3b8;
+
+            margin:
+                8px auto 0;
+
+            color:
+                #9aa3b8;
+
             font-size: 13px;
         }
 
+
+        /* ================================
+           PREVIEW
+        ================================= */
+
         .preview {
+
             max-width: 850px;
-            margin: 8px auto;
+
+            margin:
+                8px auto;
+
             display: none;
+
+            align-items: center;
+
+            gap: 10px;
         }
 
         .preview img {
+
             max-width: 160px;
+
             max-height: 110px;
+
             border-radius: 12px;
         }
 
-        #settingsScreen {
+
+        /* ================================
+           REWARD
+        ================================= */
+
+        #rewardBox {
+
             display: none;
-            height: calc(100vh - 65px);
+
+            max-width: 850px;
+
+            margin:
+                10px auto 0;
+
+            padding: 15px;
+
+            background:
+                rgba(20,25,43,.95);
+
+            border:
+                1px solid rgba(255,255,255,.1);
+
+            border-radius: 15px;
+
+            text-align: center;
+        }
+
+        #rewardButton {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #5969ff,
+                    #7b4dff
+                );
+
+            font-weight: bold;
+        }
+
+        #rewardButton:hover {
+
+            opacity: .9;
+        }
+
+        #rewardStatus {
+
+            margin-top: 8px;
+
+            color:
+                #9aa3b8;
+
+            font-size: 13px;
+        }
+
+
+        /* ================================
+           SETTINGS
+        ================================= */
+
+        #settingsScreen {
+
+            display: none;
+
+            height:
+                calc(100vh - 65px);
+
             overflow-y: auto;
-            padding: 25px 15px;
+
+            padding:
+                25px 15px;
         }
 
         .settings-box {
+
             max-width: 700px;
+
             margin: auto;
         }
 
         .settings-title {
+
             font-size: 28px;
+
             font-weight: bold;
+
             margin-bottom: 22px;
         }
 
         .setting {
+
             padding: 18px;
+
             margin-bottom: 14px;
-            background: rgba(20,25,43,.8);
-            border: 1px solid rgba(255,255,255,.08);
+
+            background:
+                rgba(20,25,43,.8);
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
             border-radius: 16px;
+
             display: flex;
-            justify-content: space-between;
+
+            justify-content:
+                space-between;
+
             align-items: center;
+
             gap: 15px;
         }
 
         .setting-name {
+
             font-weight: bold;
+
             margin-bottom: 5px;
         }
 
         .setting-description {
-            color: #949db0;
+
+            color:
+                #949db0;
+
             font-size: 13px;
         }
 
+
+        /* ================================
+           SWITCH
+        ================================= */
+
         .switch {
+
             position: relative;
+
             width: 52px;
             height: 30px;
+
             flex-shrink: 0;
         }
 
         .switch input {
+
             display: none;
         }
 
         .slider {
+
             position: absolute;
+
             inset: 0;
-            background: #343b50;
+
+            background:
+                #343b50;
+
             border-radius: 30px;
+
             cursor: pointer;
         }
 
         .slider::before {
+
             content: "";
+
             position: absolute;
+
             width: 22px;
             height: 22px;
+
             left: 4px;
             top: 4px;
+
             background: white;
+
             border-radius: 50%;
+
             transition: .2s;
         }
 
         .switch input:checked + .slider {
-            background: #5969ff;
+
+            background:
+                #5969ff;
         }
 
         .switch input:checked + .slider::before {
-            transform: translateX(22px);
+
+            transform:
+                translateX(22px);
         }
 
+
+        /* ================================
+           HISTORY
+        ================================= */
+
         .history-title {
+
             margin-top: 30px;
+
             font-size: 20px;
+
             font-weight: bold;
         }
 
         .history-item {
+
             padding: 13px;
+
             margin-top: 8px;
+
             border-radius: 12px;
-            background: rgba(255,255,255,.06);
+
+            background:
+                rgba(255,255,255,.06);
+
             cursor: pointer;
+
             overflow: hidden;
+
             text-overflow: ellipsis;
+
             white-space: nowrap;
         }
 
         .history-item:hover {
-            background: rgba(255,255,255,.11);
+
+            background:
+                rgba(255,255,255,.11);
         }
 
+
+        /* ================================
+           MOBILE
+        ================================= */
+
         @media (max-width: 600px) {
+
             .message {
                 max-width: 96%;
             }
 
             .input-box button {
-                padding: 10px 12px;
+                padding:
+                    10px 12px;
             }
+
         }
+
     </style>
 </head>
 
+
 <body>
 
+
 <header>
-    <div class="logo">DMN 🤖</div>
-    <button id="settingsButton" title="Ayarlar">⚙️</button>
+
+    <div class="logo">
+        DMN 🤖
+    </div>
+
+    <button
+        id="settingsButton"
+        title="Ayarlar"
+    >
+        ⚙️
+    </button>
+
 </header>
+
+
+<!-- ====================================
+     CHAT SCREEN
+===================================== -->
 
 <div id="chatScreen">
 
-    <div class="messages" id="messages">
+    <div
+        class="messages"
+        id="messages"
+    >
+
         <div class="message dmn">
+
             Merhaba! Ben DMN. 🤖
-            Bana istediğin şeyi sorabilirsin.
+
+            Bana istediğin şeyi
+            sorabilirsin.
+
         </div>
+
     </div>
 
-    <div class="preview" id="preview">
-        <img id="previewImage" alt="Seçilen fotoğraf">
-        <button id="removeImageButton">✕</button>
+
+    <!-- FOTOĞRAF ÖNİZLEME -->
+
+    <div
+        class="preview"
+        id="preview"
+    >
+
+        <img
+            id="previewImage"
+            alt="Seçilen fotoğraf"
+        >
+
+        <button
+            id="removeImageButton"
+            title="Fotoğrafı kaldır"
+        >
+            ✕
+        </button>
+
     </div>
+
+
+    <!-- REKLAM / ÜCRETSİZ MESAJ -->
+
+    <div id="rewardBox">
+
+        <div style="margin-bottom:10px;">
+
+            🚫 Mesaj hakkın bitti.
+
+        </div>
+
+        <button id="rewardButton">
+
+            📺 Reklam izle → +10 mesaj
+
+        </button>
+
+        <div id="rewardStatus"></div>
+
+    </div>
+
+
+    <!-- INPUT -->
 
     <div class="input-area">
 
         <div class="input-box">
 
-            <button id="imageButton" title="Fotoğraf ekle">📷</button>
+
+            <button
+                id="imageButton"
+                title="Fotoğraf ekle"
+            >
+                📷
+            </button>
+
 
             <input
                 id="imageInput"
@@ -346,7 +732,14 @@
                 accept="image/*"
             >
 
-            <button id="micButton" title="Sesli komut">🎤</button>
+
+            <button
+                id="micButton"
+                title="Sesli komut"
+            >
+                🎤
+            </button>
+
 
             <input
                 id="messageInput"
@@ -355,177 +748,551 @@
                 autocomplete="off"
             >
 
-            <button id="sendButton" title="Gönder">➤</button>
+
+            <button
+                id="sendButton"
+                title="Gönder"
+            >
+                ➤
+            </button>
 
         </div>
 
-        <div class="status" id="status">
-            🔊 Sesli cevap: Kapalı
+
+        <div
+            class="status"
+            id="status"
+        >
+
+            💬 Kalan mesaj:
+            <span id="messageCount">
+                10
+            </span>
+
         </div>
 
     </div>
+
 </div>
+
+
+<!-- ====================================
+     SETTINGS SCREEN
+===================================== -->
 
 <div id="settingsScreen">
 
     <div class="settings-box">
 
+
         <div class="settings-title">
+
             ⚙️ DMN Ayarları
+
         </div>
 
+
+        <!-- VOICE -->
+
         <div class="setting">
+
             <div>
-                <div class="setting-name">🔊 Sesli cevap</div>
+
+                <div class="setting-name">
+
+                    🔊 Sesli cevap
+
+                </div>
+
                 <div class="setting-description">
+
                     DMN cevaplarını sesli okur.
+
                 </div>
+
             </div>
 
+
             <label class="switch">
-                <input type="checkbox" id="voiceToggle">
+
+                <input
+                    type="checkbox"
+                    id="voiceToggle"
+                >
+
                 <span class="slider"></span>
+
             </label>
+
         </div>
 
+
+        <!-- ENGLISH -->
+
         <div class="setting">
+
             <div>
-                <div class="setting-name">🇬🇧 İngilizce</div>
+
+                <div class="setting-name">
+
+                    🇬🇧 İngilizce
+
+                </div>
+
                 <div class="setting-description">
+
                     DMN İngilizce cevap verir.
+
                 </div>
+
             </div>
 
+
             <label class="switch">
-                <input type="checkbox" id="englishToggle">
+
+                <input
+                    type="checkbox"
+                    id="englishToggle"
+                >
+
                 <span class="slider"></span>
+
             </label>
+
         </div>
+
+
+        <!-- CHAT MODE -->
 
         <div class="setting">
+
             <div>
-                <div class="setting-name">💬 Sohbet modu</div>
-                <div class="setting-description">
-                    Doğal sohbet modu sürekli açıktır.
+
+                <div class="setting-name">
+
+                    💬 Sohbet modu
+
                 </div>
+
+                <div class="setting-description">
+
+                    Doğal sohbet modu sürekli açıktır.
+
+                </div>
+
             </div>
 
+
             <label class="switch">
-                <input type="checkbox" checked disabled>
+
+                <input
+                    type="checkbox"
+                    checked
+                    disabled
+                >
+
                 <span class="slider"></span>
+
             </label>
+
         </div>
+
+
+        <!-- HISTORY -->
 
         <div class="history-title">
+
             🕘 Sohbetler
+
         </div>
+
 
         <div id="historyList"></div>
 
-        <button id="clearHistoryButton" style="margin-top:15px;">
+
+        <button
+            id="clearHistoryButton"
+            style="margin-top:15px;"
+        >
+
             🗑️ Sohbet geçmişini temizle
+
         </button>
 
     </div>
+
 </div>
 
+
 <script>
-const input = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendButton");
-const micButton = document.getElementById("micButton");
-const imageButton = document.getElementById("imageButton");
-const imageInput = document.getElementById("imageInput");
-const removeImageButton = document.getElementById("removeImageButton");
-const preview = document.getElementById("preview");
-const previewImage = document.getElementById("previewImage");
-const messages = document.getElementById("messages");
-const statusText = document.getElementById("status");
 
-const chatScreen = document.getElementById("chatScreen");
-const settingsScreen = document.getElementById("settingsScreen");
 
-const settingsButton = document.getElementById("settingsButton");
-const voiceToggle = document.getElementById("voiceToggle");
-const englishToggle = document.getElementById("englishToggle");
+/* ====================================
+   ELEMENTLER
+===================================== */
 
-const historyList = document.getElementById("historyList");
-const clearHistoryButton = document.getElementById("clearHistoryButton");
+const input =
+    document.getElementById(
+        "messageInput"
+    );
+
+const sendButton =
+    document.getElementById(
+        "sendButton"
+    );
+
+const micButton =
+    document.getElementById(
+        "micButton"
+    );
+
+const imageButton =
+    document.getElementById(
+        "imageButton"
+    );
+
+const imageInput =
+    document.getElementById(
+        "imageInput"
+    );
+
+const removeImageButton =
+    document.getElementById(
+        "removeImageButton"
+    );
+
+const preview =
+    document.getElementById(
+        "preview"
+    );
+
+const previewImage =
+    document.getElementById(
+        "previewImage"
+    );
+
+const messages =
+    document.getElementById(
+        "messages"
+    );
+
+const statusText =
+    document.getElementById(
+        "status"
+    );
+
+const chatScreen =
+    document.getElementById(
+        "chatScreen"
+    );
+
+const settingsScreen =
+    document.getElementById(
+        "settingsScreen"
+    );
+
+const settingsButton =
+    document.getElementById(
+        "settingsButton"
+    );
+
+const voiceToggle =
+    document.getElementById(
+        "voiceToggle"
+    );
+
+const englishToggle =
+    document.getElementById(
+        "englishToggle"
+    );
+
+const historyList =
+    document.getElementById(
+        "historyList"
+    );
+
+const clearHistoryButton =
+    document.getElementById(
+        "clearHistoryButton"
+    );
+
+
+/* ====================================
+   MESAJ / REKLAM ELEMENTLERİ
+===================================== */
+
+const messageCount =
+    document.getElementById(
+        "messageCount"
+    );
+
+const rewardBox =
+    document.getElementById(
+        "rewardBox"
+    );
+
+const rewardButton =
+    document.getElementById(
+        "rewardButton"
+    );
+
+const rewardStatus =
+    document.getElementById(
+        "rewardStatus"
+    );
+
+
+/* ====================================
+   KULLANICI ID
+===================================== */
+
+let userId =
+    localStorage.getItem(
+        "dmn_user_id"
+    );
+
+
+if (!userId) {
+
+    userId =
+        "user_" +
+        Math.random()
+            .toString(36)
+            .substring(2) +
+        Date.now()
+            .toString(36);
+
+    localStorage.setItem(
+        "dmn_user_id",
+        userId
+    );
+
+}
+
+
+/* ====================================
+   AYARLAR
+===================================== */
 
 let voiceEnabled =
-    localStorage.getItem("dmn_voice") === "true";
+    localStorage.getItem(
+        "dmn_voice"
+    ) === "true";
+
 
 let englishEnabled =
-    localStorage.getItem("dmn_english") === "true";
+    localStorage.getItem(
+        "dmn_english"
+    ) === "true";
+
 
 let selectedImage = null;
 
-let currentConversation = JSON.parse(
-    localStorage.getItem("dmn_current_conversation") || "[]"
-);
 
-voiceToggle.checked = voiceEnabled;
-englishToggle.checked = englishEnabled;
+let currentConversation =
+    JSON.parse(
+        localStorage.getItem(
+            "dmn_current_conversation"
+        ) || "[]"
+    );
+
+
+voiceToggle.checked =
+    voiceEnabled;
+
+englishToggle.checked =
+    englishEnabled;
+
+
+/* ====================================
+   AYARLARI GÜNCELLE
+===================================== */
 
 function ayarlariGuncelle() {
-    voiceEnabled = voiceToggle.checked;
-    englishEnabled = englishToggle.checked;
 
-    localStorage.setItem("dmn_voice", voiceEnabled);
-    localStorage.setItem("dmn_english", englishEnabled);
+    voiceEnabled =
+        voiceToggle.checked;
+
+    englishEnabled =
+        englishToggle.checked;
+
+
+    localStorage.setItem(
+        "dmn_voice",
+        voiceEnabled
+    );
+
+    localStorage.setItem(
+        "dmn_english",
+        englishEnabled
+    );
+
 
     if (voiceEnabled) {
-        statusText.innerHTML = englishEnabled
-            ? "🔊 Voice: English"
-            : "🔊 Sesli cevap: Açık";
+
+        statusText.innerHTML =
+            englishEnabled
+                ? "🔊 Voice: English"
+                : "🔊 Sesli cevap: Açık";
+
     } else {
-        statusText.innerHTML = englishEnabled
-            ? "🔊 Voice: Off"
-            : "🔊 Sesli cevap: Kapalı";
+
+        if (
+            messageCount
+        ) {
+
+            statusText.innerHTML =
+                englishEnabled
+                    ? "💬 Messages remaining: "
+                    : "💬 Kalan mesaj: ";
+
+            statusText.innerHTML +=
+                "<span id='messageCount'>" +
+                messageCount.textContent +
+                "</span>";
+
+        }
+
     }
+
 }
 
-voiceToggle.addEventListener("change", ayarlariGuncelle);
-englishToggle.addEventListener("change", ayarlariGuncelle);
 
-settingsButton.addEventListener("click", function() {
-    const open = settingsScreen.style.display === "block";
+voiceToggle.addEventListener(
+    "change",
+    ayarlariGuncelle
+);
 
-    if (open) {
-        settingsScreen.style.display = "none";
-        chatScreen.style.display = "flex";
-    } else {
-        settingsScreen.style.display = "block";
-        chatScreen.style.display = "none";
-        sohbetleriGoster();
+
+englishToggle.addEventListener(
+    "change",
+    ayarlariGuncelle
+);
+
+
+/* ====================================
+   AYARLAR EKRANI
+===================================== */
+
+settingsButton.addEventListener(
+    "click",
+    function () {
+
+        const open =
+            settingsScreen.style.display ===
+            "block";
+
+
+        if (open) {
+
+            settingsScreen.style.display =
+                "none";
+
+            chatScreen.style.display =
+                "flex";
+
+        } else {
+
+            settingsScreen.style.display =
+                "block";
+
+            chatScreen.style.display =
+                "none";
+
+            sohbetleriGoster();
+
+        }
+
     }
-});
+);
 
-function mesajEkle(text, type) {
-    const div = document.createElement("div");
-    div.className = "message " + type;
-    div.textContent = text;
 
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
+/* ====================================
+   MESAJ EKLE
+===================================== */
+
+function mesajEkle(
+    text,
+    type
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.className =
+        "message " + type;
+
+    div.textContent =
+        text;
+
+    messages.appendChild(
+        div
+    );
+
+    messages.scrollTop =
+        messages.scrollHeight;
 }
 
-function resimEkle(src, type = "user") {
-    const div = document.createElement("div");
-    div.className = "message " + type;
 
-    const img = document.createElement("img");
-    img.src = src;
-    img.className = "message-image";
+/* ====================================
+   RESİM EKLE
+===================================== */
 
-    div.appendChild(img);
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
+function resimEkle(
+    src,
+    type = "user"
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.className =
+        "message " + type;
+
+
+    const img =
+        document.createElement(
+            "img"
+        );
+
+    img.src =
+        src;
+
+    img.className =
+        "message-image";
+
+
+    div.appendChild(
+        img
+    );
+
+    messages.appendChild(
+        div
+    );
+
+    messages.scrollTop =
+        messages.scrollHeight;
 }
 
-function kodIstegiMi(text) {
-    const lower = text.toLowerCase();
+
+/* ====================================
+   KOD İSTEĞİ
+===================================== */
+
+function kodIstegiMi(
+    text
+) {
+
+    const lower =
+        text.toLowerCase();
+
 
     const words = [
+
         "kod ver",
         "kodu ver",
         "kod yaz",
@@ -536,15 +1303,31 @@ function kodIstegiMi(text) {
         "program yaz",
         "program oluştur",
         "program olustur"
+
     ];
 
-    return words.some(word => lower.includes(word));
+
+    return words.some(
+        word =>
+            lower.includes(word)
+    );
 }
 
-function resimIstegiMi(text) {
-    const lower = text.toLowerCase();
+
+/* ====================================
+   RESİM İSTEĞİ
+===================================== */
+
+function resimIstegiMi(
+    text
+) {
+
+    const lower =
+        text.toLowerCase();
+
 
     const words = [
+
         "resim oluştur",
         "resim olustur",
         "resim yap",
@@ -553,104 +1336,425 @@ function resimIstegiMi(text) {
         "görsel oluştur",
         "gorsel olustur",
         "resim çiz",
-        "resim ciz"
+        "resim ciz",
+        "görsel yap",
+        "gorsel yap"
+
     ];
 
-    return words.some(word => lower.includes(word));
+
+    return words.some(
+        word =>
+            lower.includes(word)
+    );
 }
 
-imageButton.addEventListener("click", function() {
-    imageInput.click();
-});
 
-imageInput.addEventListener("change", function() {
-    const file = imageInput.files[0];
+/* ====================================
+   FOTOĞRAF SEÇ
+===================================== */
 
-    if (!file) {
-        return;
+imageButton.addEventListener(
+    "click",
+    function () {
+
+        imageInput.click();
+
+    }
+);
+
+
+imageInput.addEventListener(
+    "change",
+    function () {
+
+        const file =
+            imageInput.files[0];
+
+
+        if (!file) {
+            return;
+        }
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload =
+            function (event) {
+
+                selectedImage =
+                    event.target.result;
+
+
+                previewImage.src =
+                    selectedImage;
+
+
+                preview.style.display =
+                    "flex";
+
+            };
+
+
+        reader.readAsDataURL(
+            file
+        );
+
+    }
+);
+
+
+/* ====================================
+   FOTOĞRAF SİL
+===================================== */
+
+removeImageButton.addEventListener(
+    "click",
+    function () {
+
+        selectedImage = null;
+
+        imageInput.value = "";
+
+        preview.style.display =
+            "none";
+
+        previewImage.src = "";
+
+    }
+);
+
+
+/* ====================================
+   KULLANIM BİLGİSİ
+===================================== */
+
+async function kullanimBilgisi() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/usage",
+                {
+                    headers: {
+                        "x-user-id":
+                            userId
+                    }
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+            return;
+        }
+
+
+        mesajSayisiniGuncelle(
+            data.messagesRemaining
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Kullanım bilgisi alınamadı:",
+            error
+        );
+
     }
 
-    const reader = new FileReader();
+}
 
-    reader.onload = function(event) {
-        selectedImage = event.target.result;
-        previewImage.src = selectedImage;
-        preview.style.display = "block";
-    };
 
-    reader.readAsDataURL(file);
-});
+/* ====================================
+   MESAJ SAYISI
+===================================== */
 
-removeImageButton.addEventListener("click", function() {
-    selectedImage = null;
-    imageInput.value = "";
-    preview.style.display = "none";
-    previewImage.src = "";
-});
+function mesajSayisiniGuncelle(
+    sayi
+) {
+
+    messageCount.textContent =
+        sayi;
+
+
+    if (sayi <= 0) {
+
+        rewardBox.style.display =
+            "block";
+
+        sendButton.disabled =
+            true;
+
+        input.disabled =
+            true;
+
+    } else {
+
+        rewardBox.style.display =
+            "none";
+
+        sendButton.disabled =
+            false;
+
+        input.disabled =
+            false;
+
+    }
+
+
+    if (!voiceEnabled) {
+
+        statusText.innerHTML =
+            englishEnabled
+                ? "💬 Messages remaining: "
+                : "💬 Kalan mesaj: ";
+
+        statusText.innerHTML +=
+            "<span id='messageCount'>" +
+            sayi +
+            "</span>";
+
+    }
+
+}
+
+
+/* ====================================
+   REKLAM → +10
+===================================== */
+
+rewardButton.addEventListener(
+    "click",
+    async function () {
+
+        rewardButton.disabled =
+            true;
+
+
+        rewardStatus.textContent =
+            "⏳ Reklam kontrol ediliyor...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/reward-ad",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "x-user-id":
+                                userId
+                        },
+
+                        body:
+                            JSON.stringify({
+                                userId:
+                                    userId
+                            })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.error ||
+                    "Ödül alınamadı."
+                );
+
+            }
+
+
+            mesajSayisiniGuncelle(
+                data.messagesRemaining
+            );
+
+
+            rewardStatus.textContent =
+                "✅ +10 mesaj hakkı eklendi!";
+
+
+            rewardButton.disabled =
+                false;
+
+
+        } catch (error) {
+
+            rewardStatus.textContent =
+                "❌ " +
+                error.message;
+
+
+            rewardButton.disabled =
+                false;
+
+        }
+
+    }
+);
+
+
+/* ====================================
+   ANA MESAJ GÖNDER
+===================================== */
 
 async function mesajGonder() {
-    const mesaj = input.value.trim();
 
-    if (!mesaj && !selectedImage) {
+    const mesaj =
+        input.value.trim();
+
+
+    if (
+        !mesaj &&
+        !selectedImage
+    ) {
         return;
     }
 
-    const gonderilecekResim = selectedImage;
+
+    const gonderilecekResim =
+        selectedImage;
+
 
     if (mesaj) {
-        mesajEkle("Sen: " + mesaj, "user");
+
+        mesajEkle(
+            "Sen: " + mesaj,
+            "user"
+        );
+
     }
+
 
     if (gonderilecekResim) {
-        resimEkle(gonderilecekResim);
+
+        resimEkle(
+            gonderilecekResim
+        );
+
     }
 
+
     currentConversation.push({
+
         role: "user",
+
         text: mesaj,
-        image: gonderilecekResim
+
+        image:
+            gonderilecekResim
+
     });
+
 
     sohbetiKaydet();
 
+
     input.value = "";
+
     selectedImage = null;
+
     imageInput.value = "";
-    preview.style.display = "none";
+
+    preview.style.display =
+        "none";
+
     previewImage.src = "";
 
-    const loading = document.createElement("div");
-    loading.className = "message dmn";
-    loading.textContent = englishEnabled
-        ? "DMN is thinking..."
-        : "DMN düşünüyor...";
 
-    messages.appendChild(loading);
-    messages.scrollTop = messages.scrollHeight;
+    const loading =
+        document.createElement(
+            "div"
+        );
+
+
+    loading.className =
+        "message dmn";
+
+
+    loading.textContent =
+        englishEnabled
+            ? "DMN is thinking..."
+            : "DMN düşünüyor...";
+
+
+    messages.appendChild(
+        loading
+    );
+
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
 
     try {
-        if (!gonderilecekResim && mesaj && resimIstegiMi(mesaj)) {
-            const response = await fetch("/api/generate-image", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    prompt: mesaj
-                })
-            });
 
-            const data = await response.json();
+
+        /* ================================
+           GÖRSEL OLUŞTUR
+        ================================= */
+
+        if (
+            !gonderilecekResim &&
+            mesaj &&
+            resimIstegiMi(mesaj)
+        ) {
+
+            const response =
+                await fetch(
+                    "/api/generate-image",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+                                prompt:
+                                    mesaj
+                            })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
 
             loading.remove();
 
+
             if (!response.ok) {
+
                 throw new Error(
-                    data.error || "Görsel oluşturulamadı."
+                    data.error ||
+                    "Görsel oluşturulamadı."
                 );
+
             }
 
+
             if (data.image) {
+
                 mesajEkle(
                     englishEnabled
                         ? "DMN: Here is your image."
@@ -658,403 +1762,1036 @@ async function mesajGonder() {
                     "dmn"
                 );
 
-                resimEkle(data.image, "dmn");
+
+                resimEkle(
+                    data.image,
+                    "dmn"
+                );
+
 
                 currentConversation.push({
+
                     role: "assistant",
-                    text: englishEnabled
-                        ? "Here is your image."
-                        : "Görselini oluşturdum.",
-                    image: data.image
+
+                    text:
+                        englishEnabled
+                            ? "Here is your image."
+                            : "Görselini oluşturdum.",
+
+                    image:
+                        data.image
+
                 });
 
+
                 sohbetiKaydet();
+
             }
 
+
             return;
+
         }
 
-        const response = await fetch("/api/chat", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                message: mesaj,
-                english: englishEnabled,
-                codeMode: kodIstegiMi(mesaj),
-                image: gonderilecekResim
-            })
-        });
 
-        const data = await response.json();
+        /* ================================
+           CHAT
+        ================================= */
+
+        const response =
+            await fetch(
+                "/api/chat",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            message:
+                                mesaj,
+
+                            english:
+                                englishEnabled,
+
+                            codeMode:
+                                kodIstegiMi(
+                                    mesaj
+                                ),
+
+                            image:
+                                gonderilecekResim,
+
+                            userId:
+                                userId
+
+                        })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
 
         loading.remove();
 
-        if (!response.ok) {
-            throw new Error(
-                data.error || "DMN cevap veremedi."
+
+        /* ================================
+           MESAJ HAKKI BİTTİ
+        ================================= */
+
+        if (
+            response.status === 402 &&
+            data.code ===
+                "NO_MESSAGES"
+        ) {
+
+            mesajSayisiniGuncelle(
+                0
             );
+
+
+            mesajEkle(
+                englishEnabled
+                    ? "Your free messages are finished. Watch an ad to get 10 more messages."
+                    : "Ücretsiz mesaj hakkın bitti. Reklam izleyerek 10 mesaj daha kazanabilirsin.",
+                "dmn"
+            );
+
+
+            return;
+
         }
 
-        cevapEkle(data.reply);
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "DMN cevap veremedi."
+            );
+
+        }
+
+
+        /* ================================
+           SAYACI GÜNCELLE
+        ================================= */
+
+        if (
+            typeof data.messagesRemaining ===
+            "number"
+        ) {
+
+            mesajSayisiniGuncelle(
+                data.messagesRemaining
+            );
+
+        }
+
+
+        /* ================================
+           CEVAP
+        ================================= */
+
+        cevapEkle(
+            data.reply
+        );
+
 
         currentConversation.push({
-            role: "assistant",
-            text: data.reply,
-            image: null
+
+            role:
+                "assistant",
+
+            text:
+                data.reply,
+
+            image:
+                null
+
         });
+
 
         sohbetiKaydet();
 
+
+        /* ================================
+           SES
+        ================================= */
+
         if (voiceEnabled) {
-            sesliOku(data.reply);
+
+            sesliOku(
+                data.reply
+            );
+
         }
 
+
     } catch (error) {
+
         loading.remove();
 
+
         mesajEkle(
-            "DMN: " + error.message,
+            "DMN: " +
+            error.message,
             "dmn"
         );
 
-        console.error("DMN hatası:", error);
+
+        console.error(
+            "DMN hatası:",
+            error
+        );
+
     }
+
 }
 
-function cevapEkle(text) {
-    const div = document.createElement("div");
-    div.className = "message dmn";
 
-    const parts = text.split(/(```[\s\S]*?```)/g);
+/* ====================================
+   CEVAP GÖSTER
+===================================== */
 
-    parts.forEach(part => {
-        if (part.startsWith("```")) {
-            let code = part
-                .replace(/^```[a-zA-Z0-9_-]*\n?/, "")
-                .replace(/```$/, "")
-                .trim();
+function cevapEkle(
+    text
+) {
 
-            const wrapper = document.createElement("div");
-            wrapper.className = "code-wrapper";
+    const div =
+        document.createElement(
+            "div"
+        );
 
-            const copy = document.createElement("button");
-            copy.className = "copy-button";
-            copy.textContent = "📋 Kopyala";
 
-            copy.addEventListener("click", async function() {
-                try {
-                    await navigator.clipboard.writeText(code);
-                    copy.textContent = "✅ Kopyalandı";
+    div.className =
+        "message dmn";
 
-                    setTimeout(function() {
-                        copy.textContent = "📋 Kopyala";
-                    }, 1500);
-                } catch {
-                    copy.textContent = "Kopyalanamadı";
-                }
-            });
 
-            const codeBlock = document.createElement("div");
-            codeBlock.className = "code-block";
-            codeBlock.textContent = code;
+    const parts =
+        text.split(
+            /(```[\s\S]*?```)/g
+        );
 
-            wrapper.appendChild(copy);
-            wrapper.appendChild(codeBlock);
-            div.appendChild(wrapper);
 
-        } else if (part.trim()) {
-            const textNode = document.createElement("div");
-            textNode.textContent = part;
-            div.appendChild(textNode);
+    parts.forEach(
+        function (part) {
+
+            if (
+                part.startsWith(
+                    "```"
+                )
+            ) {
+
+                let code =
+                    part
+                        .replace(
+                            /^```[a-zA-Z0-9_-]*\n?/,
+                            ""
+                        )
+                        .replace(
+                            /```$/,
+                            ""
+                        )
+                        .trim();
+
+
+                const wrapper =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                wrapper.className =
+                    "code-wrapper";
+
+
+                const copy =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                copy.className =
+                    "copy-button";
+
+
+                copy.textContent =
+                    "📋 Kopyala";
+
+
+                copy.addEventListener(
+                    "click",
+                    async function () {
+
+                        try {
+
+                            await navigator
+                                .clipboard
+                                .writeText(
+                                    code
+                                );
+
+
+                            copy.textContent =
+                                "✅ Kopyalandı";
+
+
+                            setTimeout(
+                                function () {
+
+                                    copy.textContent =
+                                        "📋 Kopyala";
+
+                                },
+                                1500
+                            );
+
+
+                        } catch {
+
+                            copy.textContent =
+                                "Kopyalanamadı";
+
+                        }
+
+                    }
+                );
+
+
+                const codeBlock =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                codeBlock.className =
+                    "code-block";
+
+
+                codeBlock.textContent =
+                    code;
+
+
+                wrapper.appendChild(
+                    copy
+                );
+
+                wrapper.appendChild(
+                    codeBlock
+                );
+
+
+                div.appendChild(
+                    wrapper
+                );
+
+
+            } else if (
+                part.trim()
+            ) {
+
+                const textNode =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                textNode.textContent =
+                    part;
+
+
+                div.appendChild(
+                    textNode
+                );
+
+            }
+
         }
-    });
+    );
 
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
+
+    messages.appendChild(
+        div
+    );
+
+
+    messages.scrollTop =
+        messages.scrollHeight;
 }
 
-function temizSesMetni(text) {
+
+/* ====================================
+   SES METNİ TEMİZLE
+===================================== */
+
+function temizSesMetni(
+    text
+) {
+
     return text
-        .replace(/```[\s\S]*?```/g, " ")
-        .replace(/`[^`]*`/g, " ")
-        .replace(/https?:\/\/\S+/gi, " ")
-        .replace(/[\u{1F300}-\u{1FAFF}]/gu, " ")
-        .replace(/[\u{1F1E6}-\u{1F1FF}]/gu, " ")
-        .replace(/[\u2600-\u27BF]/g, " ")
-        .replace(/[#*_~]/g, " ")
-        .replace(/\s+/g, " ")
+
+        .replace(
+            /```[\s\S]*?```/g,
+            " "
+        )
+
+        .replace(
+            /`[^`]*`/g,
+            " "
+        )
+
+        .replace(
+            /https?:\/\/\S+/gi,
+            " "
+        )
+
+        .replace(
+            /[\u{1F300}-\u{1FAFF}]/gu,
+            " "
+        )
+
+        .replace(
+            /[\u{1F1E6}-\u{1F1FF}]/gu,
+            " "
+        )
+
+        .replace(
+            /[\u2600-\u27BF]/g,
+            " "
+        )
+
+        .replace(
+            /[#*_~]/g,
+            " "
+        )
+
+        .replace(
+            /\s+/g,
+            " "
+        )
+
         .trim();
+
 }
+
+
+/* ====================================
+   SES BUL
+===================================== */
 
 function uygunSesBul() {
-    const voices = speechSynthesis.getVoices();
+
+    const voices =
+        speechSynthesis
+            .getVoices();
+
 
     if (!voices.length) {
+
         return null;
+
     }
+
 
     if (englishEnabled) {
-        return voices.find(v =>
-            /^en(-|_)/i.test(v.lang)
-        ) || voices.find(v =>
-            /English/i.test(v.name)
+
+        return (
+            voices.find(
+                v =>
+                    /^en(-|_)/i
+                        .test(v.lang)
+            )
+            ||
+            voices.find(
+                v =>
+                    /English/i
+                        .test(v.name)
+            )
         );
+
     }
 
-    return voices.find(v =>
-        /^tr(-|_)/i.test(v.lang)
-    ) || voices.find(v =>
-        /Turkish|Türkçe/i.test(v.name)
+
+    return (
+        voices.find(
+            v =>
+                /^tr(-|_)/i
+                    .test(v.lang)
+        )
+        ||
+        voices.find(
+            v =>
+                /Turkish|Türkçe/i
+                    .test(v.name)
+        )
     );
+
 }
 
-function sesliOku(text) {
-    if (!("speechSynthesis" in window)) {
+
+/* ====================================
+   SESLİ OKUMA
+===================================== */
+
+function sesliOku(
+    text
+) {
+
+    if (
+        !("speechSynthesis" in window)
+    ) {
+
         return;
+
     }
 
-    const temiz = temizSesMetni(text);
+
+    const temiz =
+        temizSesMetni(
+            text
+        );
+
 
     if (!temiz) {
+
         return;
+
     }
+
 
     speechSynthesis.cancel();
 
-    const voice = uygunSesBul();
+
+    const voice =
+        uygunSesBul();
+
 
     const utterance =
-        new SpeechSynthesisUtterance(temiz);
+        new SpeechSynthesisUtterance(
+            temiz
+        );
+
 
     utterance.lang =
-        englishEnabled ? "en-US" : "tr-TR";
+        englishEnabled
+            ? "en-US"
+            : "tr-TR";
+
 
     if (voice) {
-        utterance.voice = voice;
+
+        utterance.voice =
+            voice;
+
     }
 
-    utterance.rate = .95;
-    utterance.pitch = 1;
-    utterance.volume = 1;
 
-    utterance.onstart = function() {
-        statusText.innerHTML =
-            '<span class="voice-circle"></span>' +
-            (englishEnabled
-                ? "Speaking..."
-                : "Konuşuyor...");
-    };
+    utterance.rate =
+        .95;
 
-    utterance.onend = function() {
-        ayarlariGuncelle();
-    };
+    utterance.pitch =
+        1;
 
-    utterance.onerror = function() {
-        ayarlariGuncelle();
-    };
+    utterance.volume =
+        1;
 
-    speechSynthesis.speak(utterance);
+
+    utterance.onstart =
+        function () {
+
+            statusText.innerHTML =
+                '<span class="voice-circle"></span>' +
+                (
+                    englishEnabled
+                        ? "Speaking..."
+                        : "Konuşuyor..."
+                );
+
+        };
+
+
+    utterance.onend =
+        function () {
+
+            ayarlariGuncelle();
+
+        };
+
+
+    utterance.onerror =
+        function () {
+
+            ayarlariGuncelle();
+
+        };
+
+
+    speechSynthesis.speak(
+        utterance
+    );
+
 }
+
+
+/* ====================================
+   SPEECH RECOGNITION
+===================================== */
 
 const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
+
 let recognition = null;
 
+
 if (SpeechRecognition) {
-    recognition = new SpeechRecognition();
 
-    recognition.continuous = false;
-    recognition.interimResults = false;
+    recognition =
+        new SpeechRecognition();
 
-    recognition.onstart = function() {
-        micButton.textContent = "🔴";
 
-        statusText.textContent =
-            englishEnabled
-                ? "🎤 Listening..."
-                : "🎤 Dinliyorum...";
-    };
+    recognition.continuous =
+        false;
 
-    recognition.onend = function() {
-        micButton.textContent = "🎤";
-        ayarlariGuncelle();
-    };
 
-    recognition.onerror = function(event) {
-        console.error(
-            "Mikrofon hatası:",
-            event.error
-        );
+    recognition.interimResults =
+        false;
 
-        micButton.textContent = "🎤";
-        ayarlariGuncelle();
-    };
 
-    recognition.onresult = function(event) {
-        const text =
-            event.results[0][0].transcript;
+    recognition.onstart =
+        function () {
 
-        input.value = text;
+            micButton.textContent =
+                "🔴";
 
-        mesajGonder();
-    };
+
+            statusText.textContent =
+                englishEnabled
+                    ? "🎤 Listening..."
+                    : "🎤 Dinliyorum...";
+
+        };
+
+
+    recognition.onend =
+        function () {
+
+            micButton.textContent =
+                "🎤";
+
+
+            ayarlariGuncelle();
+
+        };
+
+
+    recognition.onerror =
+        function (event) {
+
+            console.error(
+                "Mikrofon hatası:",
+                event.error
+            );
+
+
+            micButton.textContent =
+                "🎤";
+
+
+            ayarlariGuncelle();
+
+        };
+
+
+    recognition.onresult =
+        function (event) {
+
+            const text =
+                event
+                    .results[0][0]
+                    .transcript;
+
+
+            input.value =
+                text;
+
+
+            mesajGonder();
+
+        };
+
 } else {
-    micButton.disabled = true;
+
+    micButton.disabled =
+        true;
+
 }
 
-micButton.addEventListener("click", function() {
-    if (!recognition) {
-        return;
-    }
 
-    recognition.lang =
-        englishEnabled
-            ? "en-US"
-            : "tr-TR";
+/* ====================================
+   MİKROFON
+===================================== */
 
-    try {
-        recognition.start();
-    } catch (error) {
-        console.log(error);
+micButton.addEventListener(
+    "click",
+    function () {
+
+        if (!recognition) {
+
+            return;
+
+        }
+
+
+        recognition.lang =
+            englishEnabled
+                ? "en-US"
+                : "tr-TR";
+
+
+        try {
+
+            recognition.start();
+
+        } catch (error) {
+
+            console.log(error);
+
+        }
+
     }
-});
+);
+
+
+/* ====================================
+   GÖNDER
+===================================== */
 
 sendButton.addEventListener(
     "click",
     mesajGonder
 );
 
+
+/* ====================================
+   ENTER
+===================================== */
+
 input.addEventListener(
     "keydown",
-    function(event) {
-        if (event.key === "Enter") {
+    function (event) {
+
+        if (
+            event.key === "Enter"
+        ) {
+
             event.preventDefault();
+
             mesajGonder();
+
         }
+
     }
 );
 
+
+/* ====================================
+   SOHBET KAYDET
+===================================== */
+
 function sohbetiKaydet() {
+
     localStorage.setItem(
+
         "dmn_current_conversation",
-        JSON.stringify(currentConversation)
+
+        JSON.stringify(
+            currentConversation
+        )
+
     );
 
-    let history = JSON.parse(
-        localStorage.getItem("dmn_history") || "[]"
-    );
 
-    if (currentConversation.length === 0) {
+    let history =
+        JSON.parse(
+
+            localStorage.getItem(
+                "dmn_history"
+            ) || "[]"
+
+        );
+
+
+    if (
+        currentConversation.length ===
+        0
+    ) {
+
         return;
+
     }
 
-    const firstUser = currentConversation.find(
-        item => item.role === "user" && item.text
-    );
 
-    const title = firstUser
-        ? firstUser.text.substring(0, 45)
-        : "Yeni sohbet";
+    const firstUser =
+        currentConversation.find(
+            item =>
+                item.role === "user" &&
+                item.text
+        );
 
-    history = history.filter(
-        item => item.id !== "current"
-    );
+
+    const title =
+        firstUser
+            ? firstUser.text
+                .substring(0, 45)
+            : "Yeni sohbet";
+
+
+    history =
+        history.filter(
+            item =>
+                item.id !==
+                "current"
+        );
+
 
     history.unshift({
-        id: "current",
-        title: title,
-        messages: currentConversation
+
+        id:
+            "current",
+
+        title:
+            title,
+
+        messages:
+            currentConversation
+
     });
+
 
     localStorage.setItem(
+
         "dmn_history",
-        JSON.stringify(history)
+
+        JSON.stringify(
+            history
+        )
+
     );
+
 }
+
+
+/* ====================================
+   SOHBETLER
+===================================== */
 
 function sohbetleriGoster() {
-    historyList.innerHTML = "";
 
-    const history = JSON.parse(
-        localStorage.getItem("dmn_history") || "[]"
-    );
+    historyList.innerHTML =
+        "";
+
+
+    const history =
+        JSON.parse(
+
+            localStorage.getItem(
+                "dmn_history"
+            ) || "[]"
+
+        );
+
 
     if (!history.length) {
+
         historyList.innerHTML =
-            '<div class="history-item">Henüz kayıtlı sohbet yok.</div>';
+            '<div class="history-item">' +
+            'Henüz kayıtlı sohbet yok.' +
+            '</div>';
+
         return;
+
     }
 
-    history.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "history-item";
-        div.textContent = item.title;
 
-        div.addEventListener("click", function() {
-            currentConversation = item.messages || [];
+    history.forEach(
+        function (item) {
 
-            messages.innerHTML = "";
+            const div =
+                document.createElement(
+                    "div"
+                );
 
-            currentConversation.forEach(msg => {
-                if (msg.text) {
-                    mesajEkle(
-                        msg.role === "user"
-                            ? "Sen: " + msg.text
-                            : "DMN: " + msg.text,
-                        msg.role === "user"
-                            ? "user"
-                            : "dmn"
-                    );
+
+            div.className =
+                "history-item";
+
+
+            div.textContent =
+                item.title;
+
+
+            div.addEventListener(
+                "click",
+                function () {
+
+                    currentConversation =
+                        item.messages ||
+                        [];
+
+
+                    messages.innerHTML =
+                        "";
+
+
+                    currentConversation
+                        .forEach(
+                            function (msg) {
+
+                                if (
+                                    msg.text
+                                ) {
+
+                                    mesajEkle(
+
+                                        msg.role ===
+                                        "user"
+
+                                            ? "Sen: " +
+                                              msg.text
+
+                                            : "DMN: " +
+                                              msg.text,
+
+                                        msg.role ===
+                                        "user"
+
+                                            ? "user"
+                                            : "dmn"
+
+                                    );
+
+                                }
+
+
+                                if (
+                                    msg.image
+                                ) {
+
+                                    resimEkle(
+
+                                        msg.image,
+
+                                        msg.role ===
+                                        "user"
+
+                                            ? "user"
+                                            : "dmn"
+
+                                    );
+
+                                }
+
+                            }
+                        );
+
+
+                    settingsScreen
+                        .style.display =
+                        "none";
+
+
+                    chatScreen
+                        .style.display =
+                        "flex";
+
                 }
+            );
 
-                if (msg.image) {
-                    resimEkle(
-                        msg.image,
-                        msg.role === "user"
-                            ? "user"
-                            : "dmn"
-                    );
-                }
-            });
 
-            settingsScreen.style.display = "none";
-            chatScreen.style.display = "flex";
-        });
+            historyList.appendChild(
+                div
+            );
 
-        historyList.appendChild(div);
-    });
+        }
+    );
+
 }
+
+
+/* ====================================
+   GEÇMİŞİ TEMİZLE
+===================================== */
 
 clearHistoryButton.addEventListener(
     "click",
-    function() {
-        localStorage.removeItem("dmn_history");
+    function () {
+
+        localStorage.removeItem(
+            "dmn_history"
+        );
+
+
         localStorage.removeItem(
             "dmn_current_conversation"
         );
 
-        currentConversation = [];
+
+        currentConversation =
+            [];
+
 
         messages.innerHTML =
-            '<div class="message dmn">Merhaba! Ben DMN. 🤖</div>';
+            '<div class="message dmn">' +
+            'Merhaba! Ben DMN. 🤖' +
+            '</div>';
+
 
         sohbetleriGoster();
+
     }
 );
 
-if ("speechSynthesis" in window) {
-    speechSynthesis.onvoiceschanged = function() {
-        speechSynthesis.getVoices();
-    };
+
+/* ====================================
+   SESLER
+===================================== */
+
+if (
+    "speechSynthesis" in window
+) {
+
+    speechSynthesis.onvoiceschanged =
+        function () {
+
+            speechSynthesis
+                .getVoices();
+
+        };
+
 }
 
+
+/* ====================================
+   BAŞLAT
+===================================== */
+
 ayarlariGuncelle();
+
+kullanimBilgisi();
+
 sohbetiKaydet();
+
 </script>
+
 
 </body>
 </html>

@@ -1,4 +1,3 @@
-```javascript
 const express = require("express");
 const cors = require("cors");
 const OpenAI = require("openai");
@@ -10,6 +9,10 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// =====================================
+// OPENAI
+// =====================================
+
 if (!process.env.OPENAI_API_KEY) {
     console.error("HATA: OPENAI_API_KEY bulunamadı.");
     process.exit(1);
@@ -18,6 +21,10 @@ if (!process.env.OPENAI_API_KEY) {
 const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
+
+// =====================================
+// MIDDLEWARE
+// =====================================
 
 app.use(cors());
 
@@ -29,38 +36,6 @@ app.use(
 
 app.use(express.static(__dirname));
 
-
-// =====================================
-// BASİT FREE MESAJ SİSTEMİ
-// =====================================
-
-const FREE_MESSAGE_LIMIT = 10;
-
-// Demo/test amaçlı kullanıcı sayaçları.
-// Gerçek sistemde bunu veritabanında tutmalısın.
-const users = new Map();
-
-function getUserId(req) {
-    // Şimdilik tarayıcıdan gelen ID kullanılıyor.
-    // Gerçek sistemde kullanıcı hesabı/JWT kullanılmalı.
-    return (
-        req.headers["x-user-id"] ||
-        req.body.userId ||
-        "demo-user"
-    );
-}
-
-function getUser(userId) {
-    if (!users.has(userId)) {
-        users.set(userId, {
-            messages: FREE_MESSAGE_LIMIT
-        });
-    }
-
-    return users.get(userId);
-}
-
-
 // =====================================
 // ANA SAYFA
 // =====================================
@@ -71,65 +46,35 @@ app.get("/", function (req, res) {
     );
 });
 
-
 // =====================================
-// KULLANICI DURUMU
+// KULLANIM
 // =====================================
+// Artık mesaj sınırı yok.
+// Kullanıcı istediği kadar mesaj gönderebilir.
+// Bu endpoint eski frontend ile uyumlu bırakıldı.
 
 app.get("/api/usage", function (req, res) {
-    try {
-        const userId = getUserId(req);
-        const user = getUser(userId);
-
-        res.json({
-            messagesRemaining: user.messages,
-            freeLimit: FREE_MESSAGE_LIMIT
-        });
-
-    } catch (error) {
-        console.error("USAGE HATASI:", error);
-
-        res.status(500).json({
-            error: "Kullanım bilgisi alınamadı."
-        });
-    }
+    res.json({
+        messagesRemaining: 999999,
+        unlimited: true
+    });
 });
 
-
 // =====================================
-// REKLAM İZLE → +10 MESAJ
+// REWARD AD
 // =====================================
-//
-// ŞİMDİLİK TEST ENDPOINTİ.
-//
-// Gerçek reklam ağı bağlandığında burada
-// reklam sağlayıcısının server-side doğrulaması
-// yapılmalıdır.
-//
-// =====================================
+// Reklam sistemi kaldırıldı.
+// Eski frontend çağırırsa hata vermemesi için
+// endpoint burada bırakıldı.
 
 app.post("/api/reward-ad", function (req, res) {
-    try {
-        const userId = getUserId(req);
-        const user = getUser(userId);
-
-        user.messages += 10;
-
-        res.json({
-            success: true,
-            messagesAdded: 10,
-            messagesRemaining: user.messages
-        });
-
-    } catch (error) {
-        console.error("REKLAM ÖDÜL HATASI:", error);
-
-        res.status(500).json({
-            error: "Reklam ödülü verilemedi."
-        });
-    }
+    res.json({
+        success: true,
+        messagesAdded: 0,
+        messagesRemaining: 999999,
+        unlimited: true
+    });
 });
-
 
 // =====================================
 // CHAT
@@ -139,12 +84,9 @@ app.post("/api/chat", async function (req, res) {
 
     try {
 
-        const userId = getUserId(req);
-        const user = getUser(userId);
-
         const message =
             typeof req.body.message === "string"
-                ? req.body.message
+                ? req.body.message.trim()
                 : "";
 
         const english =
@@ -158,6 +100,9 @@ app.post("/api/chat", async function (req, res) {
                 ? req.body.image
                 : null;
 
+        // =====================================
+        // MESAJ KONTROLÜ
+        // =====================================
 
         if (!message && !image) {
 
@@ -167,32 +112,11 @@ app.post("/api/chat", async function (req, res) {
 
         }
 
-
         // =====================================
-        // MESAJ HAKKI KONTROLÜ
-        // =====================================
-
-        if (user.messages <= 0) {
-
-            return res.status(402).json({
-                error: "Mesaj hakkın bitti.",
-                code: "NO_MESSAGES",
-                messagesRemaining: 0,
-                rewardAvailable: true
-            });
-
-        }
-
-
-        // Mesaj hakkını cevap oluşturulmadan önce düşür.
-        user.messages--;
-
-
-        // =====================================
-        // TALİMATLAR
+        // DMN TALİMATLARI
         // =====================================
 
-        let instructions = "";
+        let instructions;
 
         if (english) {
 
@@ -205,13 +129,13 @@ Be natural, conversational and intelligent.
 
 You are especially knowledgeable about:
 
-Arduino
-ESP32
-electronics
-programming
-computers
-technology
-general knowledge
+- Arduino
+- ESP32
+- electronics
+- programming
+- computers
+- technology
+- general knowledge
 
 If the user asks who created you, who your developer is,
 who made you, or who developed you, answer:
@@ -221,11 +145,12 @@ My developer is Devrim Tuğra Kurtulmuş.
 If the user asks for code:
 
 - Give complete working code.
-- Never replace code with "..."
+- Never replace code with "...".
 - Include required libraries.
 - Include all required functions.
 - Make the code ready to use.
 - Do not unnecessarily shorten code.
+- Make sure the syntax is correct.
 
 If the user sends code:
 
@@ -239,6 +164,18 @@ If the user says "only code":
 - Do not add explanations.
 
 Do not unnecessarily generate code during normal conversation.
+
+If the user sends an image:
+
+- Carefully analyze the image.
+- Identify visible objects, text, circuits, components and errors.
+- Explain what you see as accurately as possible.
+
+There are NO subscriptions,
+NO advertisements,
+and NO message limits in DMN.
+
+The user can use DMN freely.
 `;
 
         } else {
@@ -252,18 +189,21 @@ Doğal, anlaşılır, akıllı ve sohbet tarzında cevap ver.
 
 Özellikle şu konularda bilgili ol:
 
-Arduino
-ESP32
-elektronik
-programlama
-bilgisayar
-teknoloji
-genel bilgi
+- Arduino
+- ESP32
+- elektronik
+- programlama
+- bilgisayar
+- teknoloji
+- genel bilgi
 
-Kullanıcı sana "Seni kim yaptı?",
-"Yapımcın kim?",
-"Seni kim geliştirdi?",
+Kullanıcı sana:
+
+"Seni kim yaptı?"
+"Yapımcın kim?"
+"Seni kim geliştirdi?"
 "Senin yapımcın kim?"
+
 veya benzeri bir soru sorarsa:
 
 Benim yapımcım Devrim Tuğra Kurtulmuş.
@@ -278,12 +218,17 @@ Kullanıcı kod isterse:
 - Gerekli kütüphaneleri ekle.
 - Gerekli bütün fonksiyonları ekle.
 - Kullanıma hazır kod ver.
+- JavaScript, HTML, CSS, Python veya diğer dillerde sözdizimini doğru kullan.
+- Kodun eksik bölümlerini bırakma.
 
 Kullanıcı kod gönderirse:
 
 - Hataları bul.
 - Sorunu kısaca açıkla.
 - Ardından düzeltilmiş TAM kodu ver.
+- Kodun içinde JavaScript string hatası,
+  eksik parantez,
+  eksik tırnak veya benzeri syntax hataları bırakma.
 
 Kullanıcı normal sohbet yapıyorsa gereksiz yere kod üretme.
 
@@ -293,26 +238,50 @@ Kullanıcı "sadece kod" derse:
 - Açıklama yazma.
 
 Fotoğraf gönderilirse fotoğrafı dikkatlice analiz et.
-Fotoğraftaki nesneleri, yazıları, devreleri veya hataları
+
+Fotoğraftaki:
+
+- nesneleri
+- yazıları
+- devreleri
+- elektronik parçaları
+- bağlantıları
+- hataları
+
 olabildiğince doğru şekilde açıkla.
+
+DMN'de:
+
+- abonelik yoktur
+- reklam yoktur
+- ücretli paket yoktur
+- mesaj sınırı yoktur
+
+Kullanıcı DMN'yi özgürce kullanabilir.
 `;
         }
 
+        // =====================================
+        // CODE MODE
+        // =====================================
 
         if (codeMode) {
 
             instructions += `
 
-The user is requesting programming code.
+Kullanıcı özellikle kod istiyor.
 
-Prioritize complete, working and ready-to-use code.
+Bu nedenle:
 
-Do not shorten the requested code.
-
-Do not replace parts with "...".
+- Tam çalışan kod ver.
+- Kodun hiçbir bölümünü "..." ile geçme.
+- Eksik fonksiyon bırakma.
+- Gerekli import/require satırlarını ekle.
+- Kodun sözdizimini kontrol et.
+- Kullanıcı "tüm kodu ver" diyorsa dosyanın tamamını ver.
+- Kullanıcı mevcut kodundaki hatayı gösterdiyse düzeltilmiş tam sürümü ver.
 `;
         }
-
 
         // =====================================
         // OPENAI INPUT
@@ -346,9 +315,8 @@ Do not replace parts with "...".
 
         }
 
-
         // =====================================
-        // OPENAI
+        // OPENAI RESPONSE
         // =====================================
 
         const response =
@@ -362,24 +330,24 @@ Do not replace parts with "...".
 
             });
 
-
-        const reply =
-            response.output_text || "";
-
-
         // =====================================
         // CEVAP
         // =====================================
+
+        const reply =
+            response.output_text || "";
 
         res.json({
 
             reply: reply,
 
-            messagesRemaining:
-                user.messages
+            // Frontend eski sistemle uyumlu kalsın.
+            // Gerçek limit yok.
+            messagesRemaining: 999999,
+
+            unlimited: true
 
         });
-
 
     } catch (error) {
 
@@ -399,7 +367,6 @@ Do not replace parts with "...".
     }
 
 });
-
 
 // =====================================
 // GÖRSEL OLUŞTURMA
@@ -426,9 +393,8 @@ app.post(
             }
 
             console.log(
-                "Görsel oluşturuluyor..."
+                "DMN görsel oluşturuyor..."
             );
-
 
             const result =
                 await client.images.generate({
@@ -440,7 +406,6 @@ app.post(
                     size: "1024x1024"
 
                 });
-
 
             if (
                 !result ||
@@ -454,10 +419,8 @@ app.post(
 
             }
 
-
             const imageData =
                 result.data[0].b64_json;
-
 
             if (!imageData) {
 
@@ -467,7 +430,6 @@ app.post(
 
             }
 
-
             res.json({
 
                 image:
@@ -475,7 +437,6 @@ app.post(
                     imageData
 
             });
-
 
         } catch (error) {
 
@@ -497,7 +458,6 @@ app.post(
     }
 );
 
-
 // =====================================
 // SAĞLIK KONTROLÜ
 // =====================================
@@ -510,13 +470,18 @@ app.get(
 
             status: "ok",
 
-            dmn: "online"
+            dmn: "online",
+
+            unlimited: true,
+
+            ads: false,
+
+            subscription: false
 
         });
 
     }
 );
-
 
 // =====================================
 // SERVER
@@ -533,6 +498,9 @@ app.listen(
             " portunda çalışıyor."
         );
 
+        console.log(
+            "DMN ONLINE - SINIRSIZ KULLANIM"
+        );
+
     }
 );
-```

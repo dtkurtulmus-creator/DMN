@@ -1,253 +1,276 @@
-```html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMN AI</title>
 
-<title>DMN AI</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-<style>
-* {
-    box-sizing: border-box;
-}
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0b0d10;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0b0d10;
-    color: white;
-    height: 100vh;
-    overflow: hidden;
-}
+        .app {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-.app {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+        header {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            background: #101318;
+            border-bottom: 1px solid #252830;
+        }
 
-header {
-    height: 65px;
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    border-bottom: 1px solid #252830;
-    background: #101318;
-}
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
 
-.logo {
-    font-size: 25px;
-    font-weight: bold;
-}
+        .online {
+            margin-left: 12px;
+            color: #65e6a4;
+            font-size: 13px;
+        }
 
-.status {
-    margin-left: 12px;
-    font-size: 13px;
-    color: #65e6a4;
-}
+        .chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px 15px 120px;
+        }
 
-.chat {
-    flex: 1;
-    overflow-y: auto;
-    padding: 25px;
-}
+        .message {
+            max-width: 850px;
+            margin: 0 auto 18px;
+            padding: 15px 18px;
+            border-radius: 16px;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
 
-.message {
-    max-width: 850px;
-    margin: 0 auto 20px auto;
-    padding: 15px 18px;
-    border-radius: 16px;
-    line-height: 1.55;
-    white-space: pre-wrap;
-}
+        .user {
+            background: #1d2735;
+        }
 
-.user {
-    background: #1d2735;
-}
+        .dmn {
+            background: #15191f;
+        }
 
-.dmn {
-    background: #15191f;
-}
+        .name {
+            font-size: 12px;
+            opacity: .55;
+            margin-bottom: 7px;
+        }
 
-.message-name {
-    font-size: 12px;
-    opacity: .6;
-    margin-bottom: 6px;
-}
+        .bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px;
+            background: #101318;
+            border-top: 1px solid #252830;
+        }
 
-.bottom {
-    padding: 15px;
-    border-top: 1px solid #252830;
-    background: #101318;
-}
+        .input-area {
+            max-width: 900px;
+            margin: auto;
+            display: flex;
+            gap: 8px;
+        }
 
-.input-area {
-    max-width: 900px;
-    margin: auto;
-    display: flex;
-    gap: 8px;
-}
+        textarea {
+            flex: 1;
+            min-height: 52px;
+            max-height: 150px;
+            resize: none;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid #30343c;
+            outline: none;
+            background: #171a20;
+            color: white;
+            font-size: 16px;
+        }
 
-textarea {
-    flex: 1;
-    resize: none;
-    min-height: 52px;
-    max-height: 150px;
-    padding: 15px;
-    border: 1px solid #30343c;
-    border-radius: 15px;
-    background: #171a20;
-    color: white;
-    outline: none;
-    font-size: 16px;
-}
+        button {
+            width: 52px;
+            min-width: 52px;
+            height: 52px;
+            border: 0;
+            border-radius: 14px;
+            background: #252b35;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
 
-button {
-    border: none;
-    border-radius: 14px;
-    min-width: 52px;
-    cursor: pointer;
-    background: #252b35;
-    color: white;
-    font-size: 20px;
-}
+        button:hover {
+            background: #343b48;
+        }
 
-button:hover {
-    background: #343b48;
-}
+        .send {
+            background: white;
+            color: black;
+        }
 
-.send {
-    background: #ffffff;
-    color: #000;
-}
+        .send:hover {
+            background: #ddd;
+        }
 
-.send:hover {
-    background: #dddddd;
-}
+        button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
 
-/* =========================
-   SES KÜRESİ
-========================= */
+        /* SES EKRANI */
 
-.voice-overlay {
-    position: fixed;
-    inset: 0;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    background: rgba(5, 7, 10, .88);
-    z-index: 100;
-}
+        .voice-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
 
-.voice-overlay.active {
-    display: flex;
-}
+            display: none;
+            align-items: center;
+            justify-content: center;
 
-.voice-container {
-    text-align: center;
-}
+            background: rgba(5, 7, 12, .94);
+        }
 
-.voice-orb {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
+        .voice-overlay.active {
+            display: flex;
+        }
 
-    background:
-        radial-gradient(
-            circle at 35% 30%,
-            #ffffff,
-            #aeb8ff 15%,
-            #6574ff 35%,
-            #353cff 60%,
-            #1517a8 100%
-        );
+        .voice-box {
+            text-align: center;
+        }
 
-    box-shadow:
-        0 0 30px rgba(92, 105, 255, .8),
-        0 0 80px rgba(92, 105, 255, .5);
+        .orb {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
 
-    animation: orbIdle 2s ease-in-out infinite;
-    transition: transform .12s ease;
-}
+            background:
+                radial-gradient(
+                    circle at 32% 28%,
+                    white 0%,
+                    #b8c0ff 12%,
+                    #707dff 30%,
+                    #3f4cff 55%,
+                    #1719a8 100%
+                );
 
-.voice-orb.speaking {
-    animation: orbSpeaking .55s ease-in-out infinite alternate;
-}
+            box-shadow:
+                0 0 25px rgba(100, 115, 255, .9),
+                0 0 70px rgba(80, 90, 255, .6),
+                0 0 130px rgba(60, 70, 255, .35);
 
-@keyframes orbIdle {
-    0%, 100% {
-        transform: scale(1);
-    }
+            animation: idle 2s infinite ease-in-out;
+        }
 
-    50% {
-        transform: scale(1.06);
-    }
-}
+        .orb.speaking {
+            animation: speaking .45s infinite alternate ease-in-out;
+        }
 
-@keyframes orbSpeaking {
-    0% {
-        transform: scale(.92);
-    }
+        @keyframes idle {
+            0% {
+                transform: scale(1);
+            }
 
-    100% {
-        transform: scale(1.22);
-    }
-}
+            50% {
+                transform: scale(1.06);
+            }
 
-.voice-text {
-    margin-top: 25px;
-    font-size: 17px;
-    opacity: .85;
-}
+            100% {
+                transform: scale(1);
+            }
+        }
 
-.close-voice {
-    margin-top: 20px;
-    padding: 12px 22px;
-    border-radius: 12px;
-    background: #252b35;
-}
-</style>
+        @keyframes speaking {
+            0% {
+                transform: scale(.88);
+            }
+
+            100% {
+                transform: scale(1.22);
+            }
+        }
+
+        .voice-status {
+            margin-top: 30px;
+            font-size: 18px;
+        }
+
+        .close-button {
+            margin-top: 25px;
+            width: auto;
+            padding: 0 22px;
+        }
+
+        @media (max-width: 600px) {
+            .orb {
+                width: 140px;
+                height: 140px;
+            }
+
+            .message {
+                max-width: 95%;
+            }
+
+            .bottom {
+                padding: 8px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
 <div class="app">
 
-<header>
-    <div class="logo">DMN</div>
-    <div class="status">● ONLINE</div>
-</header>
+    <header>
+        <div class="logo">DMN</div>
+        <div class="online">● ONLINE</div>
+    </header>
 
-<div id="chat" class="chat"></div>
+    <div id="chat" class="chat"></div>
 
-<div class="bottom">
+    <div class="bottom">
 
-    <div class="input-area">
+        <div class="input-area">
 
-        <textarea
-            id="message"
-            placeholder="DMN'ye bir şey sor..."
-        ></textarea>
+            <textarea
+                id="message"
+                placeholder="DMN'ye bir şey sor..."
+            ></textarea>
 
-        <button
-            id="micButton"
-            title="Sesli konuş"
-        >
-            🎤
-        </button>
+            <button
+                id="micButton"
+                title="Sesli konuş"
+            >🎤</button>
 
-        <button
-            id="sendButton"
-            class="send"
-            title="Gönder"
-        >
-            ➤
-        </button>
+            <button
+                id="sendButton"
+                class="send"
+                title="Gönder"
+            >➤</button>
+
+        </div>
 
     </div>
-
-</div>
 
 </div>
 
@@ -259,23 +282,23 @@ button:hover {
     class="voice-overlay"
 >
 
-    <div class="voice-container">
+    <div class="voice-box">
 
         <div
-            id="voiceOrb"
-            class="voice-orb"
+            id="orb"
+            class="orb"
         ></div>
 
         <div
-            id="voiceText"
-            class="voice-text"
+            id="voiceStatus"
+            class="voice-status"
         >
             DMN dinliyor...
         </div>
 
         <button
-            id="closeVoice"
-            class="close-voice"
+            id="closeButton"
+            class="close-button"
         >
             Kapat
         </button>
@@ -302,33 +325,32 @@ const micButton =
 const voiceOverlay =
     document.getElementById("voiceOverlay");
 
-const voiceOrb =
-    document.getElementById("voiceOrb");
+const orb =
+    document.getElementById("orb");
 
-const voiceText =
-    document.getElementById("voiceText");
+const voiceStatus =
+    document.getElementById("voiceStatus");
 
-const closeVoice =
-    document.getElementById("closeVoice");
+const closeButton =
+    document.getElementById("closeButton");
 
 
-/* =========================
+/* ==========================
    MESAJ EKLE
-========================= */
+========================== */
 
 function addMessage(text, type) {
 
-    const box =
+    const message =
         document.createElement("div");
 
-    box.className =
+    message.className =
         "message " + type;
 
     const name =
         document.createElement("div");
 
-    name.className =
-        "message-name";
+    name.className = "name";
 
     name.textContent =
         type === "user"
@@ -340,28 +362,28 @@ function addMessage(text, type) {
 
     content.textContent = text;
 
-    box.appendChild(name);
-    box.appendChild(content);
+    message.appendChild(name);
+    message.appendChild(content);
 
-    chat.appendChild(box);
+    chat.appendChild(message);
 
     chat.scrollTop =
         chat.scrollHeight;
 }
 
 
-/* =========================
-   CHAT
-========================= */
+/* ==========================
+   YAZILI MESAJ
+========================== */
 
 async function sendMessage() {
 
-    const message =
+    const text =
         messageInput.value.trim();
 
-    if (!message) return;
+    if (!text) return;
 
-    addMessage(message, "user");
+    addMessage(text, "user");
 
     messageInput.value = "";
 
@@ -371,7 +393,6 @@ async function sendMessage() {
 
         const response =
             await fetch("/api/chat", {
-
                 method: "POST",
 
                 headers: {
@@ -380,9 +401,8 @@ async function sendMessage() {
                 },
 
                 body: JSON.stringify({
-                    message: message
+                    message: text
                 })
-
             });
 
         const data =
@@ -395,10 +415,10 @@ async function sendMessage() {
             );
         }
 
-        const reply =
-            data.reply || "";
-
-        addMessage(reply, "dmn");
+        addMessage(
+            data.reply || "Boş cevap.",
+            "dmn"
+        );
 
     } catch (error) {
 
@@ -410,7 +430,6 @@ async function sendMessage() {
     } finally {
 
         sendButton.disabled = false;
-        messageInput.focus();
 
     }
 }
@@ -434,16 +453,14 @@ messageInput.addEventListener(
             event.preventDefault();
 
             sendMessage();
-
         }
-
     }
 );
 
 
-/* =========================
-   SESLİ KONUŞMA
-========================= */
+/* ==========================
+   SES TANIMA
+========================== */
 
 const SpeechRecognition =
     window.SpeechRecognition ||
@@ -463,20 +480,20 @@ if (SpeechRecognition) {
     recognition.interimResults = false;
 
 
-    recognition.onstart = function() {
+    recognition.onstart =
+        function() {
 
-        voiceOverlay.classList.add(
-            "active"
-        );
+            voiceOverlay.classList.add(
+                "active"
+            );
 
-        voiceOrb.classList.remove(
-            "speaking"
-        );
+            orb.classList.remove(
+                "speaking"
+            );
 
-        voiceText.textContent =
-            "DMN dinliyor...";
-
-    };
+            voiceStatus.textContent =
+                "Dinliyorum...";
+        };
 
 
     recognition.onresult =
@@ -485,13 +502,10 @@ if (SpeechRecognition) {
             const text =
                 event.results[0][0].transcript;
 
-            messageInput.value = text;
-
-            voiceText.textContent =
+            voiceStatus.textContent =
                 "DMN düşünüyor...";
 
             sendVoiceMessage(text);
-
         };
 
 
@@ -499,18 +513,17 @@ if (SpeechRecognition) {
         function(event) {
 
             console.error(
-                "Mikrofon hatası:",
+                "Ses tanıma hatası:",
                 event.error
             );
 
-            voiceText.textContent =
+            voiceStatus.textContent =
                 "Mikrofon kullanılamadı.";
 
             setTimeout(
-                closeVoiceMode,
+                closeVoice,
                 1500
             );
-
         };
 
 
@@ -518,14 +531,11 @@ if (SpeechRecognition) {
         function() {
 
             if (
-                voiceText.textContent ===
-                "DMN dinliyor..."
+                voiceStatus.textContent ===
+                "Dinliyorum..."
             ) {
-
-                closeVoiceMode();
-
+                closeVoice();
             }
-
         };
 
 } else {
@@ -533,14 +543,13 @@ if (SpeechRecognition) {
     micButton.disabled = true;
 
     micButton.title =
-        "Tarayıcınız ses tanımayı desteklemiyor.";
-
+        "Bu tarayıcı ses tanımayı desteklemiyor.";
 }
 
 
-/* =========================
+/* ==========================
    MİKROFON
-========================= */
+========================== */
 
 micButton.addEventListener(
     "click",
@@ -553,34 +562,36 @@ micButton.addEventListener(
             );
 
             return;
-
         }
+
+        voiceOverlay.classList.add(
+            "active"
+        );
+
+        voiceStatus.textContent =
+            "Dinliyorum...";
 
         try {
-
             recognition.start();
-
         } catch (error) {
-
-            console.error(error);
-
+            console.log(error);
         }
-
     }
 );
 
 
-/* =========================
-   SESLİ DMN CEVABI
-========================= */
+/* ==========================
+   SESLİ MESAJ GÖNDER
+========================== */
 
 async function sendVoiceMessage(text) {
 
     try {
 
+        addMessage(text, "user");
+
         const response =
             await fetch("/api/chat", {
-
                 method: "POST",
 
                 headers: {
@@ -591,32 +602,31 @@ async function sendVoiceMessage(text) {
                 body: JSON.stringify({
                     message: text
                 })
-
             });
 
         const data =
             await response.json();
 
         if (!response.ok) {
-
             throw new Error(
                 data.error ||
                 "DMN cevap veremedi."
             );
-
         }
 
         const reply =
             data.reply || "";
 
-        addMessage(text, "user");
-        addMessage(reply, "dmn");
+        addMessage(
+            reply,
+            "dmn"
+        );
 
         speakDMN(reply);
 
     } catch (error) {
 
-        voiceText.textContent =
+        voiceStatus.textContent =
             "Hata oluştu.";
 
         addMessage(
@@ -625,39 +635,40 @@ async function sendVoiceMessage(text) {
         );
 
         setTimeout(
-            closeVoiceMode,
+            closeVoice,
             1500
         );
-
     }
-
 }
 
 
-/* =========================
-   DMN SESİ
-========================= */
+/* ==========================
+   DMN SESLİ CEVAP
+========================== */
 
 function speakDMN(text) {
 
-    if (!("speechSynthesis" in window)) {
+    if (
+        !("speechSynthesis" in window)
+    ) {
 
-        voiceText.textContent =
+        voiceStatus.textContent =
             "Tarayıcınız sesli cevabı desteklemiyor.";
 
         setTimeout(
-            closeVoiceMode,
+            closeVoice,
             2000
         );
 
         return;
-
     }
 
     window.speechSynthesis.cancel();
 
     const utterance =
-        new SpeechSynthesisUtterance(text);
+        new SpeechSynthesisUtterance(
+            text
+        );
 
     utterance.lang = "tr-TR";
 
@@ -675,89 +686,86 @@ function speakDMN(text) {
                 "active"
             );
 
-            voiceOrb.classList.add(
+            orb.classList.add(
                 "speaking"
             );
 
-            voiceText.textContent =
+            voiceStatus.textContent =
                 "DMN konuşuyor...";
-
         };
 
 
     utterance.onend =
         function() {
 
-            voiceOrb.classList.remove(
+            orb.classList.remove(
                 "speaking"
             );
 
-            voiceText.textContent =
-                "Konuşma tamamlandı.";
+            voiceStatus.textContent =
+                "Tamamlandı.";
 
             setTimeout(
-                closeVoiceMode,
-                700
+                closeVoice,
+                800
             );
-
         };
 
 
     utterance.onerror =
         function() {
 
-            voiceOrb.classList.remove(
+            orb.classList.remove(
                 "speaking"
             );
 
-            voiceText.textContent =
+            voiceStatus.textContent =
                 "Ses oynatılamadı.";
 
             setTimeout(
-                closeVoiceMode,
+                closeVoice,
                 1500
             );
-
         };
 
 
     window.speechSynthesis.speak(
         utterance
     );
-
 }
 
 
-/* =========================
-   SES EKRANINI KAPAT
-========================= */
+/* ==========================
+   KAPAT
+========================== */
 
-function closeVoiceMode() {
+function closeVoice() {
 
     voiceOverlay.classList.remove(
         "active"
     );
 
-    voiceOrb.classList.remove(
+    orb.classList.remove(
         "speaking"
     );
 
-    if ("speechSynthesis" in window) {
+    if (
+        "speechSynthesis" in window
+    ) {
         window.speechSynthesis.cancel();
     }
-
 }
 
 
-closeVoice.addEventListener(
+closeButton.addEventListener(
     "click",
-    closeVoiceMode
+    closeVoice
 );
 
 
-/* =========================
+/* ==========================
    BAŞLANGIÇ
-========================= */
+========================== */
 
 addMessage(
     "Merhaba! Ben DMN. Sana nasıl yardımcı olabilirim?",
@@ -768,4 +776,3 @@ addMessage(
 
 </body>
 </html>
-```

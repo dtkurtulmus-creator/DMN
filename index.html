@@ -1,364 +1,728 @@
+````html
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="google-site-verification" content="mBO_SXlln8r7ot4GJeNZK81rDS11GLJPQZbGsy6jHCQ">
-<title>DMN</title>
+    <meta charset="UTF-8">
 
-<style>
-* {
-    box-sizing: border-box;
-}
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    color: #fff;
-    background:
-        radial-gradient(circle at 20% 10%, #26345f 0, transparent 35%),
-        radial-gradient(circle at 90% 20%, #40275f 0, transparent 35%),
-        linear-gradient(135deg, #0b1020, #151525 50%, #0b1020);
-    height: 100vh;
-    overflow: hidden;
-}
+    <meta
+        name="google-site-verification"
+        content="mBO_SXlln8r7ot4GJeNZK81rDS11GLJPQZbGsy6jHCQ"
+    >
 
-header {
-    height: 65px;
-    display: flex;
-    align-items: center;
-    padding: 0 18px;
-    background: rgba(15,18,32,.82);
-    backdrop-filter: blur(15px);
-    border-bottom: 1px solid rgba(255,255,255,.08);
-}
+    <title>DMN 🤖</title>
 
-.logo {
-    font-size: 23px;
-    font-weight: bold;
-}
+    <style>
 
-#settingsButton {
-    margin-left: auto;
-}
+        * {
+            box-sizing: border-box;
+        }
 
-button {
-    border: 0;
-    color: white;
-    background: rgba(255,255,255,.09);
-    border-radius: 12px;
-    padding: 11px 15px;
-    cursor: pointer;
-    font-size: 18px;
-}
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
 
-button:hover {
-    background: rgba(255,255,255,.16);
-}
+        body {
+            font-family: Arial, sans-serif;
+            color: #fff;
 
-button:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-}
+            background:
+                radial-gradient(
+                    circle at 20% 10%,
+                    #26345f 0,
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 90% 20%,
+                    #40275f 0,
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    #0b1020,
+                    #151525 50%,
+                    #0b1020
+                );
 
-#chatScreen {
-    height: calc(100vh - 65px);
-    display: flex;
-    flex-direction: column;
-}
+            min-height: 100vh;
+            overflow: hidden;
+        }
 
-.messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 25px 15px;
-}
+        /* =====================================
+           HEADER
+        ===================================== */
 
-.message {
-    max-width: 850px;
-    margin: 12px auto;
-    padding: 15px 17px;
-    border-radius: 18px;
-    line-height: 1.55;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-}
+        header {
+            height: 65px;
 
-.user {
-    background: rgba(255,255,255,.09);
-}
+            display: flex;
+            align-items: center;
 
-.dmn {
-    background: rgba(20,25,43,.82);
-    border: 1px solid rgba(255,255,255,.08);
-}
+            padding: 0 18px;
 
-.message-image {
-    max-width: 100%;
-    max-height: 500px;
-    border-radius: 15px;
-    display: block;
-    margin-top: 8px;
-}
+            background:
+                rgba(15, 18, 32, 0.82);
 
-.code-wrapper {
-    position: relative;
-    margin-top: 10px;
-}
+            backdrop-filter: blur(15px);
 
-.code-block {
-    background: #080b12;
-    border: 1px solid #30384d;
-    border-radius: 12px;
-    padding: 45px 15px 15px;
-    overflow-x: auto;
-    white-space: pre;
-    font-family: Consolas, monospace;
-    font-size: 14px;
-}
+            border-bottom:
+                1px solid rgba(255, 255, 255, 0.08);
 
-.copy-button {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 13px;
-    padding: 7px 10px;
-}
+            position: relative;
+            z-index: 10;
+        }
 
-.voice-circle {
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 7px;
-    background: #7c8cff;
-    box-shadow: 0 0 12px #7c8cff;
-    animation: voicePulse 1s infinite alternate;
-}
+        .logo {
+            font-size: 23px;
+            font-weight: bold;
 
-@keyframes voicePulse {
-    from {
-        transform: scale(.75);
-        opacity: .55;
-    }
-    to {
-        transform: scale(1.2);
-        opacity: 1;
-    }
-}
+            user-select: none;
+        }
 
-.input-area {
-    padding: 15px;
-    background: rgba(10,13,25,.82);
-    backdrop-filter: blur(15px);
-    border-top: 1px solid rgba(255,255,255,.08);
-}
+        #settingsButton {
+            margin-left: auto;
+        }
 
-.input-box {
-    max-width: 850px;
-    margin: auto;
-    display: flex;
-    gap: 8px;
-}
+        /* =====================================
+           BUTTONS
+        ===================================== */
 
-#messageInput {
-    flex: 1;
-    min-width: 0;
-    padding: 14px;
-    border: 1px solid #343b50;
-    border-radius: 14px;
-    background: rgba(5,8,17,.8);
-    color: white;
-    outline: none;
-    font-size: 16px;
-}
+        button {
+            border: 0;
 
-#messageInput:focus {
-    border-color: #6978ff;
-}
+            color: white;
 
-#imageInput {
-    display: none;
-}
+            background:
+                rgba(255, 255, 255, 0.09);
 
-#settingsScreen {
-    display: none;
-    height: calc(100vh - 65px);
-    overflow-y: auto;
-    padding: 25px 15px;
-}
+            border-radius: 12px;
 
-.settings-box {
-    max-width: 700px;
-    margin: auto;
-}
+            padding: 11px 15px;
 
-.settings-title {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 22px;
-}
+            cursor: pointer;
 
-.setting {
-    padding: 18px;
-    margin-bottom: 14px;
-    background: rgba(20,25,43,.8);
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-}
+            font-size: 18px;
 
-.setting-name {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
+            transition:
+                background 0.2s,
+                transform 0.1s;
+        }
 
-.setting-description {
-    color: #949db0;
-    font-size: 13px;
-}
+        button:hover {
+            background:
+                rgba(255, 255, 255, 0.16);
+        }
 
-.switch {
-    position: relative;
-    width: 52px;
-    height: 30px;
-    flex-shrink: 0;
-}
+        button:active {
+            transform: scale(0.97);
+        }
 
-.switch input {
-    display: none;
-}
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
-.slider {
-    position: absolute;
-    inset: 0;
-    background: #343b50;
-    border-radius: 30px;
-    cursor: pointer;
-}
+        /* =====================================
+           CHAT
+        ===================================== */
 
-.slider::before {
-    content: "";
-    position: absolute;
-    width: 22px;
-    height: 22px;
-    left: 4px;
-    top: 4px;
-    background: white;
-    border-radius: 50%;
-    transition: .2s;
-}
+        #chatScreen {
+            height: calc(100vh - 65px);
 
-.switch input:checked + .slider {
-    background: #5969ff;
-}
+            display: flex;
+            flex-direction: column;
+        }
 
-.switch input:checked + .slider::before {
-    transform: translateX(22px);
-}
+        .messages {
+            flex: 1;
 
-.history-title {
-    margin-top: 30px;
-    font-size: 20px;
-    font-weight: bold;
-}
+            overflow-y: auto;
 
-.history-item {
-    padding: 13px;
-    margin-top: 8px;
-    border-radius: 12px;
-    background: rgba(255,255,255,.06);
-    cursor: pointer;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
+            padding: 25px 15px 15px;
 
-.history-item:hover {
-    background: rgba(255,255,255,.11);
-}
+            scroll-behavior: smooth;
+        }
 
-@media (max-width: 600px) {
-    .message {
-        max-width: 96%;
-    }
+        .messages::-webkit-scrollbar {
+            width: 7px;
+        }
 
-    .input-box button {
-        padding: 10px 12px;
-    }
-}
-</style>
+        .messages::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,.15);
+            border-radius: 20px;
+        }
+
+        .message {
+            max-width: 850px;
+
+            margin: 12px auto;
+
+            padding: 15px 17px;
+
+            border-radius: 18px;
+
+            line-height: 1.55;
+
+            white-space: pre-wrap;
+
+            overflow-wrap: anywhere;
+        }
+
+        .user {
+            background:
+                rgba(255,255,255,.09);
+        }
+
+        .dmn {
+            background:
+                rgba(20,25,43,.82);
+
+            border:
+                1px solid rgba(255,255,255,.08);
+        }
+
+        /* =====================================
+           IMAGES
+        ===================================== */
+
+        .message-image {
+            max-width: 100%;
+            max-height: 500px;
+
+            border-radius: 15px;
+
+            display: block;
+
+            margin-top: 8px;
+        }
+
+        /* =====================================
+           CODE
+        ===================================== */
+
+        .code-wrapper {
+            position: relative;
+
+            margin-top: 10px;
+        }
+
+        .code-block {
+            background: #080b12;
+
+            border:
+                1px solid #30384d;
+
+            border-radius: 12px;
+
+            padding: 45px 15px 15px;
+
+            overflow-x: auto;
+
+            white-space: pre;
+
+            font-family:
+                Consolas,
+                Monaco,
+                monospace;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+        .copy-button {
+            position: absolute;
+
+            top: 8px;
+            right: 8px;
+
+            font-size: 13px;
+
+            padding:
+                7px 10px;
+
+            z-index: 2;
+        }
+
+        /* =====================================
+           VOICE
+        ===================================== */
+
+        .voice-circle {
+            width: 13px;
+            height: 13px;
+
+            border-radius: 50%;
+
+            display: inline-block;
+
+            margin-right: 7px;
+
+            background: #7c8cff;
+
+            box-shadow:
+                0 0 12px #7c8cff;
+
+            animation:
+                voicePulse
+                1s
+                infinite
+                alternate;
+        }
+
+        @keyframes voicePulse {
+
+            from {
+                transform: scale(.75);
+                opacity: .55;
+            }
+
+            to {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+
+        }
+
+        /* =====================================
+           INPUT
+        ===================================== */
+
+        .input-area {
+            padding: 15px;
+
+            background:
+                rgba(10,13,25,.82);
+
+            backdrop-filter:
+                blur(15px);
+
+            border-top:
+                1px solid rgba(255,255,255,.08);
+        }
+
+        .input-box {
+            max-width: 850px;
+
+            margin: auto;
+
+            display: flex;
+
+            gap: 8px;
+        }
+
+        #messageInput {
+            flex: 1;
+
+            min-width: 0;
+
+            padding: 14px;
+
+            border:
+                1px solid #343b50;
+
+            border-radius: 14px;
+
+            background:
+                rgba(5,8,17,.8);
+
+            color: white;
+
+            outline: none;
+
+            font-size: 16px;
+        }
+
+        #messageInput:focus {
+            border-color:
+                #6978ff;
+        }
+
+        #imageInput {
+            display: none;
+        }
+
+        /* =====================================
+           STATUS
+        ===================================== */
+
+        .status {
+            max-width: 850px;
+
+            margin:
+                8px auto 0;
+
+            color:
+                #9aa3b8;
+
+            font-size: 13px;
+        }
+
+        /* =====================================
+           PREVIEW
+        ===================================== */
+
+        .preview {
+            max-width: 850px;
+
+            margin:
+                8px auto;
+
+            display: none;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .preview img {
+            max-width: 160px;
+            max-height: 110px;
+
+            border-radius: 12px;
+        }
+
+        /* =====================================
+           SETTINGS
+        ===================================== */
+
+        #settingsScreen {
+            display: none;
+
+            height:
+                calc(100vh - 65px);
+
+            overflow-y: auto;
+
+            padding:
+                25px 15px;
+        }
+
+        .settings-box {
+            max-width: 700px;
+
+            margin: auto;
+        }
+
+        .settings-title {
+            font-size: 28px;
+
+            font-weight: bold;
+
+            margin-bottom: 22px;
+        }
+
+        .setting {
+            padding: 18px;
+
+            margin-bottom: 14px;
+
+            background:
+                rgba(20,25,43,.8);
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            border-radius: 16px;
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .setting-name {
+            font-weight: bold;
+
+            margin-bottom: 5px;
+        }
+
+        .setting-description {
+            color:
+                #949db0;
+
+            font-size: 13px;
+        }
+
+        /* =====================================
+           SWITCH
+        ===================================== */
+
+        .switch {
+            position: relative;
+
+            width: 52px;
+            height: 30px;
+
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                #343b50;
+
+            border-radius: 30px;
+
+            cursor: pointer;
+        }
+
+        .slider::before {
+            content: "";
+
+            position: absolute;
+
+            width: 22px;
+            height: 22px;
+
+            left: 4px;
+            top: 4px;
+
+            background: white;
+
+            border-radius: 50%;
+
+            transition: .2s;
+        }
+
+        .switch input:checked + .slider {
+            background:
+                #5969ff;
+        }
+
+        .switch input:checked + .slider::before {
+            transform:
+                translateX(22px);
+        }
+
+        /* =====================================
+           HISTORY
+        ===================================== */
+
+        .history-title {
+            margin-top: 30px;
+
+            font-size: 20px;
+
+            font-weight: bold;
+        }
+
+        .history-item {
+            padding: 13px;
+
+            margin-top: 8px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(255,255,255,.06);
+
+            cursor: pointer;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+        }
+
+        .history-item:hover {
+            background:
+                rgba(255,255,255,.11);
+        }
+
+        /* =====================================
+           UNLIMITED BADGE
+        ===================================== */
+
+        .unlimited-badge {
+            max-width: 850px;
+
+            margin: 0 auto 5px;
+
+            font-size: 12px;
+
+            color: #9aa3b8;
+
+            text-align: center;
+        }
+
+        /* =====================================
+           MOBILE
+        ===================================== */
+
+        @media (max-width: 600px) {
+
+            .message {
+                max-width: 96%;
+            }
+
+            .input-box button {
+                padding:
+                    10px 12px;
+            }
+
+            .input-area {
+                padding: 10px;
+            }
+
+            .settings-title {
+                font-size: 24px;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
 <header>
-    <div class="logo">DMN 🤖</div>
 
-    <button id="settingsButton" title="Ayarlar">
+    <div class="logo">
+        DMN 🤖
+    </div>
+
+    <button
+        id="settingsButton"
+        title="Ayarlar"
+    >
         ⚙️
     </button>
+
 </header>
+
+
+<!-- =====================================
+     CHAT SCREEN
+===================================== -->
 
 <div id="chatScreen">
 
-    <div class="messages" id="messages">
+    <div
+        class="messages"
+        id="messages"
+    >
+
         <div class="message dmn">
             Merhaba! Ben DMN. 🤖
-            Bana istediğin şeyi sorabilirsin.
+
+            Bana istediğin şeyi
+            sorabilirsin.
+
+            Kod, teknoloji, Arduino,
+            ESP32, elektronik veya
+            normal sohbet için buradayım.
         </div>
+
     </div>
 
-    <div class="preview" id="preview"
-         style="max-width:850px;margin:8px auto;display:none;align-items:center;gap:10px;">
-        <img id="previewImage"
-             alt="Seçilen fotoğraf"
-             style="max-width:160px;max-height:110px;border-radius:12px;">
 
-        <button id="removeImageButton"
-                title="Fotoğrafı kaldır">
+    <!-- FOTOĞRAF ÖNİZLEME -->
+
+    <div
+        class="preview"
+        id="preview"
+    >
+
+        <img
+            id="previewImage"
+            alt="Seçilen fotoğraf"
+        >
+
+        <button
+            id="removeImageButton"
+            title="Fotoğrafı kaldır"
+        >
             ✕
         </button>
+
     </div>
 
+
+    <!-- INPUT -->
+
     <div class="input-area">
+
+        <div class="unlimited-badge">
+            ♾️ DMN • Sınırsız kullanım
+        </div>
+
         <div class="input-box">
 
-            <button id="imageButton"
-                    title="Fotoğraf ekle">
+            <button
+                id="imageButton"
+                title="Fotoğraf ekle"
+            >
                 📷
             </button>
 
-            <input id="imageInput"
-                   type="file"
-                   accept="image/*">
+            <input
+                id="imageInput"
+                type="file"
+                accept="image/*"
+            >
 
-            <button id="micButton"
-                    title="Sesli komut">
+            <button
+                id="micButton"
+                title="Sesli komut"
+            >
                 🎤
             </button>
 
-            <input id="messageInput"
-                   type="text"
-                   placeholder="DMN'ye bir şey sor..."
-                   autocomplete="off">
+            <input
+                id="messageInput"
+                type="text"
+                placeholder="DMN'ye bir şey sor..."
+                autocomplete="off"
+            >
 
-            <button id="sendButton"
-                    title="Gönder">
+            <button
+                id="sendButton"
+                title="Gönder"
+            >
                 ➤
             </button>
 
         </div>
 
-        <div class="status"
-             id="status"
-             style="max-width:850px;margin:8px auto 0;color:#9aa3b8;font-size:13px;">
-            ✨ DMN ücretsiz
+        <div
+            class="status"
+            id="status"
+        >
+            💬 Sınırsız mesaj
         </div>
+
     </div>
+
 </div>
+
+
+<!-- =====================================
+     SETTINGS SCREEN
+===================================== -->
 
 <div id="settingsScreen">
 
@@ -368,9 +732,13 @@ button:disabled {
             ⚙️ DMN Ayarları
         </div>
 
+
+        <!-- VOICE -->
+
         <div class="setting">
 
             <div>
+
                 <div class="setting-name">
                     🔊 Sesli cevap
                 </div>
@@ -378,18 +746,29 @@ button:disabled {
                 <div class="setting-description">
                     DMN cevaplarını sesli okur.
                 </div>
+
             </div>
 
             <label class="switch">
-                <input type="checkbox" id="voiceToggle">
+
+                <input
+                    type="checkbox"
+                    id="voiceToggle"
+                >
+
                 <span class="slider"></span>
+
             </label>
 
         </div>
 
+
+        <!-- ENGLISH -->
+
         <div class="setting">
 
             <div>
+
                 <div class="setting-name">
                     🇬🇧 İngilizce
                 </div>
@@ -397,18 +776,29 @@ button:disabled {
                 <div class="setting-description">
                     DMN İngilizce cevap verir.
                 </div>
+
             </div>
 
             <label class="switch">
-                <input type="checkbox" id="englishToggle">
+
+                <input
+                    type="checkbox"
+                    id="englishToggle"
+                >
+
                 <span class="slider"></span>
+
             </label>
 
         </div>
 
+
+        <!-- CHAT MODE -->
+
         <div class="setting">
 
             <div>
+
                 <div class="setting-name">
                     💬 Sohbet modu
                 </div>
@@ -416,14 +806,48 @@ button:disabled {
                 <div class="setting-description">
                     Doğal sohbet modu sürekli açıktır.
                 </div>
+
             </div>
 
             <label class="switch">
-                <input type="checkbox" checked disabled>
+
+                <input
+                    type="checkbox"
+                    checked
+                    disabled
+                >
+
                 <span class="slider"></span>
+
             </label>
 
         </div>
+
+
+        <!-- UNLIMITED -->
+
+        <div class="setting">
+
+            <div>
+
+                <div class="setting-name">
+                    ♾️ Sınırsız kullanım
+                </div>
+
+                <div class="setting-description">
+                    Abonelik, reklam veya mesaj limiti yok.
+                </div>
+
+            </div>
+
+            <div style="font-size:24px;">
+                ✅
+            </div>
+
+        </div>
+
+
+        <!-- HISTORY -->
 
         <div class="history-title">
             🕘 Sohbetler
@@ -431,57 +855,128 @@ button:disabled {
 
         <div id="historyList"></div>
 
-        <button id="clearHistoryButton"
-                style="margin-top:15px;">
+        <button
+            id="clearHistoryButton"
+            style="margin-top:15px;"
+        >
             🗑️ Sohbet geçmişini temizle
         </button>
 
     </div>
+
 </div>
+
 
 <script>
 
-/* ================================
+/* =====================================
    ELEMENTLER
-================================ */
+===================================== */
 
-const input = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendButton");
-const micButton = document.getElementById("micButton");
-const imageButton = document.getElementById("imageButton");
-const imageInput = document.getElementById("imageInput");
-const removeImageButton = document.getElementById("removeImageButton");
+const input =
+    document.getElementById(
+        "messageInput"
+    );
 
-const preview = document.getElementById("preview");
-const previewImage = document.getElementById("previewImage");
+const sendButton =
+    document.getElementById(
+        "sendButton"
+    );
 
-const messages = document.getElementById("messages");
-const statusText = document.getElementById("status");
+const micButton =
+    document.getElementById(
+        "micButton"
+    );
 
-const chatScreen = document.getElementById("chatScreen");
-const settingsScreen = document.getElementById("settingsScreen");
-const settingsButton = document.getElementById("settingsButton");
+const imageButton =
+    document.getElementById(
+        "imageButton"
+    );
 
-const voiceToggle = document.getElementById("voiceToggle");
-const englishToggle = document.getElementById("englishToggle");
+const imageInput =
+    document.getElementById(
+        "imageInput"
+    );
 
-const historyList = document.getElementById("historyList");
+const removeImageButton =
+    document.getElementById(
+        "removeImageButton"
+    );
+
+const preview =
+    document.getElementById(
+        "preview"
+    );
+
+const previewImage =
+    document.getElementById(
+        "previewImage"
+    );
+
+const messages =
+    document.getElementById(
+        "messages"
+    );
+
+const statusText =
+    document.getElementById(
+        "status"
+    );
+
+const chatScreen =
+    document.getElementById(
+        "chatScreen"
+    );
+
+const settingsScreen =
+    document.getElementById(
+        "settingsScreen"
+    );
+
+const settingsButton =
+    document.getElementById(
+        "settingsButton"
+    );
+
+const voiceToggle =
+    document.getElementById(
+        "voiceToggle"
+    );
+
+const englishToggle =
+    document.getElementById(
+        "englishToggle"
+    );
+
+const historyList =
+    document.getElementById(
+        "historyList"
+    );
+
 const clearHistoryButton =
-    document.getElementById("clearHistoryButton");
+    document.getElementById(
+        "clearHistoryButton"
+    );
 
 
-/* ================================
+/* =====================================
    KULLANICI ID
-================================ */
+===================================== */
 
-let userId = localStorage.getItem("dmn_user_id");
+let userId =
+    localStorage.getItem(
+        "dmn_user_id"
+    );
 
 if (!userId) {
 
     userId =
         "user_" +
-        Math.random().toString(36).substring(2) +
-        Date.now().toString(36);
+        Math.random()
+            .toString(36)
+            .substring(2) +
+        Date.now()
+            .toString(36);
 
     localStorage.setItem(
         "dmn_user_id",
@@ -490,15 +985,19 @@ if (!userId) {
 }
 
 
-/* ================================
+/* =====================================
    AYARLAR
-================================ */
+===================================== */
 
 let voiceEnabled =
-    localStorage.getItem("dmn_voice") === "true";
+    localStorage.getItem(
+        "dmn_voice"
+    ) === "true";
 
 let englishEnabled =
-    localStorage.getItem("dmn_english") === "true";
+    localStorage.getItem(
+        "dmn_english"
+    ) === "true";
 
 let selectedImage = null;
 
@@ -509,18 +1008,24 @@ let currentConversation =
         ) || "[]"
     );
 
-voiceToggle.checked = voiceEnabled;
-englishToggle.checked = englishEnabled;
+voiceToggle.checked =
+    voiceEnabled;
+
+englishToggle.checked =
+    englishEnabled;
 
 
-/* ================================
+/* =====================================
    AYARLARI GÜNCELLE
-================================ */
+===================================== */
 
 function ayarlariGuncelle() {
 
-    voiceEnabled = voiceToggle.checked;
-    englishEnabled = englishToggle.checked;
+    voiceEnabled =
+        voiceToggle.checked;
+
+    englishEnabled =
+        englishToggle.checked;
 
     localStorage.setItem(
         "dmn_voice",
@@ -532,11 +1037,23 @@ function ayarlariGuncelle() {
         englishEnabled
     );
 
-    statusText.textContent =
-        englishEnabled
-            ? "✨ DMN is free"
-            : "✨ DMN tamamen ücretsiz";
+    if (voiceEnabled) {
+
+        statusText.innerHTML =
+            englishEnabled
+                ? "🔊 Voice enabled • Unlimited messages"
+                : "🔊 Sesli cevap açık • Sınırsız mesaj";
+
+    } else {
+
+        statusText.textContent =
+            englishEnabled
+                ? "💬 Unlimited messages"
+                : "💬 Sınırsız mesaj";
+
+    }
 }
+
 
 voiceToggle.addEventListener(
     "change",
@@ -549,83 +1066,125 @@ englishToggle.addEventListener(
 );
 
 
-/* ================================
+/* =====================================
    AYARLAR EKRANI
-================================ */
+===================================== */
 
 settingsButton.addEventListener(
     "click",
     function () {
 
         const open =
-            settingsScreen.style.display === "block";
+            settingsScreen.style.display ===
+            "block";
 
         if (open) {
 
-            settingsScreen.style.display = "none";
-            chatScreen.style.display = "flex";
+            settingsScreen.style.display =
+                "none";
+
+            chatScreen.style.display =
+                "flex";
 
         } else {
 
-            settingsScreen.style.display = "block";
-            chatScreen.style.display = "none";
+            settingsScreen.style.display =
+                "block";
+
+            chatScreen.style.display =
+                "none";
 
             sohbetleriGoster();
+
         }
+
     }
 );
 
 
-/* ================================
+/* =====================================
    MESAJ EKLE
-================================ */
+===================================== */
 
-function mesajEkle(text, type) {
+function mesajEkle(
+    text,
+    type
+) {
 
-    const div = document.createElement("div");
+    const div =
+        document.createElement(
+            "div"
+        );
 
-    div.className = "message " + type;
-    div.textContent = text;
+    div.className =
+        "message " + type;
 
-    messages.appendChild(div);
+    div.textContent =
+        text;
+
+    messages.appendChild(
+        div
+    );
 
     messages.scrollTop =
         messages.scrollHeight;
 }
 
 
-/* ================================
+/* =====================================
    RESİM EKLE
-================================ */
+===================================== */
 
-function resimEkle(src, type = "user") {
+function resimEkle(
+    src,
+    type = "user"
+) {
 
-    const div = document.createElement("div");
+    const div =
+        document.createElement(
+            "div"
+        );
 
-    div.className = "message " + type;
+    div.className =
+        "message " + type;
 
-    const img = document.createElement("img");
+    const img =
+        document.createElement(
+            "img"
+        );
 
-    img.src = src;
-    img.className = "message-image";
+    img.src =
+        src;
 
-    div.appendChild(img);
-    messages.appendChild(div);
+    img.className =
+        "message-image";
+
+    div.appendChild(
+        img
+    );
+
+    messages.appendChild(
+        div
+    );
 
     messages.scrollTop =
         messages.scrollHeight;
 }
 
 
-/* ================================
+/* =====================================
    KOD İSTEĞİ
-================================ */
+===================================== */
 
-function kodIstegiMi(text) {
+function kodIstegiMi(
+    text
+) {
 
-    const lower = text.toLowerCase();
+    const lower =
+        text.toLowerCase();
 
     const words = [
+
         "kod ver",
         "kodu ver",
         "kod yaz",
@@ -635,24 +1194,34 @@ function kodIstegiMi(text) {
         "kod yap",
         "program yaz",
         "program oluştur",
-        "program olustur"
+        "program olustur",
+        "tüm kod",
+        "tum kod",
+        "komple kod",
+        "tam kod"
+
     ];
 
     return words.some(
-        word => lower.includes(word)
+        word =>
+            lower.includes(word)
     );
 }
 
 
-/* ================================
+/* =====================================
    RESİM İSTEĞİ
-================================ */
+===================================== */
 
-function resimIstegiMi(text) {
+function resimIstegiMi(
+    text
+) {
 
-    const lower = text.toLowerCase();
+    const lower =
+        text.toLowerCase();
 
     const words = [
+
         "resim oluştur",
         "resim olustur",
         "resim yap",
@@ -664,57 +1233,80 @@ function resimIstegiMi(text) {
         "resim ciz",
         "görsel yap",
         "gorsel yap"
+
     ];
 
     return words.some(
-        word => lower.includes(word)
+        word =>
+            lower.includes(word)
     );
 }
 
 
-/* ================================
+/* =====================================
    FOTOĞRAF SEÇ
-================================ */
+===================================== */
 
 imageButton.addEventListener(
     "click",
     function () {
+
         imageInput.click();
+
     }
 );
+
 
 imageInput.addEventListener(
     "change",
     function () {
 
-        const file = imageInput.files[0];
+        const file =
+            imageInput.files[0];
 
         if (!file) {
             return;
         }
 
-        const reader = new FileReader();
+        if (!file.type.startsWith("image/")) {
 
-        reader.onload = function (event) {
+            alert(
+                "Lütfen bir resim dosyası seç."
+            );
 
-            selectedImage =
-                event.target.result;
+            imageInput.value = "";
 
-            previewImage.src =
-                selectedImage;
+            return;
+        }
 
-            preview.style.display =
-                "flex";
-        };
+        const reader =
+            new FileReader();
 
-        reader.readAsDataURL(file);
+        reader.onload =
+            function (event) {
+
+                selectedImage =
+                    event.target.result;
+
+                previewImage.src =
+                    selectedImage;
+
+                preview.style.display =
+                    "flex";
+
+            };
+
+        reader.readAsDataURL(
+            file
+        );
+
     }
 );
 
 
-/* ================================
+/* =====================================
    FOTOĞRAF SİL
-================================ */
+===================================== */
 
 removeImageButton.addEventListener(
     "click",
@@ -724,27 +1316,36 @@ removeImageButton.addEventListener(
 
         imageInput.value = "";
 
-        preview.style.display = "none";
+        preview.style.display =
+            "none";
 
         previewImage.src = "";
+
     }
 );
 
 
-/* ================================
+/* =====================================
    ANA MESAJ GÖNDER
-================================ */
+===================================== */
 
 async function mesajGonder() {
 
-    const mesaj = input.value.trim();
+    const mesaj =
+        input.value.trim();
 
-    if (!mesaj && !selectedImage) {
+    if (
+        !mesaj &&
+        !selectedImage
+    ) {
         return;
     }
 
     const gonderilecekResim =
         selectedImage;
+
+
+    /* Kullanıcı mesajını göster */
 
     if (mesaj) {
 
@@ -752,7 +1353,9 @@ async function mesajGonder() {
             "Sen: " + mesaj,
             "user"
         );
+
     }
+
 
     if (gonderilecekResim) {
 
@@ -760,15 +1363,27 @@ async function mesajGonder() {
             gonderilecekResim,
             "user"
         );
+
     }
 
+
+    /* Geçmişe ekle */
+
     currentConversation.push({
+
         role: "user",
+
         text: mesaj,
-        image: gonderilecekResim
+
+        image:
+            gonderilecekResim
+
     });
 
     sohbetiKaydet();
+
+
+    /* Input temizle */
 
     input.value = "";
 
@@ -776,13 +1391,18 @@ async function mesajGonder() {
 
     imageInput.value = "";
 
-    preview.style.display = "none";
+    preview.style.display =
+        "none";
 
     previewImage.src = "";
 
 
+    /* Loading */
+
     const loading =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     loading.className =
         "message dmn";
@@ -792,7 +1412,9 @@ async function mesajGonder() {
             ? "DMN is thinking..."
             : "DMN düşünüyor...";
 
-    messages.appendChild(loading);
+    messages.appendChild(
+        loading
+    );
 
     messages.scrollTop =
         messages.scrollHeight;
@@ -800,9 +1422,9 @@ async function mesajGonder() {
 
     try {
 
-        /* ================================
+        /* =====================================
            GÖRSEL OLUŞTUR
-        ================================= */
+        ===================================== */
 
         if (
             !gonderilecekResim &&
@@ -821,9 +1443,11 @@ async function mesajGonder() {
                                 "application/json"
                         },
 
-                        body: JSON.stringify({
-                            prompt: mesaj
-                        })
+                        body:
+                            JSON.stringify({
+                                prompt:
+                                    mesaj
+                            })
                     }
                 );
 
@@ -838,6 +1462,7 @@ async function mesajGonder() {
                     data.error ||
                     "Görsel oluşturulamadı."
                 );
+
             }
 
             if (data.image) {
@@ -855,26 +1480,31 @@ async function mesajGonder() {
                 );
 
                 currentConversation.push({
-                    role: "assistant",
+
+                    role:
+                        "assistant",
 
                     text:
                         englishEnabled
                             ? "Here is your image."
                             : "Görselini oluşturdum.",
 
-                    image: data.image
+                    image:
+                        data.image
+
                 });
 
                 sohbetiKaydet();
+
             }
 
             return;
         }
 
 
-        /* ================================
+        /* =====================================
            CHAT
-        ================================= */
+        ===================================== */
 
         const response =
             await fetch(
@@ -887,24 +1517,30 @@ async function mesajGonder() {
                             "application/json"
                     },
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify({
 
-                        message: mesaj,
+                            message:
+                                mesaj,
 
-                        english:
-                            englishEnabled,
+                            english:
+                                englishEnabled,
 
-                        codeMode:
-                            kodIstegiMi(mesaj),
+                            codeMode:
+                                kodIstegiMi(
+                                    mesaj
+                                ),
 
-                        image:
-                            gonderilecekResim,
+                            image:
+                                gonderilecekResim,
 
-                        userId:
-                            userId
-                    })
+                            userId:
+                                userId
+
+                        })
                 }
             );
+
 
         const data =
             await response.json();
@@ -918,33 +1554,45 @@ async function mesajGonder() {
                 data.error ||
                 "DMN cevap veremedi."
             );
+
         }
 
 
-        /* ================================
+        /* =====================================
            CEVAP
-        ================================= */
+        ===================================== */
 
-        cevapEkle(data.reply);
+        cevapEkle(
+            data.reply
+        );
+
 
         currentConversation.push({
-            role: "assistant",
-            text: data.reply,
-            image: null
+
+            role:
+                "assistant",
+
+            text:
+                data.reply,
+
+            image:
+                null
+
         });
 
         sohbetiKaydet();
 
 
-        /* ================================
+        /* =====================================
            SES
-        ================================= */
+        ===================================== */
 
         if (voiceEnabled) {
 
             sesliOku(
                 data.reply
             );
+
         }
 
     } catch (error) {
@@ -952,7 +1600,8 @@ async function mesajGonder() {
         loading.remove();
 
         mesajEkle(
-            "DMN: " + error.message,
+            "DMN: " +
+            error.message,
             "dmn"
         );
 
@@ -960,45 +1609,64 @@ async function mesajGonder() {
             "DMN hatası:",
             error
         );
+
     }
+
 }
 
 
-/* ================================
+/* =====================================
    CEVAP GÖSTER
-================================ */
+===================================== */
 
-function cevapEkle(text) {
+function cevapEkle(
+    text
+) {
 
     const div =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     div.className =
         "message dmn";
+
+
+    /*
+       Kod bloklarını yakala.
+       Örnek:
+
+       ```javascript
+       console.log("Merhaba");
+       ```
+    */
 
     const parts =
         text.split(
             /(```[\s\S]*?```)/g
         );
 
+
     parts.forEach(
         function (part) {
 
             if (
-                part.startsWith("```")
+                part.startsWith(
+                    "```"
+                )
             ) {
 
                 let code =
                     part
                         .replace(
-                            /^```[a-zA-Z0-9_-]*\n?/,
+                            /^```[a-zA-Z0-9_-]*\s*/,
                             ""
                         )
                         .replace(
                             /```$/,
                             ""
-                        )
-                        .trim();
+                        );
+
 
                 const wrapper =
                     document.createElement(
@@ -1007,6 +1675,7 @@ function cevapEkle(text) {
 
                 wrapper.className =
                     "code-wrapper";
+
 
                 const copy =
                     document.createElement(
@@ -1019,34 +1688,76 @@ function cevapEkle(text) {
                 copy.textContent =
                     "📋 Kopyala";
 
+
                 copy.addEventListener(
                     "click",
                     async function () {
 
                         try {
 
-                            await navigator.clipboard.writeText(
-                                code
-                            );
+                            await navigator
+                                .clipboard
+                                .writeText(
+                                    code
+                                );
 
                             copy.textContent =
                                 "✅ Kopyalandı";
 
                             setTimeout(
                                 function () {
+
                                     copy.textContent =
                                         "📋 Kopyala";
+
                                 },
                                 1500
                             );
 
                         } catch {
 
-                            copy.textContent =
-                                "Kopyalanamadı";
+                            /*
+                               Clipboard API çalışmazsa
+                               fallback kullan.
+                            */
+
+                            const textarea =
+                                document.createElement(
+                                    "textarea"
+                                );
+
+                            textarea.value =
+                                code;
+
+                            document.body.appendChild(
+                                textarea
+                            );
+
+                            textarea.select();
+
+                            try {
+
+                                document.execCommand(
+                                    "copy"
+                                );
+
+                                copy.textContent =
+                                    "✅ Kopyalandı";
+
+                            } catch {
+
+                                copy.textContent =
+                                    "❌ Kopyalanamadı";
+
+                            }
+
+                            textarea.remove();
+
                         }
+
                     }
                 );
+
 
                 const codeBlock =
                     document.createElement(
@@ -1059,10 +1770,19 @@ function cevapEkle(text) {
                 codeBlock.textContent =
                     code;
 
-                wrapper.appendChild(copy);
-                wrapper.appendChild(codeBlock);
 
-                div.appendChild(wrapper);
+                wrapper.appendChild(
+                    copy
+                );
+
+                wrapper.appendChild(
+                    codeBlock
+                );
+
+                div.appendChild(
+                    wrapper
+                );
+
 
             } else if (
                 part.trim()
@@ -1076,133 +1796,203 @@ function cevapEkle(text) {
                 textNode.textContent =
                     part;
 
-                div.appendChild(textNode);
+                div.appendChild(
+                    textNode
+                );
+
             }
+
         }
     );
 
-    messages.appendChild(div);
+
+    messages.appendChild(
+        div
+    );
 
     messages.scrollTop =
         messages.scrollHeight;
 }
 
 
-/* ================================
+/* =====================================
    SES METNİ TEMİZLE
-================================ */
+===================================== */
 
-function temizSesMetni(text) {
+function temizSesMetni(
+    text
+) {
 
     return text
-        .replace(/```[\s\S]*?```/g, " ")
-        .replace(/`[^`]*`/g, " ")
-        .replace(/https?:\/\/\S+/gi, " ")
+
+        .replace(
+            /```[\s\S]*?```/g,
+            " "
+        )
+
+        .replace(
+            /`[^`]*`/g,
+            " "
+        )
+
+        .replace(
+            /https?:\/\/\S+/gi,
+            " "
+        )
+
         .replace(
             /[\u{1F300}-\u{1FAFF}]/gu,
             " "
         )
+
         .replace(
             /[\u{1F1E6}-\u{1F1FF}]/gu,
             " "
         )
+
         .replace(
             /[\u2600-\u27BF]/g,
             " "
         )
+
         .replace(
             /[#*_~]/g,
             " "
         )
+
         .replace(
             /\s+/g,
             " "
         )
+
         .trim();
 }
 
 
-/* ================================
+/* =====================================
    SES BUL
-================================ */
+===================================== */
 
 function uygunSesBul() {
 
+    if (
+        !("speechSynthesis" in window)
+    ) {
+        return null;
+    }
+
     const voices =
-        speechSynthesis.getVoices();
+        speechSynthesis
+            .getVoices();
 
     if (!voices.length) {
         return null;
     }
 
+
     if (englishEnabled) {
 
         return (
+
             voices.find(
                 v =>
-                    /^en(-|_)/i.test(v.lang)
+                    /^en(-|_)/i
+                        .test(v.lang)
             )
+
             ||
+
             voices.find(
                 v =>
-                    /English/i.test(v.name)
+                    /English/i
+                        .test(v.name)
             )
+
         );
+
     }
 
+
     return (
+
         voices.find(
             v =>
-                /^tr(-|_)/i.test(v.lang)
+                /^tr(-|_)/i
+                    .test(v.lang)
         )
+
         ||
+
         voices.find(
             v =>
-                /Turkish|Türkçe/i.test(v.name)
+                /Turkish|Türkçe/i
+                    .test(v.name)
         )
+
     );
 }
 
 
-/* ================================
+/* =====================================
    SESLİ OKUMA
-================================ */
+===================================== */
 
-function sesliOku(text) {
+function sesliOku(
+    text
+) {
 
-    if (!("speechSynthesis" in window)) {
+    if (
+        !("speechSynthesis" in window)
+    ) {
         return;
     }
 
     const temiz =
-        temizSesMetni(text);
+        temizSesMetni(
+            text
+        );
 
     if (!temiz) {
         return;
     }
 
+
     speechSynthesis.cancel();
+
 
     const voice =
         uygunSesBul();
+
 
     const utterance =
         new SpeechSynthesisUtterance(
             temiz
         );
 
+
     utterance.lang =
         englishEnabled
             ? "en-US"
             : "tr-TR";
 
+
     if (voice) {
-        utterance.voice = voice;
+
+        utterance.voice =
+            voice;
+
     }
 
-    utterance.rate = .95;
-    utterance.pitch = 1;
-    utterance.volume = 1;
+
+    utterance.rate =
+        .95;
+
+    utterance.pitch =
+        1;
+
+    utterance.volume =
+        1;
+
 
     utterance.onstart =
         function () {
@@ -1214,17 +2004,25 @@ function sesliOku(text) {
                         ? "Speaking..."
                         : "Konuşuyor..."
                 );
+
         };
+
 
     utterance.onend =
         function () {
+
             ayarlariGuncelle();
+
         };
+
 
     utterance.onerror =
         function () {
+
             ayarlariGuncelle();
+
         };
+
 
     speechSynthesis.speak(
         utterance
@@ -1232,42 +2030,54 @@ function sesliOku(text) {
 }
 
 
-/* ================================
+/* =====================================
    SPEECH RECOGNITION
-================================ */
+===================================== */
 
 const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
+
 let recognition = null;
+
 
 if (SpeechRecognition) {
 
     recognition =
         new SpeechRecognition();
 
-    recognition.continuous = false;
-    recognition.interimResults = false;
+    recognition.continuous =
+        false;
+
+    recognition.interimResults =
+        false;
+
 
     recognition.onstart =
         function () {
 
-            micButton.textContent = "🔴";
+            micButton.textContent =
+                "🔴";
 
             statusText.textContent =
                 englishEnabled
                     ? "🎤 Listening..."
                     : "🎤 Dinliyorum...";
+
         };
+
 
     recognition.onend =
         function () {
 
-            micButton.textContent = "🎤";
+            micButton.textContent =
+                "🎤";
 
             ayarlariGuncelle();
+
         };
+
 
     recognition.onerror =
         function (event) {
@@ -1277,31 +2087,43 @@ if (SpeechRecognition) {
                 event.error
             );
 
-            micButton.textContent = "🎤";
+            micButton.textContent =
+                "🎤";
 
             ayarlariGuncelle();
+
         };
+
 
     recognition.onresult =
         function (event) {
 
             const text =
-                event.results[0][0].transcript;
+                event
+                    .results[0][0]
+                    .transcript;
 
-            input.value = text;
+            input.value =
+                text;
 
             mesajGonder();
+
         };
 
 } else {
 
-    micButton.disabled = true;
+    micButton.disabled =
+        true;
+
+    micButton.title =
+        "Tarayıcınız ses tanımayı desteklemiyor.";
+
 }
 
 
-/* ================================
+/* =====================================
    MİKROFON
-================================ */
+===================================== */
 
 micButton.addEventListener(
     "click",
@@ -1311,23 +2133,32 @@ micButton.addEventListener(
             return;
         }
 
+
         recognition.lang =
             englishEnabled
                 ? "en-US"
                 : "tr-TR";
 
+
         try {
+
             recognition.start();
+
         } catch (error) {
-            console.log(error);
+
+            console.log(
+                error
+            );
+
         }
+
     }
 );
 
 
-/* ================================
+/* =====================================
    GÖNDER
-================================ */
+===================================== */
 
 sendButton.addEventListener(
     "click",
@@ -1335,99 +2166,142 @@ sendButton.addEventListener(
 );
 
 
-/* ================================
+/* =====================================
    ENTER
-================================ */
+===================================== */
 
 input.addEventListener(
     "keydown",
     function (event) {
 
-        if (event.key === "Enter") {
+        if (
+            event.key === "Enter"
+        ) {
 
             event.preventDefault();
 
             mesajGonder();
+
         }
+
     }
 );
 
 
-/* ================================
+/* =====================================
    SOHBET KAYDET
-================================ */
+===================================== */
 
 function sohbetiKaydet() {
 
     localStorage.setItem(
+
         "dmn_current_conversation",
+
         JSON.stringify(
             currentConversation
         )
+
     );
+
 
     let history =
         JSON.parse(
+
             localStorage.getItem(
                 "dmn_history"
             ) || "[]"
+
         );
 
+
     if (
-        currentConversation.length === 0
+        currentConversation.length ===
+        0
     ) {
+
         return;
+
     }
+
 
     const firstUser =
         currentConversation.find(
+
             item =>
                 item.role === "user" &&
                 item.text
+
         );
+
 
     const title =
         firstUser
-            ? firstUser.text.substring(0, 45)
+
+            ? firstUser.text
+                .substring(
+                    0,
+                    45
+                )
+
             : "Yeni sohbet";
+
 
     history =
         history.filter(
+
             item =>
-                item.id !== "current"
+                item.id !==
+                "current"
+
         );
+
 
     history.unshift({
 
-        id: "current",
+        id:
+            "current",
 
-        title: title,
+        title:
+            title,
 
         messages:
             currentConversation
+
     });
 
+
     localStorage.setItem(
+
         "dmn_history",
-        JSON.stringify(history)
+
+        JSON.stringify(
+            history
+        )
+
     );
 }
 
 
-/* ================================
+/* =====================================
    SOHBETLER
-================================ */
+===================================== */
 
 function sohbetleriGoster() {
 
-    historyList.innerHTML = "";
+    historyList.innerHTML =
+        "";
+
 
     const history =
         JSON.parse(
+
             localStorage.getItem(
                 "dmn_history"
             ) || "[]"
+
         );
+
 
     if (!history.length) {
 
@@ -1437,7 +2311,9 @@ function sohbetleriGoster() {
             '</div>';
 
         return;
+
     }
+
 
     history.forEach(
         function (item) {
@@ -1447,71 +2323,121 @@ function sohbetleriGoster() {
                     "div"
                 );
 
+
             div.className =
                 "history-item";
 
+
             div.textContent =
                 item.title;
+
 
             div.addEventListener(
                 "click",
                 function () {
 
                     currentConversation =
-                        item.messages || [];
+                        item.messages ||
+                        [];
 
-                    messages.innerHTML = "";
 
-                    currentConversation.forEach(
-                        function (msg) {
+                    messages.innerHTML =
+                        "";
 
-                            if (msg.text) {
 
-                                mesajEkle(
+                    currentConversation
+                        .forEach(
+                            function (msg) {
 
-                                    msg.role === "user"
-                                        ? "Sen: " + msg.text
-                                        : "DMN: " + msg.text,
+                                if (
+                                    msg.text
+                                ) {
 
-                                    msg.role === "user"
-                                        ? "user"
-                                        : "dmn"
-                                );
+                                    mesajEkle(
+
+                                        msg.role ===
+                                        "user"
+
+                                            ? "Sen: " +
+                                              msg.text
+
+                                            : "DMN: " +
+                                              msg.text,
+
+                                        msg.role ===
+                                        "user"
+
+                                            ? "user"
+
+                                            : "dmn"
+
+                                    );
+
+                                }
+
+
+                                if (
+                                    msg.image
+                                ) {
+
+                                    resimEkle(
+
+                                        msg.image,
+
+                                        msg.role ===
+                                        "user"
+
+                                            ? "user"
+
+                                            : "dmn"
+
+                                    );
+
+                                }
+
                             }
+                        );
 
-                            if (msg.image) {
 
-                                resimEkle(
-                                    msg.image,
-                                    msg.role === "user"
-                                        ? "user"
-                                        : "dmn"
-                                );
-                            }
-                        }
-                    );
-
-                    settingsScreen.style.display =
+                    settingsScreen
+                        .style.display =
                         "none";
 
-                    chatScreen.style.display =
+
+                    chatScreen
+                        .style.display =
                         "flex";
+
                 }
             );
 
-            historyList.appendChild(div);
+
+            historyList.appendChild(
+                div
+            );
+
         }
     );
 }
 
 
-/* ================================
+/* =====================================
    GEÇMİŞİ TEMİZLE
-================================ */
+===================================== */
 
 clearHistoryButton.addEventListener(
     "click",
     function () {
+
+        const confirmed =
+            confirm(
+                "Tüm sohbet geçmişi silinsin mi?"
+            );
+
+        if (!confirmed) {
+            return;
+        }
+
 
         localStorage.removeItem(
             "dmn_history"
@@ -1521,73 +2447,129 @@ clearHistoryButton.addEventListener(
             "dmn_current_conversation"
         );
 
-        currentConversation = [];
+
+        currentConversation =
+            [];
+
 
         messages.innerHTML =
             '<div class="message dmn">' +
             'Merhaba! Ben DMN. 🤖' +
-            ' Bana istediğin şeyi sorabilirsin.' +
+            '<br><br>' +
+            'Sohbet geçmişin temizlendi.' +
             '</div>';
 
+
         sohbetleriGoster();
+
     }
 );
 
 
-/* ================================
+/* =====================================
    SESLER
-================================ */
+===================================== */
 
-if ("speechSynthesis" in window) {
+if (
+    "speechSynthesis" in window
+) {
 
     speechSynthesis.onvoiceschanged =
         function () {
-            speechSynthesis.getVoices();
+
+            speechSynthesis
+                .getVoices();
+
         };
+
 }
 
 
-/* ================================
-   BAŞLAT
-================================ */
+/* =====================================
+   ESKİ SOHBETİ YÜKLE
+===================================== */
 
-ayarlariGuncelle();
+function mevcutSohbetiYukle() {
 
-if (currentConversation.length > 0) {
+    if (
+        !currentConversation.length
+    ) {
+        return;
+    }
 
-    messages.innerHTML = "";
+
+    messages.innerHTML =
+        "";
+
 
     currentConversation.forEach(
         function (msg) {
 
-            if (msg.text) {
+            if (
+                msg.text
+            ) {
 
                 mesajEkle(
 
-                    msg.role === "user"
-                        ? "Sen: " + msg.text
-                        : "DMN: " + msg.text,
+                    msg.role ===
+                    "user"
 
-                    msg.role === "user"
+                        ? "Sen: " +
+                          msg.text
+
+                        : "DMN: " +
+                          msg.text,
+
+                    msg.role ===
+                    "user"
+
                         ? "user"
+
                         : "dmn"
+
                 );
+
             }
 
-            if (msg.image) {
+
+            if (
+                msg.image
+            ) {
 
                 resimEkle(
+
                     msg.image,
-                    msg.role === "user"
+
+                    msg.role ===
+                    "user"
+
                         ? "user"
+
                         : "dmn"
+
                 );
+
             }
+
         }
     );
 }
 
+
+/* =====================================
+   BAŞLAT
+===================================== */
+
+ayarlariGuncelle();
+
+mevcutSohbetiYukle();
+
+sohbetiKaydet();
+
 </script>
 
+
 </body>
+
 </html>
+````

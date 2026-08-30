@@ -1,27 +1,31 @@
 ```javascript
 const express = require("express");
 const cors = require("cors");
+const OpenAI = require("openai");
+const dotenv = require("dotenv");
 const path = require("path");
 
+dotenv.config();
+
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-const PORT = process.env.PORT || 10000;
+// ===============================
+// OPENAI
+// ===============================
 
-// =====================================
-// AYARLAR
-// =====================================
+if (!process.env.OPENAI_API_KEY) {
+    console.error("HATA: OPENAI_API_KEY bulunamadı.");
+    process.exit(1);
+}
 
-const OLLAMA_URL =
-    process.env.OLLAMA_URL ||
-    "http://127.0.0.1:11434";
+const client = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+});
 
-const MODEL =
-    process.env.OLLAMA_MODEL ||
-    "gemma3";
-
-// =====================================
-// EXPRESS
-// =====================================
+// ===============================
+// MIDDLEWARE
+// ===============================
 
 app.use(cors());
 
@@ -33,70 +37,135 @@ app.use(
 
 app.use(express.static(__dirname));
 
-// =====================================
+// ===============================
+// KULLANICI SİSTEMİ
+// SINIRSIZ MESAJ
+// ===============================
+
+const users = new Map();
+
+function getUserId(req) {
+    return (
+        req.headers["x-user-id"] ||
+        req.body?.userId ||
+        "demo-user"
+    );
+}
+
+function getUser(userId) {
+    if (!users.has(userId)) {
+        users.set(userId, {
+            messages: Infinity
+        });
+    }
+
+    return users.get(userId);
+}
+
+// ===============================
 // ANA SAYFA
-// =====================================
+// ===============================
 
 app.get("/", function (req, res) {
-
     res.sendFile(
         path.join(__dirname, "index.html")
     );
-
 });
 
-// =====================================
+// ===============================
 // HEALTH
-// =====================================
+// ===============================
 
-app.get(
-    "/api/health",
-    function (req, res) {
+app.get("/api/health", function (req, res) {
+    res.json({
+        status: "ok",
+        dmn: "online"
+    });
+});
+
+// ===============================
+// USAGE
+// ===============================
+
+app.get("/api/usage", function (req, res) {
+    try {
+        const userId = getUserId(req);
+        const user = getUser(userId);
 
         res.json({
-            status: "ok",
-            dmn: "online"
+            messagesRemaining: "unlimited",
+            unlimited: true
         });
 
+    } catch (error) {
+        console.error("USAGE HATASI:", error);
+
+        res.status(500).json({
+            error: "Kullanım bilgisi alınamadı."
+        });
     }
-);
+});
 
-// =====================================
+// ===============================
+// REWARD AD
+// ARTIK GEREKLİ DEĞİL
+// ===============================
+
+app.post("/api/reward-ad", function (req, res) {
+    res.json({
+        success: true,
+        messagesAdded: 0,
+        messagesRemaining: "unlimited",
+        unlimited: true
+    });
+});
+
+// ===============================
 // CHAT
-// =====================================
+// ===============================
 
-app.post(
-    "/api/chat",
-    async function (req, res) {
+app.post("/api/chat", async function (req, res) {
 
-        try {
+    try {
 
-            const message =
-                typeof req.body.message === "string"
-                    ? req.body.message.trim()
-                    : "";
+        const userId = getUserId(req);
+        const user = getUser(userId);
 
-            const english =
-                req.body.english === true;
+        const message =
+            typeof req.body.message === "string"
+                ? req.body.message.trim()
+                : "";
 
-            if (!message) {
+        const english =
+            req.body.english === true;
 
-                return res.status(400).json({
-                    error:
-                        "Mesaj gönderilmedi."
-                });
+        const codeMode =
+            req.body.codeMode === true;
 
-            }
+        const image =
+            typeof req.body.image === "string"
+                ? req.body.image
+                : null;
 
-            // =====================================
-            // TÜRKÇE DMN
-            // =====================================
+        // ===============================
+        // MESAJ KONTROLÜ
+        // ===============================
 
-            let systemPrompt;
+        if (!message && !image) {
+            return res.status(400).json({
+                error: "Mesaj veya fotoğraf gönderilmedi."
+            });
+        }
 
-            if (english) {
+        // ===============================
+        // TALİMATLAR
+        // ===============================
 
-                systemPrompt = `
+        let instructions;
+
+        if (english) {
+
+            instructions = `
 You are DMN, a smart, friendly and helpful AI assistant.
 
 Always answer in English.
@@ -105,25 +174,23 @@ Be natural, conversational and intelligent.
 
 You are especially knowledgeable about:
 
-Arduino
-ESP32
-electronics
-programming
-computers
-technology
-general knowledge
+- Arduino
+- ESP32
+- electronics
+- programming
+- computers
+- technology
+- general knowledge
 
-If the user asks who created you,
-who your developer is,
-who made you,
-or who developed you, answer:
+If the user asks who created you, who your developer is,
+who made you, or who developed you, answer:
 
-My developer is Devrim Tuğra Kurtulmuş.
+"My developer is Devrim Tuğra Kurtulmuş."
 
 If the user asks for code:
 
 - Give complete working code.
-- Never use three dots instead of code.
+- Never replace code with "...".
 - Include required libraries.
 - Include all required functions.
 - Make the code ready to use.
@@ -132,10 +199,10 @@ If the user asks for code:
 If the user sends code:
 
 - Find the errors.
-- Explain the important problem briefly.
+- Briefly explain the important problem.
 - Then provide the complete corrected code.
 
-If the user says only code:
+If the user says "only code":
 
 - Give only the code.
 - Do not add explanations.
@@ -143,9 +210,9 @@ If the user says only code:
 Do not unnecessarily generate code during normal conversation.
 `;
 
-            } else {
+        } else {
 
-                systemPrompt = `
+            instructions = `
 Sen DMN adlı akıllı, yardımsever ve samimi Türkçe yapay zeka asistanısın.
 
 Her zaman Türkçe konuş.
@@ -154,17 +221,24 @@ Doğal, anlaşılır, akıllı ve sohbet tarzında cevap ver.
 
 Özellikle şu konularda bilgili ol:
 
-Arduino
-ESP32
-elektronik
-programlama
-bilgisayar
-teknoloji
-genel bilgi
+- Arduino
+- ESP32
+- elektronik
+- programlama
+- bilgisayar
+- teknoloji
+- genel bilgi
 
-Kullanıcı sana seni kimin yaptığını sorarsa:
+Kullanıcı sana:
 
-Benim yapımcım Devrim Tuğra Kurtulmuş.
+"Seni kim yaptı?"
+"Yapımcın kim?"
+"Seni kim geliştirdi?"
+"Senin yapımcın kim?"
+
+veya benzeri bir soru sorarsa:
+
+"Benim yapımcım Devrim Tuğra Kurtulmuş."
 
 şeklinde cevap ver.
 
@@ -172,7 +246,7 @@ Kullanıcı kod isterse:
 
 - Tam ve eksiksiz çalışan kod ver.
 - Kodu kısaltma.
-- Üç nokta kullanma.
+- "..." kullanma.
 - Gerekli kütüphaneleri ekle.
 - Gerekli bütün fonksiyonları ekle.
 - Kullanıma hazır kod ver.
@@ -183,166 +257,214 @@ Kullanıcı kod gönderirse:
 - Sorunu kısaca açıkla.
 - Ardından düzeltilmiş TAM kodu ver.
 
-Kullanıcı sadece kod derse:
+Kullanıcı normal sohbet yapıyorsa gereksiz yere kod üretme.
+
+Kullanıcı "sadece kod" derse:
 
 - Yalnızca kod ver.
 - Açıklama yazma.
 
-Normal sohbet sırasında gereksiz yere kod üretme.
+Fotoğraf gönderilirse fotoğrafı dikkatlice analiz et.
+
+Fotoğraftaki nesneleri, yazıları, devreleri veya hataları
+olabildiğince doğru şekilde açıkla.
 `;
+        }
 
-            }
+        // ===============================
+        // CODE MODE
+        // ===============================
 
-            // =====================================
-            // OLLAMA İSTEĞİ
-            // =====================================
+        if (codeMode) {
 
-            const ollamaResponse =
-                await fetch(
-                    OLLAMA_URL + "/api/chat",
-                    {
-                        method: "POST",
+            instructions += `
 
-                        headers: {
-                            "Content-Type":
-                                "application/json"
+The user is requesting programming code.
+
+Prioritize complete, working and ready-to-use code.
+
+Do not shorten the requested code.
+
+Do not replace parts with "...".
+`;
+        }
+
+        // ===============================
+        // OPENAI INPUT
+        // ===============================
+
+        let input;
+
+        if (image) {
+
+            input = [
+                {
+                    role: "user",
+                    content: [
+                        {
+                            type: "input_text",
+                            text:
+                                message ||
+                                "Bu fotoğrafı analiz et."
                         },
+                        {
+                            type: "input_image",
+                            image_url: image
+                        }
+                    ]
+                }
+            ];
 
-                        body: JSON.stringify({
+        } else {
 
-                            model: MODEL,
+            input = message;
+        }
 
-                            messages: [
+        // ===============================
+        // OPENAI API
+        // ===============================
 
-                                {
-                                    role: "system",
-                                    content:
-                                        systemPrompt
-                                },
+        const response =
+            await client.responses.create({
 
-                                {
-                                    role: "user",
-                                    content:
-                                        message
-                                }
+                // BURAYA HESABINDAKİ GEÇERLİ MODELÜ YAZ
+                model: "gpt-5",
 
-                            ],
+                instructions: instructions,
 
-                            stream: false
+                input: input
+            });
 
-                        })
-                    }
-                );
+        // ===============================
+        // CEVAP
+        // ===============================
 
-            // =====================================
-            // OLLAMA HATASI
-            // =====================================
+        const reply =
+            response.output_text || "";
 
-            if (!ollamaResponse.ok) {
+        res.json({
+            reply: reply,
+            messagesRemaining: "unlimited",
+            unlimited: true
+        });
 
-                const errorText =
-                    await ollamaResponse.text();
+    } catch (error) {
 
-                console.error(
-                    "OLLAMA HATASI:",
-                    errorText
-                );
+        console.error(
+            "CHAT HATASI:",
+            error
+        );
 
-                return res.status(500).json({
+        let errorMessage =
+            error?.message ||
+            "DMN cevap oluşturamadı.";
 
-                    error:
-                        "DMN yapay zeka sunucusuna bağlanamadı. " +
-                        "Ollama bağlantısını kontrol et."
+        // OpenAI kredi hatası
+        if (
+            error?.status === 429 ||
+            errorMessage.includes("credits") ||
+            errorMessage.includes("quota")
+        ) {
+            errorMessage =
+                "OpenAI API kredisi bulunmuyor. OPENAI_API_KEY hesabının API bakiyesi ve model erişimini kontrol et.";
+        }
 
-                });
+        res.status(500).json({
+            error: errorMessage
+        });
+    }
+});
 
-            }
+// ===============================
+// GÖRSEL OLUŞTURMA
+// ===============================
 
-            // =====================================
-            // CEVAP
-            // =====================================
+app.post(
+    "/api/generate-image",
+    async function (req, res) {
 
-            const data =
-                await ollamaResponse.json();
+        try {
 
-            const reply =
-                data &&
-                data.message &&
-                typeof data.message.content === "string"
-                    ? data.message.content
+            const prompt =
+                typeof req.body.prompt === "string"
+                    ? req.body.prompt.trim()
                     : "";
 
-            if (!reply) {
+            if (!prompt) {
 
-                return res.status(500).json({
-
+                return res.status(400).json({
                     error:
-                        "DMN boş cevap aldı."
-
+                        "Görsel açıklaması gönderilmedi."
                 });
-
             }
 
-            // =====================================
-            // JSON
-            // =====================================
+            console.log(
+                "Görsel oluşturuluyor..."
+            );
 
-            return res.json({
+            const result =
+                await client.images.generate({
 
-                reply: reply
+                    model: "gpt-image-1",
 
+                    prompt: prompt,
+
+                    size: "1024x1024"
+                });
+
+            if (
+                !result ||
+                !result.data ||
+                !result.data[0]
+            ) {
+
+                throw new Error(
+                    "Görsel oluşturulamadı."
+                );
+            }
+
+            const imageData =
+                result.data[0].b64_json;
+
+            if (!imageData) {
+
+                throw new Error(
+                    "Görsel verisi alınamadı."
+                );
+            }
+
+            res.json({
+
+                image:
+                    "data:image/png;base64," +
+                    imageData
             });
 
         } catch (error) {
 
             console.error(
-                "DMN CHAT HATASI:",
+                "GORSEL HATASI:",
                 error
             );
 
-            return res.status(500).json({
+            res.status(500).json({
 
                 error:
-                    error.message ||
-                    "DMN cevap veremedi."
-
+                    error?.message ||
+                    "Görsel oluşturulamadı."
             });
-
         }
-
     }
 );
 
-// =====================================
-// GÖRSEL
-// =====================================
-
-app.post(
-    "/api/generate-image",
-    function (req, res) {
-
-        return res.status(501).json({
-
-            error:
-                "Görsel üretimi bu ücretsiz local sürümde kapalı."
-
-        });
-
-    }
-);
-
-// =====================================
+// ===============================
 // SERVER
-// =====================================
+// ===============================
 
 app.listen(
     PORT,
     "0.0.0.0",
     function () {
-
-        console.log(
-            "===================================="
-        );
 
         console.log(
             "DMN sunucusu " +
@@ -353,20 +475,6 @@ app.listen(
         console.log(
             "DMN ONLINE - SINIRSIZ KULLANIM"
         );
-
-        console.log(
-            "AI: Ollama"
-        );
-
-        console.log(
-            "Model: " +
-            MODEL
-        );
-
-        console.log(
-            "===================================="
-        );
-
     }
 );
 ```

@@ -1,9 +1,7 @@
+```javascript
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv");
 const path = require("path");
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -44,16 +42,15 @@ app.post("/api/chat", async (req, res) => {
         const systemPrompt = `
 Sen DMN adlı akıllı, yardımsever ve samimi bir yapay zeka asistanısın.
 
-Her zaman Türkçe cevap ver.
+Her zaman Türkçe konuş.
 
-Doğal, anlaşılır ve arkadaşça konuş.
+Doğal, anlaşılır ve arkadaşça cevap ver.
 
 Arduino, ESP32, elektronik, programlama,
 bilgisayar, teknoloji ve genel bilgi konularında
 özellikle yardımcı ol.
 
-Kullanıcı "Seni kim yaptı?",
-"Yapımcın kim?" veya benzeri bir şey sorarsa:
+Kullanıcı seni kimin yaptığını sorarsa:
 
 Benim yapımcım Devrim Tuğra Kurtulmuş.
 
@@ -61,17 +58,20 @@ Benim yapımcım Devrim Tuğra Kurtulmuş.
 
 Kullanıcı kod isterse:
 - Tam çalışan kod ver.
-- "..." ile kodu kısaltma.
+- "..." kullanarak kodu kısaltma.
 - Gerekli kütüphaneleri ekle.
 - Gerekli fonksiyonları ekle.
 - Kullanıma hazır kod ver.
 
 Kullanıcı kod gönderirse:
 - Hataları bul.
-- Sorunu açıkla.
+- Sorunu kısaca açıkla.
 - Düzeltilmiş tam kodu ver.
 
 Kullanıcı "sadece kod" derse sadece kod ver.
+
+Güvenlik veya sistem durumuyla ilgili teknik ifadeleri
+kullanıcı sormadığı sürece normal cevabına ekleme.
 `;
 
         const response = await fetch(
@@ -81,8 +81,7 @@ Kullanıcı "sadece kod" derse sadece kod ver.
 
                 headers: {
                     "Authorization":
-                        "Bearer " +
-                        process.env.OPENROUTER_API_KEY,
+                        `Bearer ${process.env.OPENROUTER_API_KEY}`,
 
                     "Content-Type":
                         "application/json",
@@ -114,7 +113,7 @@ Kullanıcı "sadece kod" derse sadece kod ver.
         const data = await response.json();
 
         if (!response.ok) {
-            console.error("OpenRouter:", data);
+            console.error("OPENROUTER HATASI:", data);
 
             return res.status(response.status).json({
                 error:
@@ -149,12 +148,11 @@ Kullanıcı "sadece kod" derse sadece kod ver.
 
 app.listen(PORT, "0.0.0.0", () => {
     console.log(
-        "DMN sunucusu " +
-        PORT +
-        " portunda çalışıyor."
+        `DMN sunucusu ${PORT} portunda çalışıyor.`
     );
 
     console.log(
         "DMN ONLINE - OPENROUTER"
     );
 });
+```

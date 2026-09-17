@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DMN AI</title>
 
   <style>
@@ -18,7 +18,6 @@
       --muted: #9aa8bd;
       --border: rgba(255,255,255,.09);
       --accent: #1687ff;
-      --accent2: #0066ff;
       --user: #145fd1;
       --assistant: #101d31;
       --danger: #ff4d67;
@@ -45,6 +44,15 @@
       transition: background .3s, color .3s;
     }
 
+    button,
+    textarea {
+      font-family: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
     .app {
       display: flex;
       height: 100vh;
@@ -60,7 +68,7 @@
       flex-direction: column;
       padding: 18px;
       transition: .3s;
-      z-index: 10;
+      z-index: 100;
     }
 
     .logo {
@@ -135,6 +143,7 @@
       display: flex;
       flex-direction: column;
       min-width: 0;
+      position: relative;
     }
 
     .topbar {
@@ -145,6 +154,7 @@
       justify-content: space-between;
       padding: 0 18px;
       background: var(--panel);
+      flex-shrink: 0;
     }
 
     .top-title {
@@ -168,6 +178,10 @@
       font-size: 18px;
     }
 
+    .icon-btn:hover {
+      border-color: var(--accent);
+    }
+
     /* ORB */
 
     .orb-area {
@@ -183,7 +197,13 @@
       height: 82px;
       border-radius: 50%;
       background:
-        radial-gradient(circle at 35% 30%, #7bc7ff, #1687ff 35%, #004cff 70%, #001f6d);
+        radial-gradient(
+          circle at 35% 30%,
+          #7bc7ff,
+          #1687ff 35%,
+          #004cff 70%,
+          #001f6d
+        );
       box-shadow:
         0 0 20px rgba(0,119,255,.65),
         0 0 55px rgba(0,119,255,.35);
@@ -207,9 +227,10 @@
     }
 
     @keyframes floatOrb {
-      0%,100% {
+      0%, 100% {
         transform: translateY(0);
       }
+
       50% {
         transform: translateY(-9px);
       }
@@ -220,6 +241,7 @@
         transform: scale(.9);
         opacity: .8;
       }
+
       100% {
         transform: scale(1.3);
         opacity: 0;
@@ -294,14 +316,15 @@
     }
 
     .code-header {
-      height: 40px;
-      padding: 0 10px;
+      min-height: 40px;
+      padding: 6px 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: #0c1524;
       color: #aab8ca;
       font-size: 12px;
+      gap: 10px;
     }
 
     .copy-code {
@@ -332,6 +355,7 @@
       padding: 12px 18px 18px;
       background: var(--panel);
       border-top: 1px solid var(--border);
+      flex-shrink: 0;
     }
 
     .mode-row {
@@ -378,7 +402,6 @@
       min-height: 45px;
       max-height: 160px;
       padding: 11px;
-      font-family: inherit;
       font-size: 15px;
     }
 
@@ -421,13 +444,175 @@
 
     .status {
       text-align: center;
-      height: 18px;
+      min-height: 18px;
       font-size: 12px;
       color: var(--muted);
       margin-top: 5px;
     }
 
+    /* SETTINGS */
+
+    .settings-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .settings-overlay.open {
+      display: flex;
+    }
+
+    .settings-panel {
+      width: min(430px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 20px 70px rgba(0,0,0,.4);
+      padding: 20px;
+    }
+
+    .settings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .settings-header h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .close-settings {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--text);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .setting {
+      padding: 15px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .setting:last-child {
+      border-bottom: none;
+    }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .setting-name {
+      font-weight: 600;
+    }
+
+    .setting-description {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .toggle {
+      width: 52px;
+      height: 29px;
+      border-radius: 20px;
+      border: none;
+      background: #526176;
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .toggle::after {
+      content: "";
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      background: white;
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      transition: .2s;
+    }
+
+    .toggle.on {
+      background: var(--accent);
+    }
+
+    .toggle.on::after {
+      left: 26px;
+    }
+
+    .setting select {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--text);
+      outline: none;
+    }
+
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .range-row input {
+      flex: 1;
+    }
+
+    .range-value {
+      min-width: 42px;
+      text-align: right;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .test-voice {
+      width: 100%;
+      padding: 11px;
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--text);
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .danger-btn {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid rgba(255,77,103,.35);
+      background: rgba(255,77,103,.08);
+      color: var(--danger);
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    /* MOBILE */
+
     @media(max-width: 700px) {
+
       .sidebar {
         position: fixed;
         left: -280px;
@@ -457,986 +642,1745 @@
 
 <body>
 
-<div class="app">
+  <div class="app">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
 
-    <div class="logo">🔵 DMN</div>
+      <div class="logo">🔵 DMN</div>
 
-    <button class="new-chat" onclick="newChat()">
-      ＋ Yeni sohbet
-    </button>
-
-    <div class="history-title">📋 Sohbet geçmişi</div>
-
-    <div id="history"></div>
-
-    <div class="sidebar-bottom">
-      <button class="small-btn" onclick="clearHistory()">
-        🗑️ Temizle
+      <button class="new-chat" onclick="newChat()">
+        ＋ Yeni sohbet
       </button>
 
-      <button class="small-btn" onclick="toggleTheme()">
-        🌙 Tema
-      </button>
-    </div>
-
-  </aside>
-
-  <!-- MAIN -->
-  <main class="main">
-
-    <header class="topbar">
-
-      <button
-        class="icon-btn"
-        onclick="toggleSidebar()"
-        title="Menü"
-      >
-        ☰
-      </button>
-
-      <div class="top-title">
-        DMN AI
+      <div class="history-title">
+        📋 Sohbet geçmişi
       </div>
 
-      <div class="top-actions">
+      <div id="history"></div>
+
+      <div class="sidebar-bottom">
+        <button class="small-btn" onclick="clearHistory()">
+          🗑️ Temizle
+        </button>
+
+        <button class="small-btn" onclick="toggleTheme()">
+          🌙 Tema
+        </button>
+      </div>
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <header class="topbar">
+
         <button
           class="icon-btn"
-          onclick="toggleTheme()"
-          title="Tema"
-          id="themeButton"
+          onclick="toggleSidebar()"
+          title="Menü"
         >
-          🌙
+          ☰
         </button>
+
+        <div class="top-title">
+          DMN AI
+        </div>
+
+        <div class="top-actions">
+
+          <!-- SES -->
+          <button
+            class="icon-btn"
+            id="soundButton"
+            onclick="toggleSound()"
+            title="Sesi aç/kapat"
+          >
+            🔊
+          </button>
+
+          <!-- AYARLAR -->
+          <button
+            class="icon-btn"
+            onclick="openSettings()"
+            title="Ayarlar"
+          >
+            ⚙️
+          </button>
+
+          <!-- TEMA -->
+          <button
+            class="icon-btn"
+            onclick="toggleTheme()"
+            title="Tema"
+            id="themeButton"
+          >
+            🌙
+          </button>
+
+        </div>
+
+      </header>
+
+      <!-- ORB -->
+      <div class="orb-area">
+        <div class="orb" id="orb"></div>
       </div>
 
-    </header>
+      <!-- CHAT -->
+      <section class="chat" id="chat">
 
-    <!-- ORB -->
-    <div class="orb-area">
-      <div class="orb" id="orb"></div>
+        <div class="welcome" id="welcome">
+          <h1>Merhaba 👋</h1>
+
+          <p>
+            Ben DMN. Bana mesaj yazabilir veya
+            🎙️ mikrofonla konuşabilirsin.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- INPUT -->
+      <div class="input-area">
+
+        <div class="mode-row">
+
+          <button
+            class="mode-btn active"
+            id="normalMode"
+            onclick="setMode('normal')"
+          >
+            💬 Normal
+          </button>
+
+          <button
+            class="mode-btn"
+            id="codeMode"
+            onclick="setMode('code')"
+          >
+            💻 Kod modu
+          </button>
+
+        </div>
+
+        <div class="input-box">
+
+          <textarea
+            id="messageInput"
+            placeholder="DMN'ye bir şey sor..."
+            rows="1"
+          ></textarea>
+
+          <button
+            class="mic-btn"
+            id="micButton"
+            onclick="toggleMic()"
+            title="Sesli konuş"
+          >
+            🎙️
+          </button>
+
+          <button
+            class="send-btn"
+            onclick="sendMessage()"
+            title="Gönder"
+          >
+            ➤
+          </button>
+
+        </div>
+
+        <div class="status" id="status"></div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+  <!-- SETTINGS -->
+
+  <div
+    class="settings-overlay"
+    id="settingsOverlay"
+    onclick="closeSettingsOutside(event)"
+  >
+
+    <div
+      class="settings-panel"
+      onclick="event.stopPropagation()"
+    >
+
+      <div class="settings-header">
+
+        <h2>⚙️ DMN Ayarları</h2>
+
+        <button
+          class="close-settings"
+          onclick="closeSettings()"
+        >
+          ✕
+        </button>
+
+      </div>
+
+
+      <!-- SOUND -->
+
+      <div class="setting">
+
+        <div class="setting-row">
+
+          <div>
+            <div class="setting-name">
+              🔊 Sesli cevap
+            </div>
+
+            <div class="setting-description">
+              DMN'nin cevaplarını sesli okur.
+            </div>
+          </div>
+
+          <button
+            class="toggle on"
+            id="soundToggle"
+            onclick="toggleSound()"
+          ></button>
+
+        </div>
+
+      </div>
+
+
+      <!-- VOICE -->
+
+      <div class="setting">
+
+        <div class="setting-name">
+          🗣️ Ses
+        </div>
+
+        <div class="setting-description">
+          Tarayıcının desteklediği seslerden birini seç.
+        </div>
+
+        <select id="voiceSelect"></select>
+
+        <button
+          class="test-voice"
+          onclick="testVoice()"
+        >
+          🔊 Sesi test et
+        </button>
+
+      </div>
+
+
+      <!-- SPEED -->
+
+      <div class="setting">
+
+        <div class="setting-name">
+          🎚️ Konuşma hızı
+        </div>
+
+        <div class="range-row">
+
+          <input
+            type="range"
+            id="rateRange"
+            min="0.5"
+            max="1.5"
+            step="0.1"
+            value="1"
+            oninput="updateRate()"
+          >
+
+          <span
+            class="range-value"
+            id="rateValue"
+          >
+            1.0
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- PITCH -->
+
+      <div class="setting">
+
+        <div class="setting-name">
+          🎵 Ses perdesi
+        </div>
+
+        <div class="range-row">
+
+          <input
+            type="range"
+            id="pitchRange"
+            min="0"
+            max="2"
+            step="0.1"
+            value="1"
+            oninput="updatePitch()"
+          >
+
+          <span
+            class="range-value"
+            id="pitchValue"
+          >
+            1.0
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- THEME -->
+
+      <div class="setting">
+
+        <div class="setting-row">
+
+          <div>
+            <div class="setting-name">
+              🌙 Tema
+            </div>
+
+            <div class="setting-description">
+              Koyu ve açık tema arasında geçiş yap.
+            </div>
+          </div>
+
+          <button
+            class="small-btn"
+            onclick="toggleTheme()"
+          >
+            Değiştir
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- CLEAR -->
+
+      <div class="setting">
+
+        <button
+          class="danger-btn"
+          onclick="clearHistoryFromSettings()"
+        >
+          🗑️ Sohbet geçmişini temizle
+        </button>
+
+      </div>
+
     </div>
 
-    <!-- CHAT -->
-    <section class="chat" id="chat">
+  </div>
 
-      <div class="welcome" id="welcome">
-        <h1>Merhaba 👋</h1>
-        <p>
-          Ben DMN. Bana mesaj yazabilir veya 🎙️ mikrofonla konuşabilirsin.
-        </p>
-      </div>
 
-    </section>
+  <script>
 
-    <!-- INPUT -->
-    <div class="input-area">
+    /* =========================================
+       VARIABLES
+    ========================================= */
 
-      <div class="mode-row">
+    const input =
+      document.getElementById("messageInput");
 
-        <button
-          class="mode-btn active"
-          id="normalMode"
-          onclick="setMode('normal')"
-        >
-          💬 Normal
-        </button>
+    const chat =
+      document.getElementById("chat");
 
-        <button
-          class="mode-btn"
-          id="codeMode"
-          onclick="setMode('code')"
-        >
-          💻 Kod modu
-        </button>
+    const orb =
+      document.getElementById("orb");
 
-      </div>
+    const statusText =
+      document.getElementById("status");
 
-      <div class="input-box">
+    const micButton =
+      document.getElementById("micButton");
 
-        <textarea
-          id="messageInput"
-          placeholder="DMN'ye bir şey sor..."
-          rows="1"
-          onkeydown="handleKey(event)"
-        ></textarea>
+    const soundButton =
+      document.getElementById("soundButton");
 
-        <button
-          class="mic-btn"
-          id="micButton"
-          onclick="toggleMic()"
-          title="Sesli konuş"
-        >
-          🎙️
-        </button>
+    const soundToggle =
+      document.getElementById("soundToggle");
 
-        <button
-          class="send-btn"
-          onclick="sendMessage()"
-          title="Gönder"
-        >
-          ➤
-        </button>
+    const voiceSelect =
+      document.getElementById("voiceSelect");
 
-      </div>
+    const rateRange =
+      document.getElementById("rateRange");
 
-      <div class="status" id="status"></div>
+    const pitchRange =
+      document.getElementById("pitchRange");
 
-    </div>
+    let messages = [];
 
-  </main>
+    let currentMode = "normal";
 
-</div>
+    let recognition = null;
 
-<script>
+    let isRecording = false;
 
-  /* =========================
-     VARIABLES
-  ========================= */
+    let soundEnabled = true;
 
-  const input = document.getElementById("messageInput");
-  const chat = document.getElementById("chat");
-  const orb = document.getElementById("orb");
-  const statusText = document.getElementById("status");
-  const micButton = document.getElementById("micButton");
+    let voices = [];
 
-  let messages = [];
-  let currentMode = "normal";
-  let recognition = null;
-  let isRecording = false;
 
-  /* =========================
-     LOAD
-  ========================= */
+    /* =========================================
+       LOAD
+    ========================================= */
 
-  window.addEventListener("load", () => {
+    window.addEventListener("load", () => {
 
-    loadTheme();
-    loadHistory();
+      loadTheme();
 
-    input.addEventListener("input", () => {
-      input.style.height = "auto";
-      input.style.height =
-        Math.min(input.scrollHeight, 160) + "px";
+      loadSettings();
+
+      loadVoices();
+
+      loadHistory();
+
+      setupSpeechRecognition();
+
+      input.addEventListener("input", () => {
+
+        input.style.height = "auto";
+
+        input.style.height =
+          Math.min(input.scrollHeight, 160) + "px";
+
+      });
+
     });
 
-    setupSpeechRecognition();
 
-  });
+    /* =========================================
+       THEME
+    ========================================= */
 
-  /* =========================
-     THEME
-  ========================= */
+    function toggleTheme() {
 
-  function toggleTheme() {
+      document.body.classList.toggle("light");
 
-    document.body.classList.toggle("light");
+      const light =
+        document.body.classList.contains("light");
 
-    const light =
-      document.body.classList.contains("light");
+      localStorage.setItem(
+        "dmn-theme",
+        light ? "light" : "dark"
+      );
 
-    localStorage.setItem(
-      "dmn-theme",
-      light ? "light" : "dark"
-    );
-
-    updateThemeButton();
-  }
-
-  function loadTheme() {
-
-    const theme =
-      localStorage.getItem("dmn-theme");
-
-    if (theme === "light") {
-      document.body.classList.add("light");
+      updateThemeButton();
     }
 
-    updateThemeButton();
-  }
 
-  function updateThemeButton() {
+    function loadTheme() {
 
-    const button =
-      document.getElementById("themeButton");
+      const theme =
+        localStorage.getItem("dmn-theme");
 
-    if (!button) return;
-
-    button.textContent =
-      document.body.classList.contains("light")
-        ? "☀️"
-        : "🌙";
-  }
-
-  /* =========================
-     SIDEBAR
-  ========================= */
-
-  function toggleSidebar() {
-
-    document
-      .getElementById("sidebar")
-      .classList.toggle("open");
-  }
-
-  /* =========================
-     MODE
-  ========================= */
-
-  function setMode(mode) {
-
-    currentMode = mode;
-
-    document
-      .getElementById("normalMode")
-      .classList.toggle(
-        "active",
-        mode === "normal"
-      );
-
-    document
-      .getElementById("codeMode")
-      .classList.toggle(
-        "active",
-        mode === "code"
-      );
-
-    input.placeholder =
-      mode === "code"
-        ? "Kod hakkında ne yapmak istiyorsun?"
-        : "DMN'ye bir şey sor...";
-  }
-
-  /* =========================
-     SEND MESSAGE
-  ========================= */
-
-  async function sendMessage() {
-
-    const text =
-      input.value.trim();
-
-    if (!text) return;
-
-    input.value = "";
-    input.style.height = "45px";
-
-    removeWelcome();
-
-    addMessage("user", text);
-
-    messages.push({
-      role: "user",
-      content: text
-    });
-
-    saveCurrentChat();
-
-    startThinking();
-
-    try {
-
-      const response =
-        await fetch("/api/chat", {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json"
-          },
-
-          body: JSON.stringify({
-            message: text,
-            messages: messages,
-            mode: currentMode
-          })
-        });
-
-      const data =
-        await response.json();
-
-      stopThinking();
-
-      if (!response.ok) {
-        throw new Error(
-          data.error || "Sunucu hatası"
-        );
+      if (theme === "light") {
+        document.body.classList.add("light");
       }
 
-      const answer =
-        data.reply ||
-        data.message ||
-        "DMN cevap veremedi.";
+      updateThemeButton();
+    }
+
+
+    function updateThemeButton() {
+
+      const button =
+        document.getElementById("themeButton");
+
+      if (!button) return;
+
+      button.textContent =
+        document.body.classList.contains("light")
+          ? "☀️"
+          : "🌙";
+    }
+
+
+    /* =========================================
+       SETTINGS
+    ========================================= */
+
+    function openSettings() {
+
+      document
+        .getElementById("settingsOverlay")
+        .classList.add("open");
+
+      loadVoices();
+    }
+
+
+    function closeSettings() {
+
+      document
+        .getElementById("settingsOverlay")
+        .classList.remove("open");
+    }
+
+
+    function closeSettingsOutside(event) {
+
+      if (
+        event.target.id === "settingsOverlay"
+      ) {
+        closeSettings();
+      }
+    }
+
+
+    /* =========================================
+       SOUND
+    ========================================= */
+
+    function toggleSound() {
+
+      soundEnabled =
+        !soundEnabled;
+
+      localStorage.setItem(
+        "dmn-sound",
+        soundEnabled
+          ? "on"
+          : "off"
+      );
+
+      updateSoundUI();
+
+      if (!soundEnabled) {
+
+        stopSpeaking();
+
+        statusText.textContent =
+          "🔇 Ses kapalı";
+
+      } else {
+
+        statusText.textContent =
+          "🔊 Ses açık";
+
+        setTimeout(() => {
+          statusText.textContent = "";
+        }, 1200);
+      }
+    }
+
+
+    function updateSoundUI() {
+
+      soundButton.textContent =
+        soundEnabled
+          ? "🔊"
+          : "🔇";
+
+      soundToggle.classList.toggle(
+        "on",
+        soundEnabled
+      );
+    }
+
+
+    /* =========================================
+       SPEECH SETTINGS
+    ========================================= */
+
+    function loadSettings() {
+
+      const savedSound =
+        localStorage.getItem("dmn-sound");
+
+      if (savedSound === "off") {
+        soundEnabled = false;
+      }
+
+      const savedRate =
+        localStorage.getItem("dmn-rate");
+
+      const savedPitch =
+        localStorage.getItem("dmn-pitch");
+
+      if (savedRate) {
+        rateRange.value = savedRate;
+      }
+
+      if (savedPitch) {
+        pitchRange.value = savedPitch;
+      }
+
+      updateSoundUI();
+
+      updateRate();
+
+      updatePitch();
+    }
+
+
+    function updateRate() {
+
+      const value =
+        Number(rateRange.value);
+
+      document.getElementById(
+        "rateValue"
+      ).textContent =
+        value.toFixed(1);
+
+      localStorage.setItem(
+        "dmn-rate",
+        value
+      );
+    }
+
+
+    function updatePitch() {
+
+      const value =
+        Number(pitchRange.value);
+
+      document.getElementById(
+        "pitchValue"
+      ).textContent =
+        value.toFixed(1);
+
+      localStorage.setItem(
+        "dmn-pitch",
+        value
+      );
+    }
+
+
+    /* =========================================
+       VOICES
+    ========================================= */
+
+    function loadVoices() {
+
+      if (
+        !("speechSynthesis" in window)
+      ) {
+        return;
+      }
+
+      voices =
+        window.speechSynthesis.getVoices();
+
+      voiceSelect.innerHTML = "";
+
+      const turkishVoices =
+        voices.filter(voice =>
+          voice.lang &&
+          voice.lang.toLowerCase()
+            .startsWith("tr")
+        );
+
+      const availableVoices =
+        turkishVoices.length
+          ? turkishVoices
+          : voices;
+
+      availableVoices.forEach(
+        (voice, index) => {
+
+          const option =
+            document.createElement("option");
+
+          option.value =
+            voices.indexOf(voice);
+
+          option.textContent =
+            voice.name +
+            " (" +
+            voice.lang +
+            ")";
+
+          voiceSelect.appendChild(
+            option
+          );
+        }
+      );
+
+      const savedVoice =
+        localStorage.getItem(
+          "dmn-voice"
+        );
+
+      if (savedVoice !== null) {
+
+        const found =
+          Array.from(
+            voiceSelect.options
+          ).find(
+            option =>
+              option.value === savedVoice
+          );
+
+        if (found) {
+          voiceSelect.value =
+            savedVoice;
+        }
+      }
+    }
+
+
+    if ("speechSynthesis" in window) {
+
+      window.speechSynthesis
+        .addEventListener(
+          "voiceschanged",
+          loadVoices
+        );
+    }
+
+
+    voiceSelect.addEventListener(
+      "change",
+      () => {
+
+        localStorage.setItem(
+          "dmn-voice",
+          voiceSelect.value
+        );
+
+      }
+    );
+
+
+    /* =========================================
+       TEST VOICE
+    ========================================= */
+
+    function testVoice() {
+
+      if (
+        !soundEnabled
+      ) {
+
+        alert(
+          "Önce sesli cevabı açmalısın."
+        );
+
+        return;
+      }
+
+      speak(
+        "Merhaba. Ben DMN. Bu benim seçtiğin ses."
+      );
+    }
+
+
+    /* =========================================
+       STOP SPEAKING
+    ========================================= */
+
+    function stopSpeaking() {
+
+      if (
+        "speechSynthesis" in window
+      ) {
+
+        window.speechSynthesis.cancel();
+      }
+
+      orb.classList.remove(
+        "thinking"
+      );
+    }
+
+
+    /* =========================================
+       SIDEBAR
+    ========================================= */
+
+    function toggleSidebar() {
+
+      document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+    }
+
+
+    /* =========================================
+       MODE
+    ========================================= */
+
+    function setMode(mode) {
+
+      currentMode = mode;
+
+      document
+        .getElementById("normalMode")
+        .classList.toggle(
+          "active",
+          mode === "normal"
+        );
+
+      document
+        .getElementById("codeMode")
+        .classList.toggle(
+          "active",
+          mode === "code"
+        );
+
+      input.placeholder =
+        mode === "code"
+          ? "Kod hakkında ne yapmak istiyorsun?"
+          : "DMN'ye bir şey sor...";
+    }
+
+
+    /* =========================================
+       SEND MESSAGE
+    ========================================= */
+
+    async function sendMessage() {
+
+      const text =
+        input.value.trim();
+
+      if (!text) return;
+
+      stopSpeaking();
+
+      input.value = "";
+
+      input.style.height = "45px";
+
+      removeWelcome();
 
       addMessage(
-        "assistant",
-        answer,
-        currentMode === "code"
+        "user",
+        text
       );
 
       messages.push({
-        role: "assistant",
-        content: answer
+        role: "user",
+        content: text
       });
 
       saveCurrentChat();
 
-      speak(answer);
-
-    } catch (error) {
-
-      stopThinking();
-
-      addMessage(
-        "assistant",
-        "⚠️ Bir hata oluştu: " +
-        error.message
-      );
-
-      console.error(error);
-    }
-  }
-
-  /* =========================
-     ENTER
-  ========================= */
-
-  function handleKey(event) {
-
-    if (
-      event.key === "Enter" &&
-      !event.shiftKey
-    ) {
-      event.preventDefault();
-      sendMessage();
-    }
-  }
-
-  /* =========================
-     ADD MESSAGE
-  ========================= */
-
-  function addMessage(
-    role,
-    text,
-    codeMode = false
-  ) {
-
-    const message =
-      document.createElement("div");
-
-    message.className =
-      "message " + role;
-
-    const bubble =
-      document.createElement("div");
-
-    bubble.className = "bubble";
-
-    if (
-      role === "assistant" &&
-      codeMode
-    ) {
-
-      bubble.innerHTML =
-        formatCodeResponse(text);
-
-    } else if (
-      role === "assistant"
-    ) {
-
-      bubble.innerHTML =
-        formatText(text);
-
-    } else {
-
-      bubble.textContent = text;
-    }
-
-    message.appendChild(bubble);
-
-    chat.appendChild(message);
-
-    chat.scrollTop =
-      chat.scrollHeight;
-  }
-
-  /* =========================
-     TEXT FORMAT
-  ========================= */
-
-  function formatText(text) {
-
-    const escaped =
-      escapeHtml(text);
-
-    return escaped
-      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-      .replace(/\n/g, "<br>");
-  }
-
-  function escapeHtml(text) {
-
-    const div =
-      document.createElement("div");
-
-    div.textContent = text;
-
-    return div.innerHTML;
-  }
-
-  /* =========================
-     CODE FORMAT
-  ========================= */
-
-  function formatCodeResponse(text) {
-
-    const escaped =
-      escapeHtml(text);
-
-    const codeRegex =
-      /```(?:([a-zA-Z0-9_+-]+))?\n?([\s\S]*?)```/g;
-
-    let result = "";
-    let lastIndex = 0;
-    let match;
-
-    while (
-      (match = codeRegex.exec(text)) !== null
-    ) {
-
-      const before =
-        text.substring(
-          lastIndex,
-          match.index
-        );
-
-      result +=
-        escapeHtml(before)
-          .replace(/\n/g, "<br>");
-
-      const language =
-        match[1] || "code";
-
-      const code =
-        match[2].trim();
-
-      result += `
-        <div class="code-wrapper">
-
-          <div class="code-header">
-
-            <span>${escapeHtml(language)}</span>
-
-            <button
-              class="copy-code"
-              onclick="copyCode(this)"
-            >
-              📋 Kopyala
-            </button>
-
-          </div>
-
-          <pre><code>${escapeHtml(code)}</code></pre>
-
-        </div>
-      `;
-
-      lastIndex =
-        match.index + match[0].length;
-    }
-
-    if (lastIndex === 0) {
-      return escaped.replace(
-        /\n/g,
-        "<br>"
-      );
-    }
-
-    result +=
-      escapeHtml(
-        text.substring(lastIndex)
-      ).replace(
-        /\n/g,
-        "<br>"
-      );
-
-    return result;
-  }
-
-  /* =========================
-     COPY CODE
-  ========================= */
-
-  async function copyCode(button) {
-
-    const wrapper =
-      button.closest(".code-wrapper");
-
-    const code =
-      wrapper.querySelector("code").innerText;
-
-    try {
-
-      await navigator.clipboard.writeText(code);
-
-      button.textContent =
-        "✅ Kopyalandı";
-
-      setTimeout(() => {
-        button.textContent =
-          "📋 Kopyala";
-      }, 1500);
-
-    } catch (error) {
-
-      button.textContent =
-        "❌ Kopyalanamadı";
-
-      setTimeout(() => {
-        button.textContent =
-          "📋 Kopyala";
-      }, 1500);
-    }
-  }
-
-  /* =========================
-     THINKING ANIMATION
-  ========================= */
-
-  function startThinking() {
-
-    orb.classList.add("thinking");
-
-    statusText.textContent =
-      "DMN düşünüyor...";
-  }
-
-  function stopThinking() {
-
-    orb.classList.remove("thinking");
-
-    statusText.textContent = "";
-  }
-
-  /* =========================
-     SPEECH RECOGNITION
-  ========================= */
-
-  function setupSpeechRecognition() {
-
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-
-      micButton.title =
-        "Bu tarayıcı mikrofon özelliğini desteklemiyor.";
-
-      return;
-    }
-
-    recognition =
-      new SpeechRecognition();
-
-    recognition.lang = "tr-TR";
-
-    recognition.continuous = false;
-
-    recognition.interimResults = true;
-
-    recognition.onstart = () => {
-
-      isRecording = true;
-
-      micButton.classList.add(
-        "recording"
-      );
-
-      micButton.textContent = "⏹️";
-
-      statusText.textContent =
-        "🎙️ Seni dinliyorum...";
-    };
-
-    recognition.onresult = event => {
-
-      let transcript = "";
-
-      for (
-        let i = event.resultIndex;
-        i < event.results.length;
-        i++
-      ) {
-
-        transcript +=
-          event.results[i][0].transcript;
-      }
-
-      input.value = transcript;
-    };
-
-    recognition.onerror = event => {
-
-      console.error(
-        "Speech error:",
-        event.error
-      );
-
-      stopMic();
-
-      statusText.textContent =
-        "Mikrofon kullanılamadı.";
-    };
-
-    recognition.onend = () => {
-
-      stopMic();
-
-      if (
-        input.value.trim()
-      ) {
-        statusText.textContent =
-          "Konuşmanı göndermek için ➤ butonuna bas.";
-      }
-    };
-  }
-
-  function toggleMic() {
-
-    if (!recognition) {
-
-      alert(
-        "Bu tarayıcı sesli konuşmayı desteklemiyor."
-      );
-
-      return;
-    }
-
-    if (isRecording) {
-
-      recognition.stop();
-
-    } else {
+      startThinking();
 
       try {
-        recognition.start();
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  }
 
-  function stopMic() {
+        const response =
+          await fetch(
+            "/api/chat",
+            {
+              method: "POST",
 
-    isRecording = false;
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
 
-    micButton.classList.remove(
-      "recording"
-    );
+              body: JSON.stringify({
+                message: text,
+                messages: messages,
+                mode: currentMode
+              })
+            }
+          );
 
-    micButton.textContent = "🎙️";
-  }
+        const data =
+          await response.json();
 
-  /* =========================
-     TEXT TO SPEECH
-  ========================= */
+        stopThinking();
 
-  function speak(text) {
+        if (!response.ok) {
 
-    if (
-      !("speechSynthesis" in window)
-    ) {
-      return;
-    }
+          throw new Error(
+            data.error ||
+            "Sunucu hatası"
+          );
+        }
 
-    window.speechSynthesis.cancel();
-
-    const cleanText =
-      text
-        .replace(/```[\s\S]*?```/g, "Kod bloğu.")
-        .replace(/[*#`]/g, "");
-
-    const utterance =
-      new SpeechSynthesisUtterance(
-        cleanText
-      );
-
-    utterance.lang = "tr-TR";
-
-    utterance.rate = 1;
-
-    utterance.pitch = 1;
-
-    utterance.volume = 1;
-
-    utterance.onstart = () => {
-      orb.classList.add("thinking");
-      statusText.textContent =
-        "🔊 DMN konuşuyor...";
-    };
-
-    utterance.onend = () => {
-      orb.classList.remove("thinking");
-      statusText.textContent = "";
-    };
-
-    window.speechSynthesis.speak(
-      utterance
-    );
-  }
-
-  /* =========================
-     HISTORY
-  ========================= */
-
-  function saveCurrentChat() {
-
-    if (
-      messages.length === 0
-    ) {
-      return;
-    }
-
-    localStorage.setItem(
-      "dmn-current-chat",
-      JSON.stringify(messages)
-    );
-
-    let histories =
-      JSON.parse(
-        localStorage.getItem(
-          "dmn-history"
-        ) || "[]"
-      );
-
-    const firstUser =
-      messages.find(
-        m => m.role === "user"
-      );
-
-    const title =
-      firstUser
-        ? firstUser.content.substring(0, 45)
-        : "Yeni sohbet";
-
-    const existing =
-      histories.find(
-        h => h.id === "current"
-      );
-
-    if (existing) {
-
-      existing.messages =
-        messages;
-
-      existing.title =
-        title;
-
-    } else {
-
-      histories.unshift({
-        id: "current",
-        title: title,
-        messages: messages
-      });
-    }
-
-    localStorage.setItem(
-      "dmn-history",
-      JSON.stringify(histories)
-    );
-
-    renderHistory();
-  }
-
-  function loadHistory() {
-
-    const saved =
-      localStorage.getItem(
-        "dmn-current-chat"
-      );
-
-    if (!saved) {
-
-      renderHistory();
-
-      return;
-    }
-
-    try {
-
-      messages =
-        JSON.parse(saved);
-
-      messages.forEach(message => {
+        const answer =
+          data.reply ||
+          data.message ||
+          "DMN cevap veremedi.";
 
         addMessage(
-          message.role,
-          message.content,
-          currentMode === "code" &&
-          message.role === "assistant"
+          "assistant",
+          answer,
+          currentMode === "code"
         );
 
-      });
+        messages.push({
+          role: "assistant",
+          content: answer
+        });
 
-      removeWelcome();
+        saveCurrentChat();
 
-    } catch (error) {
+        speak(answer);
 
-      console.error(error);
+      } catch (error) {
+
+        stopThinking();
+
+        addMessage(
+          "assistant",
+          "⚠️ Bir hata oluştu: " +
+          error.message
+        );
+
+        console.error(
+          "DMN:",
+          error
+        );
+      }
     }
 
-    renderHistory();
-  }
 
-  function renderHistory() {
+    /* =========================================
+       ENTER
+    ========================================= */
 
-    const history =
-      document.getElementById(
-        "history"
+    function handleKey(event) {
+
+      if (
+        event.key === "Enter" &&
+        !event.shiftKey
+      ) {
+
+        event.preventDefault();
+
+        sendMessage();
+      }
+    }
+
+
+    input.addEventListener(
+      "keydown",
+      handleKey
+    );
+
+
+    /* =========================================
+       ADD MESSAGE
+    ========================================= */
+
+    function addMessage(
+      role,
+      text,
+      codeMode = false
+    ) {
+
+      const message =
+        document.createElement("div");
+
+      message.className =
+        "message " + role;
+
+      const bubble =
+        document.createElement("div");
+
+      bubble.className =
+        "bubble";
+
+      if (
+        role === "assistant" &&
+        codeMode
+      ) {
+
+        bubble.innerHTML =
+          formatCodeResponse(text);
+
+      } else if (
+        role === "assistant"
+      ) {
+
+        bubble.innerHTML =
+          formatText(text);
+
+      } else {
+
+        bubble.textContent =
+          text;
+      }
+
+      message.appendChild(
+        bubble
       );
 
-    history.innerHTML = "";
-
-    const histories =
-      JSON.parse(
-        localStorage.getItem(
-          "dmn-history"
-        ) || "[]"
+      chat.appendChild(
+        message
       );
 
-    histories.forEach(item => {
+      chat.scrollTop =
+        chat.scrollHeight;
+    }
+
+
+    /* =========================================
+       TEXT FORMAT
+    ========================================= */
+
+    function formatText(text) {
+
+      return escapeHtml(text)
+        .replace(
+          /\*\*(.*?)\*\*/g,
+          "<strong>$1</strong>"
+        )
+        .replace(
+          /\n/g,
+          "<br>"
+        );
+    }
+
+
+    function escapeHtml(text) {
 
       const div =
         document.createElement("div");
 
-      div.className =
-        "history-item";
-
       div.textContent =
-        item.title;
+        text;
 
-      div.onclick = () => {
-        loadConversation(item);
+      return div.innerHTML;
+    }
+
+
+    /* =========================================
+       CODE FORMAT
+    ========================================= */
+
+    function formatCodeResponse(text) {
+
+      const codeRegex =
+        /```(?:([a-zA-Z0-9_+-]+))?\n?([\s\S]*?)```/g;
+
+      let result = "";
+
+      let lastIndex = 0;
+
+      let match;
+
+      while (
+        (match =
+          codeRegex.exec(text)) !== null
+      ) {
+
+        const before =
+          text.substring(
+            lastIndex,
+            match.index
+          );
+
+        result +=
+          escapeHtml(before)
+            .replace(
+              /\n/g,
+              "<br>"
+            );
+
+        const language =
+          match[1] ||
+          "code";
+
+        const code =
+          match[2].trim();
+
+        result +=
+          `
+          <div class="code-wrapper">
+
+            <div class="code-header">
+
+              <span>
+                ${escapeHtml(language)}
+              </span>
+
+              <button
+                class="copy-code"
+                onclick="copyCode(this)"
+              >
+                📋 Kopyala
+              </button>
+
+            </div>
+
+            <pre><code>${escapeHtml(code)}</code></pre>
+
+          </div>
+          `;
+
+        lastIndex =
+          match.index +
+          match[0].length;
+      }
+
+      if (lastIndex === 0) {
+
+        return escapeHtml(text)
+          .replace(
+            /\n/g,
+            "<br>"
+          );
+      }
+
+      result +=
+        escapeHtml(
+          text.substring(lastIndex)
+        ).replace(
+          /\n/g,
+          "<br>"
+        );
+
+      return result;
+    }
+
+
+    /* =========================================
+       COPY CODE
+    ========================================= */
+
+    async function copyCode(button) {
+
+      const wrapper =
+        button.closest(
+          ".code-wrapper"
+        );
+
+      const code =
+        wrapper.querySelector(
+          "code"
+        ).innerText;
+
+      try {
+
+        await navigator.clipboard
+          .writeText(code);
+
+        button.textContent =
+          "✅ Kopyalandı";
+
+        setTimeout(() => {
+
+          button.textContent =
+            "📋 Kopyala";
+
+        }, 1500);
+
+      } catch (error) {
+
+        button.textContent =
+          "❌ Kopyalanamadı";
+
+        setTimeout(() => {
+
+          button.textContent =
+            "📋 Kopyala";
+
+        }, 1500);
+      }
+    }
+
+
+    /* =========================================
+       ORB
+    ========================================= */
+
+    function startThinking() {
+
+      orb.classList.add(
+        "thinking"
+      );
+
+      statusText.textContent =
+        "DMN düşünüyor...";
+    }
+
+
+    function stopThinking() {
+
+      orb.classList.remove(
+        "thinking"
+      );
+
+      if (
+        !isRecording &&
+        !window.speechSynthesis?.speaking
+      ) {
+
+        statusText.textContent =
+          "";
+      }
+    }
+
+
+    /* =========================================
+       SPEECH RECOGNITION
+    ========================================= */
+
+    function setupSpeechRecognition() {
+
+      const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+
+        micButton.title =
+          "Bu tarayıcı mikrofon özelliğini desteklemiyor.";
+
+        return;
+      }
+
+      recognition =
+        new SpeechRecognition();
+
+      recognition.lang =
+        "tr-TR";
+
+      recognition.continuous =
+        false;
+
+      recognition.interimResults =
+        true;
+
+
+      recognition.onstart = () => {
+
+        isRecording =
+          true;
+
+        micButton.classList.add(
+          "recording"
+        );
+
+        micButton.textContent =
+          "⏹️";
+
+        statusText.textContent =
+          "🎙️ Seni dinliyorum...";
       };
 
-      history.appendChild(div);
-    });
-  }
 
-  function loadConversation(item) {
+      recognition.onresult =
+        event => {
 
-    messages =
-      item.messages || [];
+          let transcript =
+            "";
 
-    chat.innerHTML = "";
+          for (
+            let i = event.resultIndex;
+            i < event.results.length;
+            i++
+          ) {
 
-    if (
-      messages.length === 0
-    ) {
-      showWelcome();
-      return;
+            transcript +=
+              event.results[i][0]
+                .transcript;
+          }
+
+          input.value =
+            transcript;
+        };
+
+
+      recognition.onerror =
+        event => {
+
+          console.error(
+            "Speech error:",
+            event.error
+          );
+
+          stopMic();
+
+          statusText.textContent =
+            "Mikrofon kullanılamadı.";
+        };
+
+
+      recognition.onend = () => {
+
+        stopMic();
+
+        if (
+          input.value.trim()
+        ) {
+
+          statusText.textContent =
+            "Konuşmanı göndermek için ➤ butonuna bas.";
+        }
+      };
     }
 
-    messages.forEach(message => {
 
-      addMessage(
-        message.role,
-        message.content,
-        currentMode === "code" &&
-        message.role === "assistant"
-      );
-    });
+    function toggleMic() {
 
-    removeWelcome();
+      if (!recognition) {
 
-    if (
-      window.innerWidth <= 700
-    ) {
-      toggleSidebar();
+        alert(
+          "Bu tarayıcı sesli konuşmayı desteklemiyor."
+        );
+
+        return;
+      }
+
+      if (isRecording) {
+
+        recognition.stop();
+
+      } else {
+
+        try {
+
+          recognition.start();
+
+        } catch (error) {
+
+          console.error(
+            error
+          );
+        }
+      }
     }
-  }
 
-  /* =========================
-     NEW CHAT
-  ========================= */
 
-  function newChat() {
+    function stopMic() {
 
-    messages = [];
+      isRecording =
+        false;
 
-    localStorage.removeItem(
-      "dmn-current-chat"
-    );
-
-    chat.innerHTML = `
-      <div class="welcome" id="welcome">
-        <h1>Merhaba 👋</h1>
-        <p>
-          Ben DMN. Bana mesaj yazabilir veya 🎙️ mikrofonla konuşabilirsin.
-        </p>
-      </div>
-    `;
-
-    renderHistory();
-
-    input.focus();
-  }
-
-  function clearHistory() {
-
-    const confirmed =
-      confirm(
-        "Tüm sohbet geçmişi silinsin mi?"
+      micButton.classList.remove(
+        "recording"
       );
 
-    if (!confirmed) return;
-
-    localStorage.removeItem(
-      "dmn-history"
-    );
-
-    localStorage.removeItem(
-      "dmn-current-chat"
-    );
-
-    messages = [];
-
-    newChat();
-  }
-
-  /* =========================
-     WELCOME
-  ========================= */
-
-  function removeWelcome() {
-
-    const welcome =
-      document.getElementById(
-        "welcome"
-      );
-
-    if (welcome) {
-      welcome.remove();
+      micButton.textContent =
+        "🎙️";
     }
-  }
 
-  function showWelcome() {
 
-    chat.innerHTML = `
-      <div class="welcome" id="welcome">
-        <h1>Merhaba 👋</h1>
-        <p>
-          Ben DMN. Bana mesaj yazabilir veya 🎙️ mikrofonla konuşabilirsin.
-        </p>
-      </div>
-    `;
-  }
+    /* =========================================
+       TEXT TO SPEECH
+    ========================================= */
 
-</script>
+    function speak(text) {
+
+      if (!soundEnabled) {
+        return;
+      }
+
+      if (
+        !("speechSynthesis" in window)
+      ) {
+        return;
+      }
+
+      stopSpeaking();
+
+      const cleanText =
+        text
+          .replace(
+            /```[\s\S]*?```/g,
+            "Kod bloğu."
+          )
+          .replace(
+            /[*#`]/g,
+            ""
+          );
+
+      const utterance =
+        new SpeechSynthesisUtterance(
+          cleanText
+        );
+
+      utterance.lang =
+        "tr-TR";
+
+      utterance.rate =
+        Number(rateRange.value);
+
+      utterance.pitch =
+        Number(pitchRange.value);
+
+      utterance.volume =
+        1;
+
+
+      const selectedIndex =
+        Number(
+          voiceSelect.value
+        );
+
+      if (
+        voices[selectedIndex]
+      ) {
+
+        utterance.voice =
+          voices[selectedIndex];
+
+        utterance.lang =
+          voices[selectedIndex].lang;
+      }
+
+
+      utterance.onstart =
+        () => {
+
+          orb.classList.add(
+            "thinking"
+          );
+
+          statusText.textContent =
+            "🔊 DMN konuşuyor...";
+        };
+
+
+      utterance.onend =
+        () => {
+
+          orb.classList.remove(
+            "thinking"
+          );
+
+          statusText.textContent =
+            "";
+        };
+
+
+      utterance.onerror =
+        () => {
+
+          orb.classList.remove(
+            "thinking"
+          );
+
+          statusText.textContent =
+            "";
+        };
+
+
+      window.speechSynthesis.speak(
+        utterance
+      );
+    }
+
+
+    /* =========================================
+       HISTORY
+    ========================================= */
+
+    function saveCurrentChat() {
+
+      if (
+        messages.length === 0
+      ) {
+        return;
+      }
+
+      localStorage.setItem(
+        "dmn-current-chat",
+        JSON.stringify(messages)
+      );
+
+      let histories =
+        JSON.parse(
+          localStorage.getItem(
+            "dmn-history"
+          ) || "[]"
+        );
+
+      const firstUser =
+        messages.find(
+          message =>
+            message.role === "user"
+        );
+
+      const title =
+        firstUser
+          ? firstUser.content
+              .substring(0, 45)
+          : "Yeni sohbet";
+
+      const existing =
+        histories.find(
+          item =>
+            item.id === "current"
+        );
+
+      if (existing) {
+
+        existing.messages =
+          messages;
+
+        existing.title =
+          title;
+
+      } else {
+
+        histories.unshift({
+
+          id: "current",
+
+          title: title,
+
+          messages: messages
+
+        });
+      }
+
+      localStorage.setItem(
+        "dmn-history",
+        JSON.stringify(histories)
+      );
+
+      renderHistory();
+    }
+
+
+    function loadHistory() {
+
+      const saved =
+        localStorage.getItem(
+          "dmn-current-chat"
+        );
+
+      if (!saved) {
+
+        renderHistory();
+
+        return;
+      }
+
+      try {
+
+        messages =
+          JSON.parse(saved);
+
+        messages.forEach(
+          message => {
+
+            addMessage(
+              message.role,
+              message.content,
+              currentMode === "code" &&
+              message.role === "assistant"
+            );
+          }
+        );
+
+        removeWelcome();
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+      }
+
+      renderHistory();
+    }
+
+
+    function renderHistory() {
+
+      const history =
+        document.getElementById(
+          "history"
+        );
+
+      history.innerHTML =
+        "";
+
+      const histories =
+        JSON.parse(
+          localStorage.getItem(
+            "dmn-history"
+          ) || "[]"
+        );
+
+      histories.forEach(
+        item => {
+
+          const div =
+            document.createElement(
+              "div"
+            );
+
+          div.className =
+            "history-item";
+
+          div.textContent =
+            item.title;
+
+          div.onclick =
+            () => {
+
+              loadConversation(
+                item
+              );
+            };
+
+          history.appendChild(
+            div
+          );
+        }
+      );
+    }
+
+
+    function loadConversation(item) {
+
+      messages =
+        item.messages || [];
+
+      chat.innerHTML =
+        "";
+
+      if (
+        messages.length === 0
+      ) {
+
+        showWelcome();
+
+        return;
+      }
+
+      messages.forEach(
+        message => {
+
+          addMessage(
+            message.role,
+            message.content,
+            currentMode === "code" &&
+            message.role === "assistant"
+          );
+        }
+      );
+
+      if (
+        window.innerWidth <= 700
+      ) {
+
+        document
+          .getElementById("sidebar")
+          .classList.remove("open");
+      }
+    }
+
+
+    /* =========================================
+       NEW CHAT
+    ========================================= */
+
+    function newChat() {
+
+      stopSpeaking();
+
+      messages = [];
+
+      localStorage.removeItem(
+        "dmn-current-chat"
+      );
+
+      chat.innerHTML = `
+        <div class="welcome" id="welcome">
+
+          <h1>Merhaba 👋</h1>
+
+          <p>
+            Ben DMN. Bana mesaj yazabilir veya
+            🎙️ mikrofonla konuşabilirsin.
+          </p>
+
+        </div>
+      `;
+
+      renderHistory();
+
+      input.focus();
+    }
+
+
+    function clearHistory() {
+
+      const confirmed =
+        confirm(
+          "Tüm sohbet geçmişi silinsin mi?"
+        );
+
+      if (!confirmed) {
+        return;
+      }
+
+      localStorage.removeItem(
+        "dmn-history"
+      );
+
+      localStorage.removeItem(
+        "dmn-current-chat"
+      );
+
+      messages = [];
+
+      newChat();
+    }
+
+
+    function clearHistoryFromSettings() {
+
+      clearHistory();
+
+      closeSettings();
+    }
+
+
+    /* =========================================
+       WELCOME
+    ========================================= */
+
+    function removeWelcome() {
+
+      const welcome =
+        document.getElementById(
+          "welcome"
+        );
+
+      if (welcome) {
+        welcome.remove();
+      }
+    }
+
+
+    function showWelcome() {
+
+      chat.innerHTML = `
+        <div class="welcome" id="welcome">
+
+          <h1>Merhaba 👋</h1>
+
+          <p>
+            Ben DMN. Bana mesaj yazabilir veya
+            🎙️ mikrofonla konuşabilirsin.
+          </p>
+
+        </div>
+      `;
+    }
+
+  </script>
 
 </body>
 </html>
